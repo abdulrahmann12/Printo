@@ -17,7 +17,7 @@ public class OrderDTO {
 	
 
     @Positive(message = "Total amount must be positive")
-    private BigDecimal totalAmount;
+    private BigDecimal totalPrice;
 
     @NotBlank(message = "Phone number is required")
     private String phoneNumber;

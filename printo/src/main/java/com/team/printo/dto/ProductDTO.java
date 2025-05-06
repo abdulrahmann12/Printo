@@ -1,6 +1,7 @@
 package com.team.printo.dto;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.validation.constraints.NotBlank;
@@ -37,7 +38,7 @@ public class ProductDTO {
     @NotNull(message = "Category ID is required")
     private Long categoryId;
 
-    private List<ProductImageDTO> images;
+    private List<ProductImageDTO> images = new ArrayList<>();
 
-    private List<AttributeValueDTO> attributeValues;
+    private List<AttributeValueDTO> attributeValues = new ArrayList<>();
 }

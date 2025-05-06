@@ -8,7 +8,9 @@ public class CartItemDTO {
 
 	private long id;
 	
-	private long productID;
+	private long productId;
+	
+	private long cartId;
 	
 	private Long designId;
 	

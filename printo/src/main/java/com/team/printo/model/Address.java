@@ -3,7 +3,6 @@ package com.team.printo.model;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.team.printo.model.User.Role;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
