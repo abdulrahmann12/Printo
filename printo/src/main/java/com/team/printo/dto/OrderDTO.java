@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.team.printo.model.Order;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Positive;
 import lombok.Data;
@@ -23,7 +25,7 @@ public class OrderDTO {
     private LocalDateTime createdAt;
 
     @NotBlank(message = "Status is required")
-    private String status;
+    private Order.OrderStatus status;
 
     private Long userId;
 
