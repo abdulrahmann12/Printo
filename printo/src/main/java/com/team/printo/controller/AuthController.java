@@ -1,6 +1,7 @@
 package com.team.printo.controller;
 
 import org.springframework.security.core.Authentication;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -26,6 +27,7 @@ import com.team.printo.model.User;
 import com.team.printo.service.AuthService;
 import com.team.printo.service.JwtService;
 
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
@@ -42,12 +44,49 @@ public class AuthController {
 	@PostMapping("/login")
 	public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest loginRequest){
 		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
-		UserDetails userDetails = authService.getUserByEmail(loginRequest.getEmail());
+		
 		User user = authService.getUserByEmail(loginRequest.getEmail());
-		String jwt = jwtService.generateToken(userDetails);
+	    String accessToken = jwtService.generateToken(user);
+	    String refreshToken = jwtService.generateRefreshToken(user);
 		authService.revokeAllUserTokens(user);
-		authService.saveUserToken(user, jwt);
-		return ResponseEntity.ok(new AuthResponse(jwt));
+		authService.saveUserToken(user, accessToken);
+		return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken));
+	}
+	
+	@PostMapping("/refresh-token")
+	public ResponseEntity<AuthResponse> refreshToken(HttpServletRequest request) {
+	    final String authHeader = request.getHeader("Authorization");
+	    final String refreshToken;
+	    final String userEmail;
+	    if (authHeader == null || !authHeader.startsWith("Bearer "))
+	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+
+	    refreshToken = authHeader.substring(7);
+	    userEmail = jwtService.extractUsername(refreshToken);
+
+	    if (userEmail != null) {
+	        User user = authService.getUserByEmail(userEmail);
+
+	        if (jwtService.validateToken(refreshToken, user)) {
+	            String accessToken = jwtService.generateToken(user);
+	            authService.revokeAllUserTokens(user);
+	            authService.saveUserToken(user, accessToken);
+	            return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken));
+	        }
+	    }
+	    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
+	}
+	
+	@PostMapping("/logout")
+	public ResponseEntity<String> logout(HttpServletRequest request) {
+	    final String authHeader = request.getHeader("Authorization");
+	    if (authHeader == null || !authHeader.startsWith("Bearer "))
+	        return ResponseEntity.badRequest().body("Token not found");
+
+	    String token = authHeader.substring(7);
+	    authService.logout(token);
+
+	    return ResponseEntity.ok("Logged out successfully");
 	}
 	
 	@PostMapping("/register")

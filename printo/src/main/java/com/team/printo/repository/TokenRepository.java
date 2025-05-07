@@ -14,7 +14,7 @@ import com.team.printo.model.Token;
 public interface TokenRepository extends JpaRepository<Token, Long> {
     Optional<Token> findByToken(String token);
     @Query("""
-    	    SELECT t FROM Token t WHERE t.user.id = :userId AND (t.expired = false OR t.revoked = false)
+    	    SELECT t FROM Token t WHERE t.user.id = :userId 
     	""")
     	List<Token> findAllValidTokenByUser(Long userId);
 }

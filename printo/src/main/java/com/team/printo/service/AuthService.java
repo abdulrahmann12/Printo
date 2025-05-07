@@ -40,7 +40,7 @@ public class AuthService {
 		user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
 		user.setConfirmationCode(generateConfirmationCode());
 		user.setEmailConfirmation(false);
-		emailService.sendConfirmationCode(user);
+		emailService.sendConfirmationCode(user,"Confirm Your Email Address");
 		User savedUser = userRepository.save(user);
 		return userMapper.toDTO(savedUser);
 	}
@@ -57,7 +57,6 @@ public class AuthService {
 	public void resetPassword(ResetPasswodDTO resetPasswodDTO) {
 		User user = userRepository.findByEmail(resetPasswodDTO.getEmail())
 			    .orElseThrow(() -> new ResourceNotFoundException("User not found."));
-
 		if(!resetPasswodDTO.getCode().equals(user.getConfirmationCode())) {
 	        throw new BadCredentialsException("Invalid reset code");
 		}
@@ -82,7 +81,7 @@ public class AuthService {
 		String resetCode = generateConfirmationCode();
 		user.setConfirmationCode(resetCode);
 		userRepository.save(user);
-		emailService.sendConfirmationCode(user);	
+		emailService.sendConfirmationCode(user,"Confirmation Code");	
 	}
 	
 	public void confirmation(String email, String code) {
@@ -109,10 +108,10 @@ public class AuthService {
 	
 	public void revokeAllUserTokens(User user) {
 	    var validUserTokens = tokenRepository.findAllValidTokenByUser(user.getId());
-	    
 	    validUserTokens.forEach(token -> {
 	        token.setExpired(true);
 	        token.setRevoked(true);
+	        tokenRepository.delete(token);
 	    });
 	    tokenRepository.deleteAll(validUserTokens);
 	}
