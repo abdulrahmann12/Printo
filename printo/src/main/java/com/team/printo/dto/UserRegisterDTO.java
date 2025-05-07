@@ -1,13 +1,14 @@
 package com.team.printo.dto;
 
-import com.team.printo.model.User;
+
+import org.springframework.format.annotation.NumberFormat;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
-public class UserDTO {
+public class UserRegisterDTO {
 
 	private Long id;
 	
@@ -18,14 +19,14 @@ public class UserDTO {
 	private String lastName;
 	
 	@Email(message = "Invalid email format")
-	@NotBlank(message = "Email name is required")
+	@NotBlank(message = "Email is required")
 	private String email;
 	
-	@NotBlank(message = "Phone name is required")
+	@NotBlank(message = "Phone is required")
 	private String phone;
-		
+	
+	@NotBlank(message = "Password is required")
+	private String password;
+	
 	private String image;
-	
-	private User.Role role;
-	
 }
