@@ -40,7 +40,7 @@ public class AuthService {
 		user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
 		user.setConfirmationCode(generateConfirmationCode());
 		user.setEmailConfirmation(false);
-		emailService.sendConfirmationCode(user,"Confirm Your Email Address");
+		emailService.sendCode(user,"Confirm Your Email Address");
 		User savedUser = userRepository.save(user);
 		return userMapper.toDTO(savedUser);
 	}
@@ -51,7 +51,7 @@ public class AuthService {
 		String resetCode = generateConfirmationCode();
 		user.setConfirmationCode(resetCode);
 		userRepository.save(user);
-		emailService.sendPasswordResetCode(user);
+		emailService.sendCode(user,"Reset Your Password");
 	}
 	
 	public void resetPassword(ResetPasswodDTO resetPasswodDTO) {
@@ -81,7 +81,7 @@ public class AuthService {
 		String resetCode = generateConfirmationCode();
 		user.setConfirmationCode(resetCode);
 		userRepository.save(user);
-		emailService.sendConfirmationCode(user,"Confirmation Code");	
+		emailService.sendCode(user,"Confirmation Code");	
 	}
 	
 	public void confirmation(String email, String code) {

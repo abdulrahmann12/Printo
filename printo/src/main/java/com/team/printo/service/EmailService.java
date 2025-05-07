@@ -1,7 +1,6 @@
 package com.team.printo.service;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -22,7 +21,7 @@ public class EmailService {
 	private String formEmail;
 	
 	
-	public void sendConfirmationCode(User user,String subject) {
+	public void sendCode(User user,String subject) {
 		try {
 			MimeMessage message = javaMailSender.createMimeMessage();
 			MimeMessageHelper helper = new MimeMessageHelper(message, true, "UTF-8");
