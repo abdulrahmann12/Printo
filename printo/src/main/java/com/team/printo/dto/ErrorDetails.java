@@ -8,15 +8,20 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class ErrorDetials {
+public class ErrorDetails {
 
 	private String message;
 	private String details;
 	private Date timestamp;
 	
-	public ErrorDetials(Date date, String message, String details) {
+	public ErrorDetails(Date date, String message, String details) {
 		this.details = details; 
 		this.message = message;
 		this.timestamp = date;
+	}
+	
+	public ErrorDetails(String message) {
+		this.message = message;
+		this.timestamp = new Date();
 	}
 }

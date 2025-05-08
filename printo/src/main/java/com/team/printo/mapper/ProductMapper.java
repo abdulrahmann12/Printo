@@ -1,18 +1,12 @@
 package com.team.printo.mapper;
 
-import java.util.List;
 
-import org.mapstruct.IterableMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-import com.team.printo.dto.AttributeValueDTO;
 import com.team.printo.dto.ProductDTO;
-import com.team.printo.dto.ProductImageDTO;
 import com.team.printo.dto.ReviewDTO;
-import com.team.printo.model.AttributeValue;
 import com.team.printo.model.Product;
-import com.team.printo.model.ProductImage;
 import com.team.printo.model.Review;
 
 @Mapper

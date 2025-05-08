@@ -6,6 +6,7 @@ import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.team.printo.dto.ChangePasswordRequest;
+import com.team.printo.dto.EmailConfirmationRequest;
 import com.team.printo.dto.ResetPasswodDTO;
 import com.team.printo.dto.UserDTO;
 import com.team.printo.dto.UserRegisterDTO;
@@ -28,7 +29,7 @@ public class AuthService {
 	private final EmailService emailService;
 	private final UserMapper userMapper;
 	private final TokenRepository tokenRepository;
-	
+
 	
 	public UserDTO registerUser(UserRegisterDTO userDTO) {
 		User user = userMapper.toEntity(userDTO);
@@ -84,10 +85,10 @@ public class AuthService {
 		emailService.sendCode(user,"Confirmation Code");	
 	}
 	
-	public void confirmation(String email, String code) {
-		User user = userRepository.findByEmail(email)
+	public void confirmation(EmailConfirmationRequest request) {
+		User user = userRepository.findByEmail(request.getEmail())
 			    .orElseThrow(() -> new ResourceNotFoundException("User not found."));
-		if(code.equals(user.getConfirmationCode())) {
+		if(request.getConfirmationCode().equals(user.getConfirmationCode())) {
 			user.setConfirmationCode(null);
 			user.setEmailConfirmation(true);
 			userRepository.save(user);
@@ -96,26 +97,7 @@ public class AuthService {
 		}
 	}
 	
-	public void saveUserToken(User user, String jwtToken) {
-	    Token token = Token.builder()
-	            .user(user)
-	            .token(jwtToken)
-	            .expired(false)
-	            .revoked(false)
-	            .build();
-	    tokenRepository.save(token);
-	}
-	
-	public void revokeAllUserTokens(User user) {
-	    var validUserTokens = tokenRepository.findAllValidTokenByUser(user.getId());
-	    validUserTokens.forEach(token -> {
-	        token.setExpired(true);
-	        token.setRevoked(true);
-	        tokenRepository.delete(token);
-	    });
-	    tokenRepository.deleteAll(validUserTokens);
-	}
-	
+
 	public void logout(String token) {
 		var storedToken = tokenRepository.findByToken(token).orElse(null);
 		if(storedToken != null) {

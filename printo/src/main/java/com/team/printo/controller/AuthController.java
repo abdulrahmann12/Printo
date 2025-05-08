@@ -1,6 +1,9 @@
 package com.team.printo.controller;
 
 import org.springframework.security.core.Authentication;
+
+import java.util.Date;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -16,11 +19,12 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.team.printo.dto.AuthResponse;
+import com.team.printo.dto.BasicResponse;
 import com.team.printo.dto.ChangePasswordRequest;
 import com.team.printo.dto.EmailConfirmationRequest;
+import com.team.printo.dto.ErrorDetails;
 import com.team.printo.dto.LoginRequest;
 import com.team.printo.dto.ResetPasswodDTO;
-import com.team.printo.dto.UserDTO;
 import com.team.printo.dto.UserRegisterDTO;
 import com.team.printo.exception.ResourceNotFoundException;
 import com.team.printo.model.User;
@@ -42,25 +46,30 @@ public class AuthController {
 	
 	
 	@PostMapping("/login")
-	public ResponseEntity<AuthResponse> login(@RequestBody LoginRequest loginRequest){
+	public ResponseEntity<BasicResponse> login(@RequestBody LoginRequest loginRequest){
 		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
 		
 		User user = authService.getUserByEmail(loginRequest.getEmail());
 	    String accessToken = jwtService.generateToken(user);
 	    String refreshToken = jwtService.generateRefreshToken(user);
-		authService.revokeAllUserTokens(user);
-		authService.saveUserToken(user, accessToken);
-		return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken));
+	    jwtService.revokeAllUserTokens(user);
+	    jwtService.saveUserToken(user, accessToken);
+		return ResponseEntity.ok(new BasicResponse("Login Successfully",new AuthResponse(accessToken, refreshToken)));
 	}
 	
 	@PostMapping("/refresh-token")
-	public ResponseEntity<AuthResponse> refreshToken(HttpServletRequest request) {
+	public ResponseEntity<?> refreshToken(HttpServletRequest request) {
 	    final String authHeader = request.getHeader("Authorization");
 	    final String refreshToken;
 	    final String userEmail;
 	    if (authHeader == null || !authHeader.startsWith("Bearer "))
-	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-
+		    return ResponseEntity
+		    	    .status(HttpStatus.UNAUTHORIZED)
+		    	    .body(new ErrorDetails(
+		    	        new Date(),
+		    	        "Unauthorized",
+		    	        "Invalid or expired refresh token"
+		    	    ));
 	    refreshToken = authHeader.substring(7);
 	    userEmail = jwtService.extractUsername(refreshToken);
 
@@ -69,29 +78,38 @@ public class AuthController {
 
 	        if (jwtService.validateToken(refreshToken, user)) {
 	            String accessToken = jwtService.generateToken(user);
-	            authService.revokeAllUserTokens(user);
-	            authService.saveUserToken(user, accessToken);
-	            return ResponseEntity.ok(new AuthResponse(accessToken, refreshToken));
+	            jwtService.revokeAllUserTokens(user);
+	            jwtService.saveUserToken(user, accessToken);
+	            return ResponseEntity.ok(new BasicResponse("New Token Generated Successfully",new AuthResponse(accessToken, refreshToken)));
 	        }
 	    }
-	    return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
-	}
+	    return ResponseEntity
+	    	    .status(HttpStatus.UNAUTHORIZED)
+	    	    .body(new ErrorDetails(
+	    	        new Date(),
+	    	        "Unauthorized",
+	    	        "Invalid or expired refresh token"
+	    	    ));
+	    }
 	
 	@PostMapping("/logout")
-	public ResponseEntity<String> logout(HttpServletRequest request) {
+	public ResponseEntity<?> logout(HttpServletRequest request) {
 	    final String authHeader = request.getHeader("Authorization");
-	    if (authHeader == null || !authHeader.startsWith("Bearer "))
-	        return ResponseEntity.badRequest().body("Token not found");
+
+	    if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+	        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+	                             .body(new ErrorDetails("Token not found or invalid"));
+	    }
 
 	    String token = authHeader.substring(7);
 	    authService.logout(token);
 
-	    return ResponseEntity.ok("Logged out successfully");
+	    return ResponseEntity.ok(new BasicResponse("Logged out successfully"));
 	}
 	
 	@PostMapping("/register")
-	public ResponseEntity<UserDTO> register(@Valid @RequestBody UserRegisterDTO user){
-		return ResponseEntity.ok(authService.registerUser(user));
+	public ResponseEntity<?> register(@Valid @RequestBody UserRegisterDTO user){
+		return ResponseEntity.ok(new BasicResponse("Register Successfully",authService.registerUser(user)));
 	}
 	
 	@PostMapping("/change-password")
@@ -99,45 +117,36 @@ public class AuthController {
 		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 		String email = authentication.getName();
 		authService.changePassword(email, request);
-		return ResponseEntity.ok().body("Password Changed Successfuly");
+		return ResponseEntity.ok(new BasicResponse("Password Changed Successfuly"));
 	}
 	
 	@PostMapping("/confirm-email")
-	public ResponseEntity<?> confirmEmail(@RequestBody EmailConfirmationRequest request){
-		try {
-			authService.confirmation(request.getEmail(), request.getConfirmationCode());
-			return ResponseEntity.ok().body("Email Confirmed successfuly");
-		} catch (BadCredentialsException e) {
-			return ResponseEntity.ok().body("Invaild Confirmation code");
-		}catch (ResourceNotFoundException e) {
-			return ResponseEntity.notFound().build();
-		}
-	
+	public ResponseEntity<?> confirmEmail(@RequestBody EmailConfirmationRequest request) {
+	    authService.confirmation(request);
+	    return ResponseEntity.ok(new BasicResponse("Email confirmed successfully"));
 	}
 	
-	@PostMapping("/regnerate-code")
-	public ResponseEntity<?> regnerateCode(@AuthenticationPrincipal UserDetails userDetails){
-		try {
-			authService.reGenerateConfirmationCode(userDetails.getUsername());
-			return ResponseEntity.ok().body("code sent successfuly");
-		} catch (BadCredentialsException e) {
-			return ResponseEntity.ok().body("Please login.");
-		}catch (ResourceNotFoundException e) {
-			return ResponseEntity.notFound().build();
-		}
-	
+	@PostMapping("/regenerate-code")
+	public ResponseEntity<?> regenerateCode(@AuthenticationPrincipal UserDetails userDetails) {
+	    if (userDetails == null) {
+	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+	                             .body(new ErrorDetails("User is not authenticated"));
+	    }
+
+	    authService.reGenerateConfirmationCode(userDetails.getUsername());
+	    return ResponseEntity.ok(new BasicResponse("Code sent successfully"));
 	}
 	
 	@PostMapping("/forget-password")
-	public ResponseEntity<?> forgetPassword(@RequestParam("email") String email){
+	public ResponseEntity<?> forgetPassword(@Valid @RequestParam("email") String email){
 			authService.forgetPassword(email);
-			return ResponseEntity.ok().body("code sent successfuly");
+			return ResponseEntity.ok(new BasicResponse("code sent successfuly"));
 	}
 	
 	@PostMapping("/reset-password")
 	public ResponseEntity<?> resetPassword(@Valid @RequestBody ResetPasswodDTO resetPasswodDTO){
 			authService.resetPassword(resetPasswodDTO);
-			return ResponseEntity.ok().body("password changed successfuly");
+			return ResponseEntity.ok(new BasicResponse("password changed successfuly"));
 	}
 }
 

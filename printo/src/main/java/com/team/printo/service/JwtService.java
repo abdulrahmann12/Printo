@@ -10,6 +10,10 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import com.team.printo.model.Token;
+import com.team.printo.model.User;
+import com.team.printo.repository.TokenRepository;
+
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -19,6 +23,8 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class JwtService {
+
+	private final TokenRepository tokenRepository;
 
 
 	@Value("${secret}")
@@ -70,12 +76,16 @@ public class JwtService {
 	}
 
 	private Claims extractAllClaims(String token) {
-		return Jwts
-			    .parserBuilder()
-			    .setSigningKey(getSignKey())
-			    .build()
-			    .parseClaimsJws(token)
-			    .getBody();
+	    try {
+	        return Jwts
+	                .parserBuilder()
+	                .setSigningKey(getSignKey())
+	                .build()
+	                .parseClaimsJws(token)
+	                .getBody();
+	    } catch (Exception e) {
+	        throw new RuntimeException("Invalid or expired token", e);
+	    }
 	}
 		
 	private boolean isTokenExpiration(String token) {
@@ -86,4 +96,25 @@ public class JwtService {
 		return extractClaims(token, Claims :: getExpiration);
 
 	}
+	
+	public void saveUserToken(User user, String jwtToken) {
+	    Token token = Token.builder()
+	            .user(user)
+	            .token(jwtToken)
+	            .expired(false)
+	            .revoked(false)
+	            .build();
+	    tokenRepository.save(token);
+	}
+	
+	public void revokeAllUserTokens(User user) {
+	    var validUserTokens = tokenRepository.findAllValidTokenByUser(user.getId());
+	    validUserTokens.forEach(token -> {
+	        token.setExpired(true);
+	        token.setRevoked(true);
+	        tokenRepository.delete(token);
+	    });
+	    tokenRepository.deleteAll(validUserTokens);
+	}
+	
 }

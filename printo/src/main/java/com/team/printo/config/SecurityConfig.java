@@ -35,7 +35,6 @@ public class SecurityConfig {
 	private final UserRepository userRepository;
 	private final TokenRepository tokenRepository;
 
-	
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception{
 		http.csrf(c->c.disable())
@@ -51,7 +50,6 @@ public class SecurityConfig {
 			.sessionManagement(session -> session
 					.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			.addFilterBefore(jwtAuthenticationFilter(),UsernamePasswordAuthenticationFilter.class);
-		
 		return http.build();
 	}
 	
@@ -68,7 +66,6 @@ public class SecurityConfig {
 	
 	@Bean
 	public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception{
-		
 		return authenticationConfiguration.getAuthenticationManager();
 	}
 	
@@ -78,7 +75,5 @@ public class SecurityConfig {
 		authenticationProvider.setUserDetailsService(userDetailsService());
 		authenticationProvider.setPasswordEncoder(passwordEncoder);
 		return authenticationProvider;	
-	}
-	
-	
+	}	
 }
