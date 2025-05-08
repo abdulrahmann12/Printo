@@ -15,6 +15,8 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
+
+import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.team.printo.dto.ErrorDetails;
 import io.jsonwebtoken.ExpiredJwtException;
 
@@ -126,5 +128,12 @@ public class GlobalExceptionHandler {
                 "Malformed JSON request",
                 request.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
+    }
+    
+    @ExceptionHandler(InvalidFormatException.class)
+    public ResponseEntity<ErrorDetails> handleInvalidFormatException(InvalidFormatException ex) {
+        return ResponseEntity.badRequest().body(
+            new ErrorDetails("Invalid role. Please provide one of: ADMIN, CUSTOMER, etc.")
+        );
     }
 }
