@@ -1,5 +1,7 @@
 package com.team.printo.mapper;
 
+import java.util.List;
+
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -27,5 +29,13 @@ public interface UserMapper {
 	@Mapping(target = "email", source = "email")
 	@Mapping(target = "id", source = "id")
     User toEntity(UserRegisterDTO userDTO);
-
+	
+	
+	@Mapping(target = "email", source = "email")
+	@Mapping(target = "id", source = "id")
+	List<UserDTO> toDTOS(List<User> users);
+	
+	@Mapping(target = "email", source = "email")
+	@Mapping(target = "id", source = "id")
+    List<User> toEntities(List<UserDTO> userDTOS);
 }

@@ -23,7 +23,7 @@ public class UserDTO {
 	
 	@NotBlank(message = "Phone name is required")
 	private String phone;
-		
+	
 	private String image;
 	
 	private User.Role role;

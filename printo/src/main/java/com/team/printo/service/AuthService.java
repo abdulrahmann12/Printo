@@ -118,10 +118,5 @@ public class AuthService {
 				orElseThrow(()-> new ResourceNotFoundException("User not found."));
 	}
 	
-	public void changeUserRole(Long userId, Role newRole) {
-		User user = userRepository.findById(userId)
-			    .orElseThrow(() -> new ResourceNotFoundException("User not found."));
-		user.setRole(newRole);
-		userRepository.save(user);
-	}
+
 }
