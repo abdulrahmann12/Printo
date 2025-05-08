@@ -60,37 +60,42 @@ public class AuthController {
 	@PostMapping("/refresh-token")
 	public ResponseEntity<?> refreshToken(HttpServletRequest request) {
 	    final String authHeader = request.getHeader("Authorization");
-	    final String refreshToken;
-	    final String userEmail;
-	    if (authHeader == null || !authHeader.startsWith("Bearer "))
-		    return ResponseEntity
-		    	    .status(HttpStatus.UNAUTHORIZED)
-		    	    .body(new ErrorDetails(
-		    	        new Date(),
-		    	        "Unauthorized",
-		    	        "Invalid or expired refresh token"
-		    	    ));
-	    refreshToken = authHeader.substring(7);
-	    userEmail = jwtService.extractUsername(refreshToken);
 
-	    if (userEmail != null) {
+	    if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+	        return unauthorizedResponse("Invalid or missing refresh token");
+	    }
+
+	    final String refreshToken = authHeader.substring(7);
+	    final String userEmail = jwtService.extractUsername(refreshToken);
+
+	    if (userEmail == null) {
+	        return unauthorizedResponse("Could not extract user from token");
+	    }
+
+	    try {
 	        User user = authService.getUserByEmail(userEmail);
 
-	        if (jwtService.validateToken(refreshToken, user)) {
-	            String accessToken = jwtService.generateToken(user);
-	            jwtService.revokeAllUserTokens(user);
-	            jwtService.saveUserToken(user, accessToken);
-	            return ResponseEntity.ok(new BasicResponse("New Token Generated Successfully",new AuthResponse(accessToken, refreshToken)));
+	        if (!jwtService.validateToken(refreshToken, user)) {
+	            return unauthorizedResponse("Invalid or expired refresh token");
 	        }
+
+	        String accessToken = jwtService.generateToken(user);
+	        jwtService.revokeAllUserTokens(user);
+	        jwtService.saveUserToken(user, accessToken);
+
+	        AuthResponse authResponse = new AuthResponse(accessToken, refreshToken);
+	        return ResponseEntity.ok(new BasicResponse("New token generated successfully", authResponse));
+
+	    } catch (ResourceNotFoundException e) {
+	        return unauthorizedResponse("User not found");
 	    }
+	}
+
+	private ResponseEntity<ErrorDetails> unauthorizedResponse(String message) {
 	    return ResponseEntity
-	    	    .status(HttpStatus.UNAUTHORIZED)
-	    	    .body(new ErrorDetails(
-	    	        new Date(),
-	    	        "Unauthorized",
-	    	        "Invalid or expired refresh token"
-	    	    ));
-	    }
+	            .status(HttpStatus.UNAUTHORIZED)
+	            .body(new ErrorDetails(new Date(), "Unauthorized", message));
+	}
 	
 	@PostMapping("/logout")
 	public ResponseEntity<?> logout(HttpServletRequest request) {
@@ -100,10 +105,8 @@ public class AuthController {
 	        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
 	                             .body(new ErrorDetails("Token not found or invalid"));
 	    }
-
 	    String token = authHeader.substring(7);
 	    authService.logout(token);
-
 	    return ResponseEntity.ok(new BasicResponse("Logged out successfully"));
 	}
 	
@@ -132,7 +135,6 @@ public class AuthController {
 	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
 	                             .body(new ErrorDetails("User is not authenticated"));
 	    }
-
 	    authService.reGenerateConfirmationCode(userDetails.getUsername());
 	    return ResponseEntity.ok(new BasicResponse("Code sent successfully"));
 	}
