@@ -11,11 +11,11 @@ import lombok.NoArgsConstructor;
 public class ErrorDetails {
 
 	private String message;
-	private String details;
+    private Object data;
 	private Date timestamp;
 	
-	public ErrorDetails(Date date, String message, String details) {
-		this.details = details; 
+	public ErrorDetails(Date date, String message, Object data) {
+		this.data = data; 
 		this.message = message;
 		this.timestamp = date;
 	}

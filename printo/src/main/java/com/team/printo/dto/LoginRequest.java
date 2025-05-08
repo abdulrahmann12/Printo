@@ -1,5 +1,6 @@
 package com.team.printo.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -9,6 +10,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class LoginRequest {
 
-    private String email;
+    @NotBlank(message = "email is require")
+	private String email;
+    
+    @NotBlank(message = "password is require")
     private String password;
 }

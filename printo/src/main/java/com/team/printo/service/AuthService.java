@@ -59,7 +59,7 @@ public class AuthService {
 		User user = userRepository.findByEmail(resetPasswodDTO.getEmail())
 			    .orElseThrow(() -> new ResourceNotFoundException("User not found."));
 		if(!resetPasswodDTO.getCode().equals(user.getConfirmationCode())) {
-	        throw new BadCredentialsException("Invalid reset code");
+	        throw new ResourceNotFoundException("Invalid reset code");
 		}
 		user.setPassword(passwordEncoder.encode(resetPasswodDTO.getNewPassword()));
 		user.setConfirmationCode(null);
@@ -70,7 +70,7 @@ public class AuthService {
 		User user = userRepository.findByEmail(email)
 			    .orElseThrow(() -> new ResourceNotFoundException("User not found."));
 		if(!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
-			throw new BadCredentialsException("Current Password is incorrect");
+			throw new ResourceNotFoundException("Current Password is incorrect");
 		}
 		user.setPassword(passwordEncoder.encode(request.getNewPassword()));
 		userRepository.save(user);
@@ -93,7 +93,7 @@ public class AuthService {
 			user.setEmailConfirmation(true);
 			userRepository.save(user);
 		}else {
-			throw new BadCredentialsException("Invalid confirmation code");
+			throw new ResourceNotFoundException("Invalid confirmation code");
 		}
 	}
 	
