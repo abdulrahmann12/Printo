@@ -12,7 +12,7 @@ public interface CategoryMapper {
 
     @Mapping(target = "parentId", source = "parent.id")
     @Mapping(target = "image", source = "image")
-    CategoryDTO toDto(Category category);
+    CategoryDTO toDTO(Category category);
     
     @Mapping(target = "image", source = "image")
     @Mapping(target = "products", ignore = true)
