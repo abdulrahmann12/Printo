@@ -22,7 +22,6 @@ import com.team.printo.dto.UserDTO;
 import com.team.printo.model.User;
 import com.team.printo.service.UserService;
 
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController

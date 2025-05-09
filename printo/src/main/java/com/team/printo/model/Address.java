@@ -38,7 +38,8 @@ public class Address {
     @Column(nullable = false)
     private String country;
 
-    private boolean isDefault;
+    @Column(name = "is_default")
+    private boolean defaultAddress;
     
     @ManyToOne
     @JoinColumn(name = "user_id",nullable = false)

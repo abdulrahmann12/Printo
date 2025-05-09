@@ -20,5 +20,5 @@ public class AddressDTO {
 	@NotBlank(message = "Country name is required")
 	private String country;
 	
-	private boolean isDefault;
+	private boolean defaultAddress;
 }
