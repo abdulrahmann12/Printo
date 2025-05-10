@@ -39,7 +39,7 @@ public class CategoryController {
 	
 	@PutMapping("/{categoryId}")
 	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<CategoryDTO> createCategory(
+	public ResponseEntity<CategoryDTO> updateCategory(
 			@PathVariable Long categoryId,
 			@Valid @RequestPart("category") CategoryDTO categoryDTO,
             @RequestPart(value = "image", required = false) MultipartFile image) throws Exception {
@@ -72,7 +72,7 @@ public class CategoryController {
 	}
     
 	@DeleteMapping("/{categoryId}")
-	@PreAuthorize("isAuthenticated()")
+	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<BasicResponse> deleteCategory(@PathVariable Long categoryId){
 		categoryService.deleteCategory(categoryId);
 		return ResponseEntity.ok(new BasicResponse("Category deleted successfully"));

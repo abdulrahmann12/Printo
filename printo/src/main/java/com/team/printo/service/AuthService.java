@@ -2,7 +2,6 @@ package com.team.printo.service;
 
 import java.util.Optional;
 import java.util.Random;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.team.printo.dto.ChangePasswordRequest;
@@ -12,7 +11,6 @@ import com.team.printo.dto.UserDTO;
 import com.team.printo.dto.UserRegisterDTO;
 import com.team.printo.exception.ResourceNotFoundException;
 import com.team.printo.mapper.UserMapper;
-import com.team.printo.model.Token;
 import com.team.printo.model.User;
 import com.team.printo.model.User.Role;
 import com.team.printo.repository.TokenRepository;

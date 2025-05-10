@@ -10,7 +10,7 @@ import com.team.printo.model.Attribute;
 public interface AttributeMapper {
 	
 	@Mapping(target = "categoryId", source = "category.id")
-    AttributeDTO toDto(Attribute attribute);
+    AttributeDTO toDTO(Attribute attribute);
     
 	
 	@Mapping(target = "category.id", source = "categoryId")

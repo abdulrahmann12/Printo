@@ -36,7 +36,7 @@ public class Category {
     @ManyToOne
     @JoinColumn(name = "parent_id")
     private Category parent;
-    
+    	
     @OneToMany(mappedBy = "parent",cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Category> children = new ArrayList<>();
     

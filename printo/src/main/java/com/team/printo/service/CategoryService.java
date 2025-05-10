@@ -3,6 +3,7 @@ package com.team.printo.service;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
@@ -51,6 +52,13 @@ public class CategoryService {
 	}
 	
 	public CategoryDTO updateCategory(Long categoryId, CategoryDTO categoryDTO, MultipartFile image) throws Exception {
+		
+		Optional<Category> optionalCategory = categoryRepository.findByName(categoryDTO.getName());
+
+		if (optionalCategory.isPresent() && !optionalCategory.get().getId().equals(categoryId)) {
+		    throw new IllegalArgumentException("Category with name '" + categoryDTO.getName() + "' already exists.");
+		}
+	    
 		Category existingCategory = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
 		

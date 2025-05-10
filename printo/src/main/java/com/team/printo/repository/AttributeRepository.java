@@ -11,5 +11,7 @@ import com.team.printo.model.Attribute;
 @Repository
 public interface AttributeRepository extends JpaRepository<Attribute, Long>{
     List<Attribute> findByCategoryId(Long categoryId);
+    boolean existsByNameAndCategoryId(String name, Long categoryId);
+    boolean existsByNameAndCategoryIdAndIdNot(String name, Long categoryId, Long id);
 
 }
