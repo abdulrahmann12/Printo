@@ -1,5 +1,7 @@
 package com.team.printo.mapper;
 
+import java.util.List;
+
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -11,9 +13,15 @@ public interface AttributeValueMapper {
 
 	@Mapping(target = "attributeId", source = "attribute.id")
 	@Mapping(target = "productId", source = "product.id")
-    AttributeValueDTO toDto(AttributeValue attributeValue);
+    AttributeValueDTO toDTO(AttributeValue attributeValue);
     
-	@Mapping(target = "attribute.id", source = "attributeId")
-	@Mapping(target = "product.id", source = "productId")
+	@Mapping(target = "attribute", ignore = true)
+	@Mapping(target = "product", ignore = true)
     AttributeValue toEntity(AttributeValueDTO attributeValueDTO);
+	
+	List<AttributeValueDTO> toDTOS(List<AttributeValue> attributeValues);
+
+	
+	List<AttributeValue> toEntities(List<AttributeValueDTO> attributeValues);
+
 }

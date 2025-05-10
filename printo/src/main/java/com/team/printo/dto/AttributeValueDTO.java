@@ -17,5 +17,5 @@ public class AttributeValueDTO {
     @NotBlank(message = "Value is required")
 	private String value;
 	
-	private boolean isAvailable; 
+	private boolean available; 
 }

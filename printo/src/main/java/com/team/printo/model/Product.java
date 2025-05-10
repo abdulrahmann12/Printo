@@ -43,7 +43,8 @@ public class Product {
 
     private int quantity;
 
-    private boolean isActive;
+    @Column(name = "active")
+    private boolean active;
     
     private int salesCount;
     
@@ -54,7 +55,7 @@ public class Product {
     @OneToMany(mappedBy = "product",cascade = CascadeType.ALL)
     private List<ProductImage> images = new ArrayList<>();
     
-    @OneToMany(mappedBy = "product",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL,orphanRemoval = true)
     private List<AttributeValue> attributeValues = new ArrayList<>();
     
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)

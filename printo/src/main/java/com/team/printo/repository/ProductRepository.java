@@ -13,7 +13,11 @@ import com.team.printo.model.Product;
 public interface ProductRepository extends JpaRepository<Product, Long>{
 
 	List<Product> findByCategoryId(Long categoryId);
+
+	@Query("SELECT new com.team.printo.dto.ProductListDTO(p.id, p.name, p.price, p.description, p.image, p.quantity, p.active, p.salesCount, p.category.id) FROM Product p WHERE p.category.id = :categoryId")
+	List<ProductListDTO> findAllByCategoryId(Long categoryId);
+
 	
-	@Query("SELECT new com.team.printo.dto.ProductListDTO(p.id, p.name, p.description, p.price, p.quantity, p.image) FROM Product p")
+	@Query("SELECT new com.team.printo.dto.ProductListDTO(p.id, p.name, p.price, p.description, p.image, p.quantity, p.active, p.salesCount, p.category.id) FROM Product p")
 	List<ProductListDTO> findAllWithoutComment();
 }

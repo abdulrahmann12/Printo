@@ -26,13 +26,14 @@ public class AttributeValue {
     @Column(nullable = false)
     private String value;
 
-    private boolean isAvailable;
+    @Column(name = "available")
+    private Boolean available;
 
     @ManyToOne
     @JoinColumn(name = "attribute_id")
     private Attribute attribute;
 
     @ManyToOne
-    @JoinColumn(name = "product_id")
+    @JoinColumn(name = "product_id", nullable = false)
     private Product product;
 }

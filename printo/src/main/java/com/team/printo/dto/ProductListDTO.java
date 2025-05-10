@@ -2,11 +2,7 @@ package com.team.printo.dto;
 
 import java.math.BigDecimal;
 
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.PositiveOrZero;
-import jakarta.validation.constraints.Size;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -15,24 +11,32 @@ import lombok.Data;
 public class ProductListDTO {
 
 	
-    private long id;
-
-    @NotBlank(message = "Name is required")
+	private Long id;
+	
     private String name;
- 
-    
-    @Size(max = 500, message = "Description must be less than 500 characters")
-    private String description;
-    
-    @NotNull(message = "Price is required")
-    @Positive(message = "Price must be positive")
+
     private BigDecimal price;
-    
-    @PositiveOrZero(message = "Quantity can't be negative")
-    private int quantity;
-    
+
+    private String description;
+
     private String image;
+
+    private int quantity;
+
+    private boolean active;
+
+    private int salesCount;
+
+    private Long categoryId;
     
+    public ProductListDTO(Long id, String name, String description, BigDecimal price, int quantity, String image) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.price = price;
+        this.quantity = quantity;
+        this.image = image;
+    }
     
 	
 }

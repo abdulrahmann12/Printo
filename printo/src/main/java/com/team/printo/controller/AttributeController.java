@@ -62,5 +62,4 @@ public class AttributeController {
 		return ResponseEntity.ok(attributes);
 	}
 	
-	
 }
