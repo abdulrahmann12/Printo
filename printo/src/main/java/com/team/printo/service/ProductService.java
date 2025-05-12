@@ -14,7 +14,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.team.printo.dto.AttributeValueDTO;
 import com.team.printo.dto.AttributeValueResponseDTO;
-import com.team.printo.dto.ProductDTO;
+import com.team.printo.dto.ProductRequestDTO;
 import com.team.printo.dto.ProductListDTO;
 import com.team.printo.dto.ProductResponseDTO;
 import com.team.printo.exception.ResourceNotFoundException;
@@ -39,7 +39,7 @@ public class ProductService {
 	private final CategoryRepository categoryRepository;
 	private final AttributeRepository attributeRepository;
 	
-	public ProductResponseDTO createProduct(ProductDTO productDTO, MultipartFile image) throws Exception {
+	public ProductResponseDTO createProduct(ProductRequestDTO productDTO, MultipartFile image) throws Exception {
 	    Category category = categoryRepository.findById(productDTO.getCategoryId())
 	            .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
 	    Product product = productMapper.toEntity(productDTO);
@@ -70,7 +70,7 @@ public class ProductService {
         return dto;
 	}
 	
-	public ProductResponseDTO updateProduct(Long productId, ProductDTO productDTO, MultipartFile image) throws Exception {
+	public ProductResponseDTO updateProduct(Long productId, ProductRequestDTO productDTO, MultipartFile image) throws Exception {
 	    Product existingProduct = productRepository.findById(productId)
 	            .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
 	    
@@ -141,7 +141,7 @@ public class ProductService {
 	}
 	
 	// to get list of AttributeValue and used to assign it to product 
-	private List<AttributeValue> createAttributeValues(Product product, Category category, ProductDTO productDTO){
+	private List<AttributeValue> createAttributeValues(Product product, Category category, ProductRequestDTO productDTO){
         List<AttributeValue> attributeValues = new ArrayList<>();
         
 	    if (productDTO.getAttributeValues() != null && !productDTO.getAttributeValues().isEmpty()) {

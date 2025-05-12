@@ -11,7 +11,7 @@ import org.mapstruct.Mapping;
 
 import com.team.printo.dto.AttributeValueDTO;
 import com.team.printo.dto.AttributeValueResponseDTO;
-import com.team.printo.dto.ProductDTO;
+import com.team.printo.dto.ProductRequestDTO;
 import com.team.printo.dto.ProductResponseDTO;
 import com.team.printo.dto.ReviewDTO;
 import com.team.printo.model.AttributeValue;
@@ -24,14 +24,14 @@ public interface ProductMapper {
     @Mapping(target = "categoryId",  source = "category.id")
     @Mapping(target = "attributeValues", source = "attributeValues")
     @Mapping(target = "review.id", ignore = true)
-	ProductDTO toDTO(Product product);
+    ProductRequestDTO toDTO(Product product);
 	
     @Mapping(target = "category.id",  source = "categoryId")
     @Mapping(target = "attributeValues", source = "attributeValues")
     @Mapping(target = "reviews", ignore = true)
     @Mapping(target = "templates", ignore = true)
     @Mapping(target = "designs", ignore = true)
-	Product toEntity(ProductDTO productDTO);
+	Product toEntity(ProductRequestDTO productDTO);
     
     
     // Product to ProductRespnseDTO

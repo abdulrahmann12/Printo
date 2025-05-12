@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.team.printo.dto.BasicResponse;
-import com.team.printo.dto.ProductDTO;
+import com.team.printo.dto.ProductRequestDTO;
 import com.team.printo.dto.ProductListDTO;
 import com.team.printo.dto.ProductResponseDTO;
 import com.team.printo.service.ProductService;
@@ -34,7 +34,7 @@ public class ProductController {
     @PostMapping
 	@PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ProductResponseDTO> createProduct(
-    		@Valid @RequestPart("product") ProductDTO productDTO,
+    		@Valid @RequestPart("product") ProductRequestDTO productDTO,
             @RequestPart(value = "image", required = false) MultipartFile image) throws Exception {
     	ProductResponseDTO createdProduct = productService.createProduct(productDTO, image);
         return ResponseEntity.ok(createdProduct);
@@ -45,7 +45,7 @@ public class ProductController {
 	@PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<ProductResponseDTO> updateProduct(
     		@PathVariable Long productId,
-    		@Valid @RequestPart("product") ProductDTO productDTO,
+    		@Valid @RequestPart("product") ProductRequestDTO productDTO,
             @RequestPart(value = "image", required = false) MultipartFile image) throws Exception {
     	ProductResponseDTO updateProduct = productService.updateProduct(productId,productDTO, image);
         return ResponseEntity.ok(updateProduct);
