@@ -17,7 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.team.printo.dto.BasicResponse;
 import com.team.printo.dto.ProductDTO;
 import com.team.printo.dto.ProductListDTO;
-import com.team.printo.dto.ProductRespnseDTO;
+import com.team.printo.dto.ProductResponseDTO;
 import com.team.printo.service.ProductService;
 
 import jakarta.validation.Valid;
@@ -33,21 +33,21 @@ public class ProductController {
     
     @PostMapping
 	@PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ProductRespnseDTO> createProduct(
+    public ResponseEntity<ProductResponseDTO> createProduct(
     		@Valid @RequestPart("product") ProductDTO productDTO,
             @RequestPart(value = "image", required = false) MultipartFile image) throws Exception {
-    	ProductRespnseDTO createdProduct = productService.createProduct(productDTO, image);
+    	ProductResponseDTO createdProduct = productService.createProduct(productDTO, image);
         return ResponseEntity.ok(createdProduct);
     }
     
     
     @PutMapping("/{productId}")
 	@PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ProductRespnseDTO> updateProduct(
+    public ResponseEntity<ProductResponseDTO> updateProduct(
     		@PathVariable Long productId,
     		@Valid @RequestPart("product") ProductDTO productDTO,
             @RequestPart(value = "image", required = false) MultipartFile image) throws Exception {
-    	ProductRespnseDTO updateProduct = productService.updateProduct(productId,productDTO, image);
+    	ProductResponseDTO updateProduct = productService.updateProduct(productId,productDTO, image);
         return ResponseEntity.ok(updateProduct);
     }
     
@@ -67,7 +67,7 @@ public class ProductController {
 	
 	@GetMapping("/{productId}")
 	@PreAuthorize("isAuthenticated()")
-	public ResponseEntity<ProductRespnseDTO> getProductById(@PathVariable Long productId){
+	public ResponseEntity<ProductResponseDTO> getProductById(@PathVariable Long productId){
 		return ResponseEntity.ok(productService.getProductById(productId));
 	}
 	

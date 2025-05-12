@@ -14,14 +14,13 @@ import com.team.printo.model.Product;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpecificationExecutor<Product>{
 
-	List<Product> findByCategoryId(Long categoryId);
 
 	@Query("SELECT new com.team.printo.dto.ProductListDTO(p.id, p.name, p.price, p.description, p.image, p.quantity, p.active, p.category.id) FROM Product p WHERE p.category.id = :categoryId AND p.active = true")
 	List<ProductListDTO> findAllByCategoryId(Long categoryId);
 
 	
 	@Query("SELECT new com.team.printo.dto.ProductListDTO(p.id, p.name, p.price, p.description, p.image, p.quantity, p.active, p.category.id) FROM Product p WHERE p.active = true")
-	List<ProductListDTO> findAllWithoutComment();
+	List<ProductListDTO> findAllWithoutReviews();
 	
 	@Query("SELECT new com.team.printo.dto.ProductListDTO(p.id, p.name, p.price, p.description, p.image, p.quantity, p.active, p.category.id) FROM Product p WHERE p.active = true ORDER BY p.salesCount DESC")
 	List<ProductListDTO> findByOrderBySalesCountDesc(Pageable pageable);

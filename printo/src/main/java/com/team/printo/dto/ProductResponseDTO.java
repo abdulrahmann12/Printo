@@ -9,7 +9,7 @@ import java.util.Map;
 import lombok.Data;
 
 @Data
-public class ProductRespnseDTO {
+public class ProductResponseDTO {
 
 	private Long id;
 	
@@ -29,6 +29,6 @@ public class ProductRespnseDTO {
 
     private List<ProductImageDTO> images = new ArrayList<>();
 
-    private Map<String, List<AttributeValueResponseDTO>> attributeValues = new HashMap<>();  // استخدام Map لتجميع الـ attributeId مع الـ List
+    private Map<String, List<AttributeValueResponseDTO>> attributeValues = new HashMap<>(); 
     
 }
