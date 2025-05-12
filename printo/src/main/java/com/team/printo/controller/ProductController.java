@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.team.printo.dto.BasicResponse;
 import com.team.printo.dto.ProductDTO;
 import com.team.printo.dto.ProductListDTO;
+import com.team.printo.dto.ProductRespnseDTO;
 import com.team.printo.service.ProductService;
 
 import jakarta.validation.Valid;
@@ -32,21 +33,21 @@ public class ProductController {
     
     @PostMapping
 	@PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ProductDTO> createProduct(
+    public ResponseEntity<ProductRespnseDTO> createProduct(
     		@Valid @RequestPart("product") ProductDTO productDTO,
             @RequestPart(value = "image", required = false) MultipartFile image) throws Exception {
-        ProductDTO createdProduct = productService.createProduct(productDTO, image);
+    	ProductRespnseDTO createdProduct = productService.createProduct(productDTO, image);
         return ResponseEntity.ok(createdProduct);
     }
     
     
     @PutMapping("/{productId}")
 	@PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ProductDTO> updateProduct(
+    public ResponseEntity<ProductRespnseDTO> updateProduct(
     		@PathVariable Long productId,
     		@Valid @RequestPart("product") ProductDTO productDTO,
             @RequestPart(value = "image", required = false) MultipartFile image) throws Exception {
-        ProductDTO updateProduct = productService.updateProduct(productId,productDTO, image);
+    	ProductRespnseDTO updateProduct = productService.updateProduct(productId,productDTO, image);
         return ResponseEntity.ok(updateProduct);
     }
     
@@ -66,7 +67,7 @@ public class ProductController {
 	
 	@GetMapping("/{productId}")
 	@PreAuthorize("isAuthenticated()")
-	public ResponseEntity<ProductDTO> getProductById(@PathVariable Long productId){
+	public ResponseEntity<ProductRespnseDTO> getProductById(@PathVariable Long productId){
 		return ResponseEntity.ok(productService.getProductById(productId));
 	}
 	
@@ -76,5 +77,12 @@ public class ProductController {
         List<ProductListDTO> products = productService.getProductsByCategoryId(categoryId);
         return ResponseEntity.ok(products);	   
     }
+    
+	@GetMapping("/best-Selling/{numberOfItem}")
+	@PreAuthorize("isAuthenticated()")
+	public ResponseEntity<List<ProductListDTO>> getTopSellingProducts(@PathVariable int numberOfItem){
+		return ResponseEntity.ok(productService.getTopSellingProducts(numberOfItem));
+	}
+
     
 }

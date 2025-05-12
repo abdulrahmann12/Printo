@@ -2,14 +2,21 @@ package com.team.printo.service;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.PageRequest;
 
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.team.printo.dto.AttributeValueDTO;
+import com.team.printo.dto.AttributeValueResponseDTO;
 import com.team.printo.dto.ProductDTO;
 import com.team.printo.dto.ProductListDTO;
+import com.team.printo.dto.ProductRespnseDTO;
 import com.team.printo.exception.ResourceNotFoundException;
 import com.team.printo.mapper.ProductMapper;
 import com.team.printo.model.Attribute;
@@ -32,7 +39,7 @@ public class ProductService {
 	private final CategoryRepository categoryRepository;
 	private final AttributeRepository attributeRepository;
 	
-	public ProductDTO createProduct(ProductDTO productDTO, MultipartFile image) throws Exception {
+	public ProductRespnseDTO createProduct(ProductDTO productDTO, MultipartFile image) throws Exception {
 	    Category category = categoryRepository.findById(productDTO.getCategoryId())
 	            .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
 	    Product product = productMapper.toEntity(productDTO);
@@ -53,14 +60,22 @@ public class ProductService {
         savedProduct.getAttributeValues().addAll(attributeValues);
 	    
         Product finalProduct = productRepository.save(savedProduct);
-        return productMapper.toDTO(finalProduct);
+        
+        ProductRespnseDTO dto = productMapper.toResponseDTO(finalProduct);
+        dto.setCategoryName(category.getName());
+
+        Map<String, List<AttributeValueResponseDTO>> attributeValuesMap = mapAttributeValues(product);
+        dto.setAttributeValues(attributeValuesMap);
+        
+        return dto;
 	}
 	
-	public ProductDTO updateProduct(Long productId, ProductDTO productDTO, MultipartFile image) throws Exception {
+	public ProductRespnseDTO updateProduct(Long productId, ProductDTO productDTO, MultipartFile image) throws Exception {
 
-	    Category category = categoryRepository.findById(productDTO.getCategoryId())
-	            .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
 	    Product existingProduct = productRepository.findById(productId)
+	            .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
+	    
+	    Category category = categoryRepository.findById(productDTO.getCategoryId())
 	            .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
 
 	    existingProduct.setName(productDTO.getName());
@@ -78,25 +93,39 @@ public class ProductService {
 	            throw new Exception("Error occurred while saving image: " + e.getMessage());
 	        }
 	    }
+        Product updatedProduct = productRepository.save(existingProduct);
+
+        List<AttributeValue> attributeValues = createAttributeValues(updatedProduct, category, productDTO);
+        updatedProduct.getAttributeValues().clear();
+        updatedProduct.getAttributeValues().addAll(attributeValues);
 	    
-	    List<AttributeValue> updatedAttributeValues = createAttributeValues(existingProduct, category, productDTO);
+        Product finalProduct = productRepository.save(updatedProduct);
+        
+        ProductRespnseDTO dto = productMapper.toResponseDTO(finalProduct);
+        dto.setCategoryName(category.getName());
 
-	    existingProduct.getAttributeValues().clear();
-	    existingProduct.getAttributeValues().addAll(updatedAttributeValues);
-
-	    Product updatedProduct = productRepository.save(existingProduct);
-	    return productMapper.toDTO(updatedProduct);
+        Map<String, List<AttributeValueResponseDTO>> attributeValuesMap = mapAttributeValues(finalProduct);
+        dto.setAttributeValues(attributeValuesMap);
+        
+        return dto;
 	}
 	
     public List<ProductListDTO> getAllProducts(){    	
     	return productRepository.findAllWithoutComment();
     }
 	
-	public ProductDTO getProductById(Long productId) {
+	public ProductRespnseDTO getProductById(Long productId) {
 	    Product product = productRepository.findById(productId)
 	            .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + productId));
-	    return productMapper.toDTO(product);
+	    ProductRespnseDTO dto = productMapper.toResponseDTO(product);
+	    dto.setCategoryName(product.getCategory().getName());
+	    dto.setAttributeValues(mapAttributeValues(product));
+	    return dto;
 	}
+
+
+	
+
 	
 	public void deleteProduct(Long productId) {
 	    Product product = productRepository.findById(productId)
@@ -112,7 +141,13 @@ public class ProductService {
 	    return productRepository.findAllByCategoryId(category.getId());
 	}
 	
-	public List<AttributeValue> createAttributeValues(Product product, Category category, ProductDTO productDTO){
+	public List<ProductListDTO> getTopSellingProducts(int limit) {
+	    Pageable pageable = PageRequest.of(0, limit);
+	    return productRepository.findByOrderBySalesCountDesc(pageable);
+	}
+	
+	// to get list of AttributeValue and used to assign it to product 
+	private List<AttributeValue> createAttributeValues(Product product, Category category, ProductDTO productDTO){
         List<AttributeValue> attributeValues = new ArrayList<>();
         
 	    if (productDTO.getAttributeValues() != null && !productDTO.getAttributeValues().isEmpty()) {
@@ -135,5 +170,24 @@ public class ProductService {
 	    }
 	    return attributeValues;
 	}
+
+	// to get Map of AttributeValue and used in response (every attributeName have list of AttributeValue)
+    private Map<String, List<AttributeValueResponseDTO>> mapAttributeValues(Product product) {
+    	Map<String, List<AttributeValueResponseDTO>> attributeValuesMap = new HashMap<>();
+
+    	for (AttributeValue attributeValue : product.getAttributeValues()) {
+    	    String attributeName = attributeValue.getAttribute().getName();
+    	    AttributeValueResponseDTO attributeValueResponseDTO = new AttributeValueResponseDTO(
+    	            attributeValue.getId(),
+    	            attributeValue.getAttribute().getId(),
+    	            attributeValue.getAttribute().getName(),
+    	            attributeValue.getValue(),
+    	            attributeValue.getAvailable()
+    	    );
+    	    
+    	    attributeValuesMap.computeIfAbsent(attributeName, k -> new ArrayList<>()).add(attributeValueResponseDTO);
+    	}
+        return attributeValuesMap;
+    }
 
 }

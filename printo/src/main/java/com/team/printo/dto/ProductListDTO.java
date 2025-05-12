@@ -25,8 +25,6 @@ public class ProductListDTO {
 
     private boolean active;
 
-    private int salesCount;
-
     private Long categoryId;
     
     public ProductListDTO(Long id, String name, String description, BigDecimal price, int quantity, String image) {

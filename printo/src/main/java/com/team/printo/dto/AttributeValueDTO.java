@@ -7,8 +7,6 @@ import lombok.Data;
 @Data
 public class AttributeValueDTO {
 
-	private Long id;
-	
 	private Long productId;
 	
     @NotNull(message = "Attribute ID is required")

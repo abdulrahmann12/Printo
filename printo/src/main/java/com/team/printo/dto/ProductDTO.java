@@ -14,7 +14,6 @@ import lombok.Data;
 @Data
 public class ProductDTO {
 
-	private Long id;
 	
     @NotBlank(message = "Name is required")
     private String name;
@@ -26,20 +25,14 @@ public class ProductDTO {
     @NotBlank(message = "Description is required")
     private String description;
 
-    private String image;
-
     @PositiveOrZero(message = "Quantity must be zero or positive")
     private int quantity;
 
     private boolean active;
 
-    @PositiveOrZero(message = "Sales count must be zero or positive")
-    private int salesCount;
-
     @NotNull(message = "Category ID is required")
     private Long categoryId;
 
-    private List<ProductImageDTO> images = new ArrayList<>();
-
     private List<@Valid AttributeValueDTO> attributeValues = new ArrayList<>();
+    
 }
