@@ -7,6 +7,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Pageable;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
 
 import org.springframework.stereotype.Service;
@@ -135,6 +136,11 @@ public class ProductService {
 	    return productRepository.findAllByCategoryId(category.getId());
 	}
 	
+	@Cacheable(value = "products", key = "#keyword")
+	public List<ProductListDTO> fastSearch(String keyword) {
+        return productRepository.fastSearch(keyword);
+    }
+	
 	public List<ProductListDTO> getTopSellingProducts(int limit) {
 	    Pageable pageable = PageRequest.of(0, limit);
 	    return productRepository.findByOrderBySalesCountDesc(pageable);
@@ -183,4 +189,6 @@ public class ProductService {
 	    product.setSalesCount(product.getSalesCount()+1);
 	    productRepository.save(product);
 	}
+	
+	
 }

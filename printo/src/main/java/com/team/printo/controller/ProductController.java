@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -83,6 +84,12 @@ public class ProductController {
 	public ResponseEntity<List<ProductListDTO>> getTopSellingProducts(@PathVariable int numberOfItem){
 		return ResponseEntity.ok(productService.getTopSellingProducts(numberOfItem));
 	}
+	
+    @GetMapping("/fast-search")
+    @PreAuthorize("isAuthenticated()") 
+    public List<ProductListDTO> fastSearchByName(@RequestParam String keyword) {
+        return productService.fastSearch(keyword);
+    }
 
     
 }
