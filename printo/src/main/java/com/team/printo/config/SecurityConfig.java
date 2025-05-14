@@ -17,6 +17,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 
 import com.team.printo.repository.TokenRepository;
 import com.team.printo.repository.UserRepository;
@@ -42,7 +43,12 @@ public class SecurityConfig {
 					.requestMatchers("/").permitAll()
 					.requestMatchers("/images/**").permitAll()
 					.requestMatchers("/index.html").permitAll()
-					.requestMatchers("/api/auth/**").permitAll()
+	                .requestMatchers(
+	                	    "/v3/api-docs/**",
+	                	    "/swagger-ui.html",
+	                	    "/swagger-ui/**"
+	                    ).permitAll()
+	                .requestMatchers("/api/auth/**").permitAll()
 					.requestMatchers(HttpMethod.GET,"/api/products/**").permitAll()
 					.requestMatchers("/api/auth/change-password").authenticated()
 					.requestMatchers("/api/auth/refresh-token").permitAll()

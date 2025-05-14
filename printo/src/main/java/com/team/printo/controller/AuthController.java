@@ -44,6 +44,7 @@ public class AuthController {
 	private final AuthenticationManager authenticationManager;
 	
 	
+	
 	@PostMapping("/login")
 	public ResponseEntity<BasicResponse> login(@RequestBody LoginRequest loginRequest){
 		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
