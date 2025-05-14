@@ -91,5 +91,11 @@ public class ProductController {
         return productService.fastSearch(keyword);
     }
 
-    
+    @GetMapping("/fast-search/price")
+    @PreAuthorize("isAuthenticated()") 
+    public List<ProductListDTO> fastSearchByPriceRange(
+            @RequestParam double minPrice,
+            @RequestParam double maxPrice) {
+        return productService.fastSearchByPriceRange(minPrice, maxPrice);
+    }
 }

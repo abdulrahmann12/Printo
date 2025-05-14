@@ -29,4 +29,6 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
 	@Query("SELECT new com.team.printo.dto.ProductListDTO(p.id, p.name, p.price, p.description, p.image, p.quantity, p.active, p.category.id) FROM Product p WHERE LOWER(p.name) LIKE LOWER(concat('%', :keyword, '%'))")
 	List<ProductListDTO> fastSearch(@Param("keyword") String keyword);
 
+	@Query("SELECT new com.team.printo.dto.ProductListDTO(p.id, p.name, p.price, p.description, p.image, p.quantity, p.active, p.category.id) FROM Product p WHERE p.price BETWEEN :minPrice AND :maxPrice")
+	List<ProductListDTO> fastSearchByPriceRange(@Param("minPrice") double minPrice, @Param("maxPrice") double maxPrice);
 }

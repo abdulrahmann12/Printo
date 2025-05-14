@@ -146,6 +146,11 @@ public class ProductService {
 	    return productRepository.findByOrderBySalesCountDesc(pageable);
 	}
 	
+    @Cacheable(value = "products", key = "#minPrice + '-' + #maxPrice")
+    public List<ProductListDTO> fastSearchByPriceRange(double minPrice, double maxPrice) {
+        return productRepository.fastSearchByPriceRange(minPrice, maxPrice);
+    }
+	
 	// to get list of AttributeValue and used to assign it to product 
 	private List<AttributeValue> createAttributeValues(Product product, Category category, ProductRequestDTO productDTO){
         List<AttributeValue> attributeValues = new ArrayList<>();
