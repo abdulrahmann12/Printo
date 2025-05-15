@@ -15,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.team.printo.dto.AttributeValueDTO;
 import com.team.printo.dto.AttributeValueResponseDTO;
+import com.team.printo.dto.ProductImageDTO;
 import com.team.printo.dto.ProductRequestDTO;
 import com.team.printo.dto.ProductListDTO;
 import com.team.printo.dto.ProductResponseDTO;
@@ -39,6 +40,7 @@ public class ProductService {
 	private final ImageService imageService;
 	private final CategoryRepository categoryRepository;
 	private final AttributeRepository attributeRepository;
+	private final ProductImagesService productImagesService;
 	
 	public ProductResponseDTO createProduct(ProductRequestDTO productDTO, MultipartFile image) throws Exception {
 	    Category category = categoryRepository.findById(productDTO.getCategoryId())
@@ -119,6 +121,10 @@ public class ProductService {
 	    ProductResponseDTO dto = productMapper.toResponseDTO(product);
 	    dto.setCategoryName(product.getCategory().getName());
 	    dto.setAttributeValues(mapAttributeValues(product));
+	    
+	    List<ProductImageDTO> images = productImagesService.getImagesByProductId(productId);
+	    dto.setImages(images);
+	    
 	    return dto;
 	}
 	
