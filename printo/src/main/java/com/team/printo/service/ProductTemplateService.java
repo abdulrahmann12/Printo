@@ -7,61 +7,62 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.team.printo.dto.ProductImageDTO;
+import com.team.printo.dto.ProductTemplateDTO;
 import com.team.printo.exception.ResourceNotFoundException;
-import com.team.printo.mapper.ProductImageMapper;
+import com.team.printo.mapper.ProductTemplateMapper;
 import com.team.printo.model.Product;
-import com.team.printo.model.ProductImage;
-import com.team.printo.repository.ProductImageRepository;
+import com.team.printo.model.ProductTemplate;
 import com.team.printo.repository.ProductRepository;
+import com.team.printo.repository.ProductTemplateRepository;
 
 import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
-public class ProductImagesService {
-	private final ProductRepository productRepository;
-	private final ProductImageRepository productImageRepository;
-	private final ImageService imageService;
-	private final ProductImageMapper productImageMapper;
+public class ProductTemplateService {
 	
-	public ProductImageDTO addImageToProduct(Long productId, MultipartFile image) throws Exception{
+	private final ProductRepository productRepository;
+	private final ProductTemplateRepository productTemplateRepository;
+	private final ImageService imageService;
+	private final ProductTemplateMapper productTemplateMapper;
+	
+	public ProductTemplateDTO addTempleteToProduct(Long productId, MultipartFile image) throws Exception{
 	    Product product = productRepository.findById(productId)
 	            .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
 	    
-	    ProductImage productImage = new ProductImage();
+	    ProductTemplate productTemplate = new ProductTemplate();
 	    
 	    if (image != null && !image.isEmpty()) {
 	        try {
 	            String imageUrl = imageService.uploadImage(image);
-	    	    productImage.setImage(imageUrl);
+	            productTemplate.setImage(imageUrl);
 	        } catch (IOException e) {
 	            throw new Exception("Error occurred while saving image: " + e.getMessage());
 	        }
 	    }
 	    
-	    productImage.setProduct(product);
+	    productTemplate.setProduct(product);
 	    
-	    ProductImage savedImage = productImageRepository.save(productImage);
+	    ProductTemplate savedTemplete = productTemplateRepository.save(productTemplate);
 	    
-		return productImageMapper.toDto(savedImage);
+		return productTemplateMapper.toDto(savedTemplete);
 	}
 	
-	public List<ProductImageDTO> getImagesByProductId(Long productId) {
+	public List<ProductTemplateDTO> getTempletesByProductId(Long productId) {
 	    Product product = productRepository.findById(productId)
 	            .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
-	    List<ProductImage> images = productImageRepository.findByProductId(product.getId());
+	    List<ProductTemplate> images = productTemplateRepository.findByProductId(product.getId());
 	    return images.stream()
-	            .map(productImageMapper::toDto)
+	            .map(productTemplateMapper::toDto)
 	            .collect(Collectors.toList());
 	}
 	
-    public void deleteImage(Long imageId) {
-        if (!productImageRepository.existsById(imageId)) {
-            throw new RuntimeException("Image not found with ID: " + imageId);
+    public void deleteTemplate(Long imageId) {
+        if (!productTemplateRepository.existsById(imageId)) {
+            throw new RuntimeException("Template not found with ID: " + imageId);
         }
 
-        productImageRepository.deleteById(imageId);
+        productTemplateRepository.deleteById(imageId);
     }
 	
 }
