@@ -20,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class AddressService {
-
+	
 	private final AddressRepository addressRepository;
 	private final UserRepository userRepository;
 	private final AddressMapper addressMapper;
