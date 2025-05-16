@@ -22,6 +22,7 @@ public class UserService {
 	private final UserRepository userRepository;
 	private final UserMapper userMapper;
 	private final ImageService imageService;
+	private final AuthService authService;
 	
 	public UserDTO findUserById(Long userId) {
 		User user = userRepository.findById(userId)
@@ -34,7 +35,7 @@ public class UserService {
 		return userMapper.toDTOS(users);		
 	}
 	
-	public UserDTO updateUser(Long userId, UserDTO userDTO) {
+	public UserDTO updateUser(Long userId, UserDTO userDTO,String token) {
 		
 		User user = userMapper.toEntity(userDTO);
 		
@@ -44,8 +45,11 @@ public class UserService {
 	    existingUser.setLastName(user.getLastName());
 	    existingUser.setEmail(user.getEmail());
 	    existingUser.setPhone(user.getPhone());
-	    
+	    if(!existingUser.getEmail().equals(userDTO.getEmail())) {
+	    	authService.logout(token);
+	    }
 	    User savedUser = userRepository.save(existingUser);
+	    
 	    return userMapper.toDTO(savedUser);
 	}
 
