@@ -27,6 +27,9 @@ public class ProductListDTO {
 
     private Long categoryId;
     
+    public ProductListDTO() {
+    }
+    
     public ProductListDTO(Long id, String name, String description, BigDecimal price, int quantity, String image) {
         this.id = id;
         this.name = name;
