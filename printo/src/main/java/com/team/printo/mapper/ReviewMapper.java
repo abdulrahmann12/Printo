@@ -9,12 +9,12 @@ import com.team.printo.model.Review;
 @Mapper(componentModel = "spring")
 public interface ReviewMapper {
 
-	@Mapping(target = "userId", source = "user.id")
+    @Mapping(target = "userName", source = "user.firstName")
 	@Mapping(target = "productId", source = "product.id")
 	ReviewDTO toDTO(Review review);
 	
 	
-	@Mapping(target = "user.id", source = "userId")
+	@Mapping(target = "user", ignore = true)
 	@Mapping(target = "product", ignore = true)
 	Review toEntity(ReviewDTO reviewDTO);
 }

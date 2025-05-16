@@ -41,6 +41,7 @@ public interface ProductMapper {
     @Mapping(target = "attributeValues", source = "attributeValues") 
     ProductResponseDTO toResponseDTO(Product product);
     
+
     default Map<String, List<AttributeValueResponseDTO>> groupByAttributeName(List<AttributeValue> attributeValues) {
         if (attributeValues == null || attributeValues.isEmpty()) {
             return Collections.emptyMap();
@@ -57,15 +58,15 @@ public interface ProductMapper {
                 .collect(Collectors.groupingBy(AttributeValueResponseDTO::getAttributeName));
     }
     
-	@Mapping(target = "userId", source = "user.id")
+
+    @Mapping(target = "userName", source = "user.firstName")
 	@Mapping(target = "productId", source = "product.id")
 	ReviewDTO toDTO(Review review);
 	
 	
-	@Mapping(target = "user.id", source = "userId")
+	@Mapping(target = "user", ignore = true)
 	@Mapping(target = "product", ignore = true)
 	Review toEntity(ReviewDTO reviewDTO);
-	
 	
 	@Mapping(target = "attributeId", source = "attribute.id")
 	@Mapping(target = "productId", source = "product.id")

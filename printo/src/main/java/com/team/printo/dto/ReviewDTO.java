@@ -17,7 +17,7 @@ public class ReviewDTO {
     @NotBlank(message = "Comment is required")
 	private String comment;
 	
-	private Long userId;
+	private String userName;
 	
 	private Long productId;
 }
