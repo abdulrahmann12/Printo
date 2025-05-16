@@ -51,7 +51,7 @@ public class AddressController {
 	@PreAuthorize("isAuthenticated()")
 	public ResponseEntity<BasicResponse> setDefaultAddress(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long addressId){
 		Long userId = ((User) userDetails).getId();
-		addressService.setDefaultAddress(userId,addressId);
+		addressService.defaultAddress(userId,addressId);
 		return ResponseEntity.ok(new BasicResponse("Address updated successfully"));
 	}
 	
@@ -65,16 +65,24 @@ public class AddressController {
 	
 	@GetMapping("/{addressId}")
 	@PreAuthorize("isAuthenticated()")
-	public ResponseEntity<AddressDTO> getAddress(@PathVariable Long addressId){
-		AddressDTO address = addressService.getAddressById(addressId);
+	public ResponseEntity<AddressDTO> getAddress(
+			@PathVariable Long addressId,
+			@AuthenticationPrincipal UserDetails userDetails
+			){
+		Long userId = ((User) userDetails).getId();
+		AddressDTO address = addressService.getAddressById(addressId,userId);
 		return ResponseEntity.ok(address);
 	}
 	
 	@DeleteMapping("/{addressId}")
 	@PreAuthorize("isAuthenticated()")
-	public ResponseEntity<BasicResponse> deleteAddress(@PathVariable Long addressId){
+	public ResponseEntity<BasicResponse> deleteAddress(
+			@PathVariable Long addressId,
+			@AuthenticationPrincipal UserDetails userDetails
+			){
 	    try {
-	        addressService.deleteAddressById(addressId);
+	    	Long userId = ((User) userDetails).getId();
+	        addressService.deleteAddressById(addressId,userId);
 	        return ResponseEntity.ok(new BasicResponse("Address deleted successfully"));
 	    } catch (IllegalArgumentException ex) {
 	        return ResponseEntity.badRequest().body(new BasicResponse(ex.getMessage()));

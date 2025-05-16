@@ -41,7 +41,7 @@ public class AddressService {
 	        address.setDefaultAddress(true);
 	    }
 	    else if (addressDTO.isDefaultAddress()) {
-			setDefaultAddress(userId,address.getId());
+	    	defaultAddress(userId,address.getId());
 	    }
 	    else {
 	        address.setDefaultAddress(false);
@@ -55,12 +55,16 @@ public class AddressService {
 		Address existingAddress = addressRepository.findById(addressId)
 				.orElseThrow(() -> new ResourceNotFoundException("Address not found"));
 		
+	    if (!Objects.equals(existingAddress.getUser().getId(), userId)) {
+	        throw new IllegalArgumentException("Address does not belong to this user");
+	    }
+	    
 		existingAddress.setCity(addressDTO.getCity());
 		existingAddress.setCountry(addressDTO.getCountry());
 		existingAddress.setStreet(addressDTO.getStreet());
 		
 		if (addressDTO.isDefaultAddress()) {
-			setDefaultAddress(userId,addressId);
+			defaultAddress(userId,addressId);
 	    }
 	    else {
 	    	existingAddress.setDefaultAddress(false);
@@ -70,7 +74,7 @@ public class AddressService {
 		return addressMapper.toDTO(savedAddress);
 	}
 	
-	public void setDefaultAddress(Long userId, Long addressId) {
+	public void defaultAddress(Long userId, Long addressId) {
 	    Address address = addressRepository.findById(addressId)
 	        .orElseThrow(() -> new ResourceNotFoundException("Address not found"));
 
@@ -95,15 +99,22 @@ public class AddressService {
 	    return addresses.stream().map(addressMapper::toDTO).collect(Collectors.toList());
 	}
 	
-	public AddressDTO getAddressById(Long addressId) {
+	public AddressDTO getAddressById(Long addressId, Long userId) {
 	    Address address = addressRepository.findById(addressId)
 		        .orElseThrow(() -> new ResourceNotFoundException("Address not found"));
+	    if (!Objects.equals(address.getUser().getId(), userId)) {
+	        throw new IllegalArgumentException("Address does not belong to this user");
+	    }
+	    
 	    return addressMapper.toDTO(address);
 	}
 	
-	public void deleteAddressById(Long addressId) {
+	public void deleteAddressById(Long addressId, Long userId) {
 	    Address address = addressRepository.findById(addressId)
 		        .orElseThrow(() -> new ResourceNotFoundException("Address not found"));
+	    if (!Objects.equals(address.getUser().getId(), userId)) {
+	        throw new IllegalArgumentException("Address does not belong to this user");
+	    }
 	    if (address.isDefaultAddress()) {
 	        throw new IllegalArgumentException("Cannot delete default address");
 	    }
