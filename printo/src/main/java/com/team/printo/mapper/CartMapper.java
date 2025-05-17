@@ -7,9 +7,11 @@ import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
 import com.team.printo.dto.CartDTO;
+import com.team.printo.dto.CartItemAttributeValueDTO;
 import com.team.printo.dto.CartItemDTO;
 import com.team.printo.model.Cart;
 import com.team.printo.model.CartItem;
+import com.team.printo.model.CartItemAttributeValue;
 
 	@Mapper(componentModel = "spring")
 public interface CartMapper {
@@ -32,4 +34,13 @@ public interface CartMapper {
 	
     @IterableMapping(elementTargetType = CartItemDTO.class)
     List<CartItemDTO> toCartItemDTOList(List<CartItem> cartItems);
+    
+    @Mapping(source = "cartItem.id", target = "cartItemId")
+    @Mapping(source = "attributeValue.id", target = "attributeValueId")
+    CartItemAttributeValueDTO toDTO(CartItemAttributeValue entity);
+
+    @Mapping(source = "cartItemId", target = "cartItem.id")
+    @Mapping(source = "attributeValueId", target = "attributeValue.id")
+    CartItemAttributeValue toEntity(CartItemAttributeValueDTO dto);
+    
 }
