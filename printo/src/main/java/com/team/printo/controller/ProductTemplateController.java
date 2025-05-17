@@ -42,15 +42,11 @@ public class ProductTemplateController {
         return ResponseEntity.ok(images);
     }
     
-    @DeleteMapping("/{imageId}")
+    @DeleteMapping("/{templeteId}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<BasicResponse> deleteTemplate(@PathVariable Long imageId) {
-    	productTempleteService.deleteTemplate(imageId);
+    public ResponseEntity<BasicResponse> deleteTemplate(@PathVariable Long templeteId) {
+    	productTempleteService.deleteTemplate(templeteId);
         return ResponseEntity.ok(new BasicResponse("Templete deleted successfully"));
     }
     
-
-
-
-
 }
