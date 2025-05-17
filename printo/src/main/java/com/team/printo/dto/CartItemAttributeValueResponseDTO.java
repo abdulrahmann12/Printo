@@ -3,7 +3,7 @@ package com.team.printo.dto;
 import lombok.Data;
 
 @Data
-public class CartItemAttributeValueDTO {
+public class CartItemAttributeValueResponseDTO {
     private Long id;
     
     private Long cartItemId;

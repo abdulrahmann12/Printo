@@ -13,5 +13,5 @@ public class CartDTO {
     @NotNull(message = "User ID is required")
     private Long userId;
 
-    private List<CartItemDTO> items;
+    private List<CartItemResponseDTO> items;
 }

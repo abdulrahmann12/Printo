@@ -6,20 +6,19 @@ import jakarta.validation.constraints.Positive;
 import lombok.Data;
 
 @Data
-public class CartItemDTO {
+public class CartItemRequestDTO {
 
 	private long id;
 	
-	private String productName;
-	
-	private String productImage;
+	private Long productId;
 	
 	private long cartId;
 	
-	private String design;
+	private Long designId;
 	
     @Positive(message = "Quantity must be positive")
 	private int quantity;
     
-    private List<CartItemAttributeValueDTO> attributeValues;
+    private List<CartItemAttributeValueRequestDTO> attributeValuesId;
+    
 }
