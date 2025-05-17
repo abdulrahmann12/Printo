@@ -45,4 +45,10 @@ public class CartItem {
     
     @OneToMany(mappedBy = "cartItem", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CartItemAttributeValue> attributeValues = new ArrayList<>();
+    
+	public CartItem(Cart cart, Product product, int quantity) {
+	    this.cart = cart;
+	    this.product = product;
+	    this.quantity = quantity;
+	}
 }

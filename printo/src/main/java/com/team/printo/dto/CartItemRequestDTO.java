@@ -2,21 +2,19 @@ package com.team.printo.dto;
 
 import java.util.List;
 
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.Data;
 
 @Data
 public class CartItemRequestDTO {
 
-	private long id;
 	
 	private Long productId;
 	
-	private long cartId;
 	
 	private Long designId;
 	
-    @Positive(message = "Quantity must be positive")
+    @PositiveOrZero(message = "Quantity must be positive or zero")
 	private int quantity;
     
     private List<CartItemAttributeValueRequestDTO> attributeValuesId;

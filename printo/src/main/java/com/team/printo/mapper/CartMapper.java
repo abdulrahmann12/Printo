@@ -48,6 +48,7 @@ public interface CartMapper {
     @Mapping(source = "attributeValueId", target = "attributeValue.id")
     CartItemAttributeValue toEntity(CartItemAttributeValueResponseDTO dto);
     
+
 }
     
 
