@@ -22,14 +22,17 @@ public interface CartMapper {
 	@Mapping(target =  "user.id", source = "userId")
 	Cart toEntity(CartDTO cartDTO);
 	
-	@Mapping(target = "productId", source = "product.id")
-	@Mapping(target = "designId", source = "design.id")
+	@Mapping(target = "productName", source = "product.name")
+	@Mapping(target = "productImage", source = "product.image")
+	@Mapping(target = "design", source = "design.image")
 	@Mapping(target = "cartId", source = "cart.id")
 	CartItemDTO toDTO(CartItem cartItem);
 	
-	@Mapping(target = "product.id", source = "productId")
-	@Mapping(target = "design.id", source = "designId")
+	@Mapping(target = "product.name", source = "productName")
+	@Mapping(target = "product.image", source = "productImage")
+	@Mapping(target = "design.image", source = "design")
 	@Mapping(target = "cart.id", source = "cartId")
+	@Mapping(target = "attributeValues", source = "attributeValues")
 	CartItem toEntity(CartItemDTO cartItemDTO);
 	
     @IterableMapping(elementTargetType = CartItemDTO.class)
@@ -37,6 +40,8 @@ public interface CartMapper {
     
     @Mapping(source = "cartItem.id", target = "cartItemId")
     @Mapping(source = "attributeValue.id", target = "attributeValueId")
+    @Mapping(source =  "attributeValue.value", target = "attributeValue")
+    @Mapping(source =  "attributeValue.attribute.name", target = "attributeName")
     CartItemAttributeValueDTO toDTO(CartItemAttributeValue entity);
 
     @Mapping(source = "cartItemId", target = "cartItem.id")
@@ -44,3 +49,5 @@ public interface CartMapper {
     CartItemAttributeValue toEntity(CartItemAttributeValueDTO dto);
     
 }
+    
+
