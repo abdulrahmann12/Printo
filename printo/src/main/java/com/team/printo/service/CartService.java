@@ -98,7 +98,6 @@ public class CartService {
         	    cartItem.setDesign(design);
         	}
 
-        	// ✅ نعمل هنا validation على الـ attribute values قبل أي save
         	List<CartItemAttributeValue> attributeValueList = new ArrayList<>();
 
         	if (cartItemDTO.getAttributeValuesId() != null && !cartItemDTO.getAttributeValuesId().isEmpty()) {
@@ -121,13 +120,10 @@ public class CartService {
         	        attributeValueList.add(cartItemAttrVal);
         	    }
         	}
-
-        	// 💾 بعد التأكد من كل شيء، احفظ cart item
         	CartItem savedCartItem = cartItemRepository.save(cartItem);
 
-        	// 💾 احفظ attribute values بعد cart item
         	for (CartItemAttributeValue cartItemAttrVal : attributeValueList) {
-        	    cartItemAttrVal.setCartItem(savedCartItem); // تأكيد الربط بعد الحفظ
+        	    cartItemAttrVal.setCartItem(savedCartItem); 
         	    cartItemAttributeValueRepository.save(cartItemAttrVal);
         	}
 
@@ -170,6 +166,8 @@ public class CartService {
 
 	    return ids1.equals(ids2);
 	}
+	
+	
 	
 	public void deleteCartItem(Long userId, Long cartItemId) {
 	    Cart cart = cartRepository.findByUserId(userId)

@@ -81,4 +81,5 @@ public interface ProductMapper {
 	
 	@Mapping(target = "categoryId", source = "category.id")
 	ProductListDTO toProductListDTO(Product product);
+	
 }
