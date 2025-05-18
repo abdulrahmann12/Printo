@@ -81,45 +81,60 @@ public class CartService {
             existingCartItem.get().setQuantity(existingCartItem.get().getQuantity() + cartItemDTO.getQuantity());
             cartItemRepository.save(existingCartItem.get());
         } else {
-            CartItem cartItem = new CartItem();
-            cartItem.setCart(cart); 
-            cartItem.setProduct(product);
-            cartItem.setQuantity(cartItemDTO.getQuantity());
+        	CartItem cartItem = new CartItem();
+        	cartItem.setCart(cart); 
+        	cartItem.setProduct(product);
+        	cartItem.setQuantity(cartItemDTO.getQuantity());
 
-            if (cartItemDTO.getDesignId() != null) {
-                Design design = designRepository.findById(cartItemDTO.getDesignId())
-                        .orElseThrow(() -> new ResourceNotFoundException("Design not found!"));
-                if (design.getUser().getId() != userId) {
-                    throw new IllegalArgumentException("You do not own this design.");
-                }
-                if (design.getProduct().getId() != product.getId()) {
-                    throw new IllegalArgumentException("This design does not belong to the selected product.");
-                }
-                cartItem.setDesign(design);
-            }
+        	if (cartItemDTO.getDesignId() != null) {
+        	    Design design = designRepository.findById(cartItemDTO.getDesignId())
+        	            .orElseThrow(() -> new ResourceNotFoundException("Design not found!"));
+        	    if (design.getUser().getId() != userId) {
+        	        throw new IllegalArgumentException("You do not own this design.");
+        	    }
+        	    if (!design.getProduct().getId().equals(product.getId())) {
+        	        throw new IllegalArgumentException("This design does not belong to the selected product.");
+        	    }
+        	    cartItem.setDesign(design);
+        	}
 
-            CartItem savedCartItem = cartItemRepository.save(cartItem); 
+        	// ✅ نعمل هنا validation على الـ attribute values قبل أي save
+        	List<CartItemAttributeValue> attributeValueList = new ArrayList<>();
 
-            if (cartItemDTO.getAttributeValuesId() != null && !cartItemDTO.getAttributeValuesId().isEmpty()) {
-                for (CartItemAttributeValueRequestDTO attrDto : cartItemDTO.getAttributeValuesId()) {
-                    if (attrDto.getAttributeValueId() == null) {
-                        throw new IllegalArgumentException("Attribute value ID must not be null");
-                    }
+        	if (cartItemDTO.getAttributeValuesId() != null && !cartItemDTO.getAttributeValuesId().isEmpty()) {
+        	    for (CartItemAttributeValueRequestDTO attrDto : cartItemDTO.getAttributeValuesId()) {
+        	        if (attrDto.getAttributeValueId() == null) {
+        	            throw new IllegalArgumentException("Attribute value ID must not be null");
+        	        }
 
-                    AttributeValue attrValue = attributeValueRepository.findById(attrDto.getAttributeValueId())
-                            .orElseThrow(() -> new ResourceNotFoundException("AttributeValue not found with id: " + attrDto.getAttributeValueId()));
-                    if (attrValue.getProduct().getId() != product.getId()) {
-                        throw new IllegalArgumentException("Attribute value does not belong to the selected product.");
-                    }
-                    CartItemAttributeValue cartItemAttrVal = new CartItemAttributeValue();
-                    cartItemAttrVal.setCartItem(savedCartItem);
-                    cartItemAttrVal.setAttributeValue(attrValue);
+        	        AttributeValue attrValue = attributeValueRepository.findById(attrDto.getAttributeValueId())
+        	                .orElseThrow(() -> new ResourceNotFoundException("AttributeValue not found with id: " + attrDto.getAttributeValueId()));
 
-                    cartItemAttributeValueRepository.save(cartItemAttrVal);
-                }
-            }
+        	        if (!attrValue.getProduct().getId().equals(product.getId())) {
+        	            throw new IllegalArgumentException("Attribute value does not belong to the selected product.");
+        	        }
 
-            cart.getItems().add(savedCartItem);
+        	        CartItemAttributeValue cartItemAttrVal = new CartItemAttributeValue();
+        	        cartItemAttrVal.setCartItem(cartItem);
+        	        cartItemAttrVal.setAttributeValue(attrValue);
+
+        	        attributeValueList.add(cartItemAttrVal);
+        	    }
+        	}
+
+        	// 💾 بعد التأكد من كل شيء، احفظ cart item
+        	CartItem savedCartItem = cartItemRepository.save(cartItem);
+
+        	// 💾 احفظ attribute values بعد cart item
+        	for (CartItemAttributeValue cartItemAttrVal : attributeValueList) {
+        	    cartItemAttrVal.setCartItem(savedCartItem); // تأكيد الربط بعد الحفظ
+        	    cartItemAttributeValueRepository.save(cartItemAttrVal);
+        	}
+
+        	cart.getItems().add(savedCartItem);
+        	
+
+            
         }
 
        cartRepository.save(cart);
