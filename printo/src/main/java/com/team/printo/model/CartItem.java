@@ -11,7 +11,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -39,7 +38,7 @@ public class CartItem {
 	@JoinColumn(name = "cart_id", nullable = false)
 	private Cart cart;
 	
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "design_id")
     private Design design;
     
