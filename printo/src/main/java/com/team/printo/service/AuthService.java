@@ -6,6 +6,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import com.team.printo.dto.ChangePasswordRequest;
 import com.team.printo.dto.EmailConfirmationRequest;
+import com.team.printo.dto.Messages;
 import com.team.printo.dto.ResetPasswordDTO;
 import com.team.printo.dto.UserDTO;
 import com.team.printo.dto.UserRegisterDTO;
@@ -18,7 +19,6 @@ import com.team.printo.model.User;
 import com.team.printo.model.User.Role;
 import com.team.printo.repository.TokenRepository;
 import com.team.printo.repository.UserRepository;
-import com.team.printo.service.EmailService.EmailSubjects;
 
 import lombok.RequiredArgsConstructor;
 
@@ -43,7 +43,7 @@ public class AuthService {
 		user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
 		user.setConfirmationCode(generateConfirmationCode());
 		user.setEmailConfirmation(false);
-		emailService.sendCode(user,EmailSubjects.CONFIRM_EMAIL);
+		emailService.sendCode(user,Messages.CONFIRM_EMAIL);
 		User savedUser = userRepository.save(user);
 		return userMapper.toDTO(savedUser);
 	}
@@ -54,7 +54,7 @@ public class AuthService {
 		String resetCode = generateConfirmationCode();
 		user.setConfirmationCode(resetCode);
 		userRepository.save(user);
-		emailService.sendCode(user,EmailSubjects.RESET_PASSWORD);
+		emailService.sendCode(user,Messages.RESET_PASSWORD);
 	}
 	
 	public void resetPassword(ResetPasswordDTO resetPasswodDTO) {
@@ -84,7 +84,7 @@ public class AuthService {
 		String resetCode = generateConfirmationCode();
 		user.setConfirmationCode(resetCode);
 		userRepository.save(user);
-		emailService.sendCode(user,EmailSubjects.CONFIRM_EMAIL);	
+		emailService.sendCode(user,Messages.CONFIRM_EMAIL);	
 	}
 	
 	public void confirmation(EmailConfirmationRequest request) {

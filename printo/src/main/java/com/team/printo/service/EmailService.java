@@ -88,9 +88,6 @@ public class EmailService {
 	}
 	
 
-	public class EmailSubjects {
-	    public static final String RESET_PASSWORD = "Reset Your Password";
-	    public static final String CONFIRM_EMAIL = "Confirm Your Email Address";
-	}
+
 
 }

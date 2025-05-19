@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.team.printo.dto.AuthResponse;
 import com.team.printo.dto.BasicResponse;
-import com.team.printo.dto.BasicResponse.Messages;
+import com.team.printo.dto.Messages;
 import com.team.printo.dto.ChangePasswordRequest;
 import com.team.printo.dto.EmailConfirmationRequest;
 import com.team.printo.dto.EmailRequest;
@@ -116,7 +116,7 @@ public class AuthController {
 	public ResponseEntity<BasicResponse> changePassword(@AuthenticationPrincipal UserDetails userDetails,
 	                                                    @Valid @RequestBody ChangePasswordRequest request){
 	    authService.changePassword(userDetails.getUsername(), request);
-	    return ResponseEntity.ok(new BasicResponse(Messages.ChANGE_PASSWORD));
+	    return ResponseEntity.ok(new BasicResponse(Messages.CHANGE_PASSWORD));
 	}
 	
 	@PostMapping("/confirm-email")
@@ -144,7 +144,7 @@ public class AuthController {
 	@PostMapping("/reset-password")
 	public ResponseEntity<BasicResponse> resetPassword(@Valid @RequestBody ResetPasswordDTO resetPasswodDTO){
 			authService.resetPassword(resetPasswodDTO);
-			return ResponseEntity.ok(new BasicResponse(Messages.ChANGE_PASSWORD));
+			return ResponseEntity.ok(new BasicResponse(Messages.CHANGE_PASSWORD	));
 	}
 }
 

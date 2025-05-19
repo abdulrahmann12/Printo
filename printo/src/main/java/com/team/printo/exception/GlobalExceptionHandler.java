@@ -18,6 +18,8 @@ import org.springframework.web.context.request.WebRequest;
 
 import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.team.printo.dto.ErrorDetails;
+import com.team.printo.dto.Messages;
+
 import io.jsonwebtoken.ExpiredJwtException;
 
 @ControllerAdvice
@@ -69,9 +71,10 @@ public class GlobalExceptionHandler {
 	
     @ExceptionHandler(ExpiredJwtException.class)
     public ResponseEntity<?> handleExpiredJwtException(ExpiredJwtException ex, WebRequest reques) {
-    	ErrorDetails detials = new ErrorDetails(new Date(), "Your session has expired. Please login again.", reques.getDescription(false));
+    	ErrorDetails detials = new ErrorDetails(new Date(), Messages.SESSION_EXPIRED, reques.getDescription(false));
         return new ResponseEntity<>(detials, HttpStatus.BAD_REQUEST);
     }
+    
     
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<?> handleValidationException(MethodArgumentNotValidException ex, WebRequest reques) {
@@ -104,7 +107,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorDetails> handleAccessDeniedException(AccessDeniedException ex, WebRequest request) {
         ErrorDetails errorDetails = new ErrorDetails(
                 new Date(),
-                "You do not have permission to access this resource",
+                Messages.ACCESS_DENIED,
                 request.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.FORBIDDEN);
     }
@@ -113,7 +116,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorDetails> handleUsernameNotFoundException(UsernameNotFoundException ex, WebRequest request) {
         ErrorDetails errorDetails = new ErrorDetails(
                 new Date(),
-                "User not found",
+                Messages.USER_NOT_FOUND,
                 request.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
     }
@@ -122,7 +125,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorDetails> handleBadCredentialsException(BadCredentialsException ex, WebRequest request) {
         ErrorDetails errorDetails = new ErrorDetails(
                 new Date(),
-                "Invalid username or password",
+                Messages.BAD_CREDENTIAL,
                 request.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.UNAUTHORIZED);
     }
@@ -131,7 +134,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorDetails> handleAuthenticationException(AuthenticationException ex, WebRequest request) {
         ErrorDetails errorDetails = new ErrorDetails(
                 new Date(),
-                "Authentication failed",
+                Messages.AUTH_FAILED,
                 request.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.UNAUTHORIZED);
     }
@@ -140,7 +143,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorDetails> handleMethodNotSupported(HttpRequestMethodNotSupportedException ex, WebRequest request) {
         ErrorDetails errorDetails = new ErrorDetails(
                 new Date(),
-                "Request method not supported",
+                Messages.REQUEST_NOT_SUPPORTED,
                 request.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.METHOD_NOT_ALLOWED);
     }
@@ -149,7 +152,7 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorDetails> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, WebRequest request) {
         ErrorDetails errorDetails = new ErrorDetails(
                 new Date(),
-                "Malformed JSON request",
+                Messages.FORMAT_ERROR,
                 request.getDescription(false));
         return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
     }
@@ -157,7 +160,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(InvalidFormatException.class)
     public ResponseEntity<ErrorDetails> handleInvalidFormatException(InvalidFormatException ex) {
         return ResponseEntity.badRequest().body(
-            new ErrorDetails("Invalid role. Please provide one of: ADMIN, CUSTOMER, etc.")
+            new ErrorDetails(Messages.CHANGE_ROLES_ERROR)
         );
     }
 }

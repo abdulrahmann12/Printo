@@ -1,10 +1,11 @@
 package com.team.printo.exception;
 
+import com.team.printo.dto.Messages;
 
 public class EmailAlreadyExistsException extends RuntimeException{
 
 	public EmailAlreadyExistsException() {
-		super("Email is Already Exist");
+		super(Messages.EMAIL_EXIST);
 	}
 	
 }
