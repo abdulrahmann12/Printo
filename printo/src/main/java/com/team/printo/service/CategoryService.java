@@ -24,7 +24,6 @@ public class CategoryService {
 	private final CategoryRepository categoryRepository;
 	private final CategoryMapper categoryMapper;
 	private final ImageService imageService;
-
 	
 	public CategoryDTO createCategory(CategoryDTO categoryDTO, MultipartFile image) throws Exception {
 	    if (categoryRepository.findByName(categoryDTO.getName()).isPresent()) {

@@ -27,6 +27,7 @@ public interface ProductMapper {
     @Mapping(target = "review.id", ignore = true)
     ProductRequestDTO toDTO(Product product);
 	
+    
     @Mapping(target = "category.id",  source = "categoryId")
     @Mapping(target = "attributeValues", source = "attributeValues")
     @Mapping(target = "reviews", ignore = true)

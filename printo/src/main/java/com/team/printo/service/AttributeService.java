@@ -25,6 +25,7 @@ public class AttributeService {
 	private final AttributeMapper attributeMapper;
 	private final CategoryRepository categoryRepository;
 	
+	
 	public AttributeDTO createAttribute(AttributeDTO attributeDTO) {
 		if (attributeRepository.existsByNameAndCategoryId(attributeDTO.getName(), attributeDTO.getCategoryId())) {
 		    throw new IllegalArgumentException("Attribute with this name already exists in the category");

@@ -42,6 +42,7 @@ public class ProductService {
 	private final AttributeRepository attributeRepository;
 	private final ProductImagesService productImagesService;
 	
+	
 	public ProductResponseDTO createProduct(ProductRequestDTO productDTO, MultipartFile image) throws Exception {
 	    Category category = categoryRepository.findById(productDTO.getCategoryId())
 	            .orElseThrow(() -> new ResourceNotFoundException("Category not found"));

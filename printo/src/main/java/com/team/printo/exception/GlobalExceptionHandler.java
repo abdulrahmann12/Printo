@@ -29,6 +29,30 @@ public class GlobalExceptionHandler {
 		return new ResponseEntity<>(detials,HttpStatus.NOT_FOUND);
 	}
 	
+	@ExceptionHandler(EmailAlreadyExistsException.class)
+	public ResponseEntity<?> handleResourceNotFoundExcepion(EmailAlreadyExistsException exception, WebRequest request){
+		ErrorDetails detials = new ErrorDetails(new Date(), exception.getMessage(), request.getDescription(false));
+		return new ResponseEntity<>(detials,HttpStatus.NOT_FOUND);
+	}
+	
+	@ExceptionHandler(InvalidResetCodeException.class)
+	public ResponseEntity<?> handleResourceNotFoundExcepion(InvalidResetCodeException exception, WebRequest request){
+		ErrorDetails detials = new ErrorDetails(new Date(), exception.getMessage(), request.getDescription(false));
+		return new ResponseEntity<>(detials,HttpStatus.NOT_FOUND);
+	}
+	
+	@ExceptionHandler(InvalidCurrentPasswordException.class)
+	public ResponseEntity<?> handleResourceNotFoundExcepion(InvalidCurrentPasswordException exception, WebRequest request){
+		ErrorDetails detials = new ErrorDetails(new Date(), exception.getMessage(), request.getDescription(false));
+		return new ResponseEntity<>(detials,HttpStatus.NOT_FOUND);
+	}
+	
+	@ExceptionHandler(UserNotFoundException.class)
+	public ResponseEntity<?> handleResourceNotFoundExcepion(UserNotFoundException exception, WebRequest request){
+		ErrorDetails detials = new ErrorDetails(new Date(), exception.getMessage(), request.getDescription(false));
+		return new ResponseEntity<>(detials,HttpStatus.NOT_FOUND);
+	}
+	
 	
 	@ExceptionHandler(InsufficientStockException.class)
 	public ResponseEntity<?> handleInsufficientStockException(InsufficientStockException exception, WebRequest request){

@@ -29,6 +29,7 @@ public class ProductImagesService {
 	    Product product = productRepository.findById(productId)
 	            .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
 	    
+	    
 	    ProductImage productImage = new ProductImage();
 	    
 	    if (image != null && !image.isEmpty()) {

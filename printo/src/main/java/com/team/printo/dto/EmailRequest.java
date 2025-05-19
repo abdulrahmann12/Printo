@@ -5,13 +5,9 @@ import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
 @Data
-
-public class EmailConfirmationRequest {
+public class EmailRequest {
 
 	@Email(message = "Invalid email format")
 	@NotBlank(message = "Email is required")
 	private String email;
-	
-	@NotBlank(message = "Code is required")
-	private String confirmationCode;
 }
