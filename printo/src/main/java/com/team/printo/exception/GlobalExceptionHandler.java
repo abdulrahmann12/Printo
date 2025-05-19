@@ -36,6 +36,18 @@ public class GlobalExceptionHandler {
 		ErrorDetails detials = new ErrorDetails(new Date(), exception.getMessage(), request.getDescription(false));
 		return new ResponseEntity<>(detials,HttpStatus.NOT_FOUND);
 	}
+
+	@ExceptionHandler(InvalidConfirmationCodeException.class)
+	public ResponseEntity<?> handleResourceNotFoundExcepion(InvalidConfirmationCodeException exception, WebRequest request){
+		ErrorDetails detials = new ErrorDetails(new Date(), exception.getMessage(), request.getDescription(false));
+		return new ResponseEntity<>(detials,HttpStatus.NOT_FOUND);
+	}
+	
+	@ExceptionHandler(InvalidTokenException.class)
+	public ResponseEntity<?> handleResourceNotFoundExcepion(InvalidTokenException exception, WebRequest request){
+		ErrorDetails detials = new ErrorDetails(new Date(), exception.getMessage(), request.getDescription(false));
+		return new ResponseEntity<>(detials,HttpStatus.NOT_FOUND);
+	}
 	
 	@ExceptionHandler(InvalidResetCodeException.class)
 	public ResponseEntity<?> handleResourceNotFoundExcepion(InvalidResetCodeException exception, WebRequest request){

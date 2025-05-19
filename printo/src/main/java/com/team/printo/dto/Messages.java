@@ -10,6 +10,7 @@ public class Messages {
     public static final String LOGIN_SUCCESS = "Login successful";
     public static final String REGISTER_SUCCESS = "Register successful";
     public static final String LOGOUT_SUCCESS = "Logged out successfully";
+    public static final String INVAILED_CONFIRM_EMAIL = "Invalid confirmation code";
     public static final String CONFIRM_EMAIL_SUCCESS = "Email confirmed successfully";
     public static final String INVALID_PASSWORD = "Current Password is incorrect";
     public static final String CHANGE_PASSWORD = "Password Changed Successfully";

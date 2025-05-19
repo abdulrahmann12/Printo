@@ -11,8 +11,10 @@ import com.team.printo.dto.ResetPasswordDTO;
 import com.team.printo.dto.UserDTO;
 import com.team.printo.dto.UserRegisterDTO;
 import com.team.printo.exception.EmailAlreadyExistsException;
+import com.team.printo.exception.InvalidConfirmationCodeException;
 import com.team.printo.exception.InvalidCurrentPasswordException;
 import com.team.printo.exception.InvalidResetCodeException;
+import com.team.printo.exception.InvalidTokenException;
 import com.team.printo.exception.UserNotFoundException;
 import com.team.printo.mapper.UserMapper;
 import com.team.printo.model.User;
@@ -95,17 +97,19 @@ public class AuthService {
 			user.setEmailConfirmation(true);
 			userRepository.save(user);
 		}else {
-			throw new InvalidCurrentPasswordException();
+			throw new InvalidConfirmationCodeException();
 		}
 	}
 	
 
 	public void logout(String token) {
 		var storedToken = tokenRepository.findByToken(token).orElse(null);
-		if(storedToken != null) {
+		if(storedToken != null && !storedToken.isExpired()) {
 	        storedToken.setExpired(true);
 	        storedToken.setRevoked(true);
 	        tokenRepository.save(storedToken);
+		}else {
+			throw new InvalidTokenException();
 		}
 	}
 	
