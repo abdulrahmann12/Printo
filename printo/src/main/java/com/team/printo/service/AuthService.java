@@ -17,6 +17,7 @@ import com.team.printo.exception.InvalidConfirmationCodeException;
 import com.team.printo.exception.InvalidCurrentPasswordException;
 import com.team.printo.exception.InvalidResetCodeException;
 import com.team.printo.exception.InvalidTokenException;
+import com.team.printo.exception.MailSendingException;
 import com.team.printo.exception.UserNotFoundException;
 import com.team.printo.mapper.UserMapper;
 import com.team.printo.model.User;
@@ -48,7 +49,11 @@ public class AuthService {
 		user.setPassword(passwordEncoder.encode(userDTO.getPassword()));
 		user.setConfirmationCode(generateConfirmationCode());
 		user.setEmailConfirmation(false);
+		try {
 		emailService.sendCode(user,Messages.CONFIRM_EMAIL);
+		}catch (Exception e) {
+			throw new MailSendingException();
+		}
 		User savedUser = userRepository.save(user);
 		return userMapper.toDTO(savedUser);
 	}
@@ -59,7 +64,11 @@ public class AuthService {
 		String resetCode = generateConfirmationCode();
 		user.setConfirmationCode(resetCode);
 		userRepository.save(user);
+		try {
 		emailService.sendCode(user,Messages.RESET_PASSWORD);
+		}catch (Exception e) {
+			throw new MailSendingException();
+		}
 	}
 	
 	public void resetPassword(ResetPasswordDTO resetPasswodDTO) {
@@ -89,7 +98,11 @@ public class AuthService {
 		String resetCode = generateConfirmationCode();
 		user.setConfirmationCode(resetCode);
 		userRepository.save(user);
+		try {
 		emailService.sendCode(user,Messages.CONFIRM_EMAIL);	
+		}catch (Exception e) {
+			throw new MailSendingException();
+		}
 	}
 	
 	public void confirmation(EmailConfirmationRequest request) {

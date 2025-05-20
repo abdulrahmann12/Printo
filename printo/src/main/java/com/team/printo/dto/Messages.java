@@ -5,7 +5,8 @@ public class Messages {
 	// ==================== Email Messages ====================
 	public static final String RESET_PASSWORD = "Reset your password";
 	public static final String CONFIRM_EMAIL = "Confirm your email address";
-
+	public static final String FAILED_EMAIL = "Failed to send email. Please try again later";
+	
 	// ==================== Auth Messages ====================
 	public static final String LOGIN_SUCCESS = "Login successful";
 	public static final String REGISTER_SUCCESS = "Register successful";
@@ -35,7 +36,7 @@ public class Messages {
 	// ==================== User Messages ====================
 	public static final String USER_NOT_FOUND = "User not found";
 	public static final String USER_NOT_AUTHENTICATED = "User not authenticated";
-	public static final String CHANGE_ROLES_ERROR = "Invalid role. Please provide one of: ADMIN, CUSTOMER, etc.";
+	public static final String CHANGE_ROLES_ERROR = "Invalid role. Please provide one of: ADMIN, CUSTOMER, etc";
 
 	// ==================== Format Messages ====================
 	public static final String FORMAT_ERROR = "Malformed JSON request";

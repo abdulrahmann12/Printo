@@ -22,6 +22,7 @@ import com.team.printo.dto.ErrorDetails;
 import com.team.printo.dto.Messages;
 
 import io.jsonwebtoken.ExpiredJwtException;
+import jakarta.servlet.http.HttpServletRequest;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
@@ -36,7 +37,14 @@ public class GlobalExceptionHandler {
         ErrorDetails details = new ErrorDetails(new Date(), message, request.getDescription(false));
         return new ResponseEntity<>(details, status);
     }
+    
+    @ExceptionHandler(MailSendingException.class)
+    public ResponseEntity<ErrorDetails> handleMailException(MailSendingException ex, HttpServletRequest request) {
 
+        ErrorDetails errorDetails = new ErrorDetails(new Date(),ex.getMessage(),request.getRequestURI());
+
+        return new ResponseEntity<>(errorDetails, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
     // === Authentication & Security Exceptions === //
     
     @ExceptionHandler({ 
