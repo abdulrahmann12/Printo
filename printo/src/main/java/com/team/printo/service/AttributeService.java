@@ -9,7 +9,6 @@ import com.team.printo.dto.AttributeDTO;
 import com.team.printo.dto.Messages;
 import com.team.printo.exception.AttributeNotFoundException;
 import com.team.printo.exception.CategoryNotFoundException;
-import com.team.printo.exception.ResourceNotFoundException;
 import com.team.printo.mapper.AttributeMapper;
 import com.team.printo.model.Attribute;
 import com.team.printo.model.Category;

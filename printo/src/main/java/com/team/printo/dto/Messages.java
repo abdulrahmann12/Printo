@@ -48,7 +48,15 @@ public class Messages {
 	// ==================== Image Messages ====================
 	public static final String EMPTY_IMAGE= "Image file is empty or null";
 	public static final String UPLOAD_IMAGE_FAILED= "Error occurred while uploading image: ";
-    
+	public static final String IMAGE_NOT_FOUND = "Image not found";
+	public static final String DELETE_IMAGE = "Image deleted successfully";
+	
+	// ==================== Template Messages ====================
+
+	public static final String TEMPLATE_NOT_FOUND = "Template not found";
+	public static final String DELETE_TEMPLATE = "Template deleted successfully";
+	
+	
 	// ==================== Address Messages ==================== 
 	public static final String ADDRESS_NOT_FOUND = "Address not found";
 	public static final String ADDRESS_NOT_BELONG_TO_USER = "Address does not belong to this user";

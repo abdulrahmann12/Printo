@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.team.printo.dto.BasicResponse;
+import com.team.printo.dto.Messages;
 import com.team.printo.dto.ProductTemplateDTO;
 import com.team.printo.service.ProductTemplateService;
 
@@ -46,7 +47,7 @@ public class ProductTemplateController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<BasicResponse> deleteTemplate(@PathVariable Long templeteId) {
     	productTempleteService.deleteTemplate(templeteId);
-        return ResponseEntity.ok(new BasicResponse("Templete deleted successfully"));
+        return ResponseEntity.ok(new BasicResponse(Messages.DELETE_TEMPLATE));
     }
     
 }

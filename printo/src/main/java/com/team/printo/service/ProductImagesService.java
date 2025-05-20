@@ -7,8 +7,10 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.team.printo.dto.Messages;
 import com.team.printo.dto.ProductImageDTO;
-import com.team.printo.exception.ResourceNotFoundException;
+import com.team.printo.exception.ImageNotFoundException;
+import com.team.printo.exception.ProductNotFoundException;
 import com.team.printo.mapper.ProductImageMapper;
 import com.team.printo.model.Product;
 import com.team.printo.model.ProductImage;
@@ -27,7 +29,7 @@ public class ProductImagesService {
 	
 	public ProductImageDTO addImageToProduct(Long productId, MultipartFile image) throws Exception{
 	    Product product = productRepository.findById(productId)
-	            .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
+	            .orElseThrow(() -> new ProductNotFoundException());
 	    
 	    
 	    ProductImage productImage = new ProductImage();
@@ -37,7 +39,7 @@ public class ProductImagesService {
 	            String imageUrl = imageService.uploadImage(image);
 	    	    productImage.setImage(imageUrl);
 	        } catch (IOException e) {
-	            throw new Exception("Error occurred while saving image: " + e.getMessage());
+	            throw new Exception(Messages.UPLOAD_IMAGE_FAILED + e.getMessage());
 	        }
 	    }
 	    
@@ -50,7 +52,7 @@ public class ProductImagesService {
 	
 	public List<ProductImageDTO> getImagesByProductId(Long productId) {
 	    Product product = productRepository.findById(productId)
-	            .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
+	            .orElseThrow(() -> new ProductNotFoundException());
 	    List<ProductImage> images = productImageRepository.findByProductId(product.getId());
 	    return images.stream()
 	            .map(productImageMapper::toDto)
@@ -59,7 +61,7 @@ public class ProductImagesService {
 	
     public void deleteImage(Long imageId) {
         if (!productImageRepository.existsById(imageId)) {
-            throw new RuntimeException("Image not found with ID: " + imageId);
+            throw new ImageNotFoundException();
         }
 
         productImageRepository.deleteById(imageId);

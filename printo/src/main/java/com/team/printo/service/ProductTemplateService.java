@@ -7,8 +7,10 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.team.printo.dto.Messages;
 import com.team.printo.dto.ProductTemplateDTO;
-import com.team.printo.exception.ResourceNotFoundException;
+import com.team.printo.exception.ProductNotFoundException;
+import com.team.printo.exception.TemplateNotFoundException;
 import com.team.printo.mapper.ProductTemplateMapper;
 import com.team.printo.model.Product;
 import com.team.printo.model.ProductTemplate;
@@ -28,7 +30,7 @@ public class ProductTemplateService {
 	
 	public ProductTemplateDTO addTempleteToProduct(Long productId, MultipartFile image) throws Exception{
 	    Product product = productRepository.findById(productId)
-	            .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
+	            .orElseThrow(() -> new ProductNotFoundException());
 	    
 	    ProductTemplate productTemplate = new ProductTemplate();
 	    
@@ -37,7 +39,7 @@ public class ProductTemplateService {
 	            String imageUrl = imageService.uploadImage(image);
 	            productTemplate.setImage(imageUrl);
 	        } catch (IOException e) {
-	            throw new Exception("Error occurred while saving image: " + e.getMessage());
+	            throw new Exception(Messages.UPLOAD_IMAGE_FAILED + e.getMessage());
 	        }
 	    }
 	    
@@ -50,7 +52,7 @@ public class ProductTemplateService {
 	
 	public List<ProductTemplateDTO> getTempletesByProductId(Long productId) {
 	    Product product = productRepository.findById(productId)
-	            .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
+	            .orElseThrow(() -> new ProductNotFoundException());
 	    List<ProductTemplate> images = productTemplateRepository.findByProductId(product.getId());
 	    return images.stream()
 	            .map(productTemplateMapper::toDto)
@@ -59,7 +61,7 @@ public class ProductTemplateService {
 	
     public void deleteTemplate(Long imageId) {
         if (!productTemplateRepository.existsById(imageId)) {
-            throw new RuntimeException("Template not found with ID: " + imageId);
+            throw new TemplateNotFoundException();
         }
 
         productTemplateRepository.deleteById(imageId);

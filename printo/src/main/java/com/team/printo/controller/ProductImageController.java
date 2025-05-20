@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.team.printo.dto.BasicResponse;
+import com.team.printo.dto.Messages;
 import com.team.printo.dto.ProductImageDTO;
 import com.team.printo.service.ProductImagesService;
 
@@ -46,11 +47,7 @@ public class ProductImageController {
     @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<BasicResponse> deleteImage(@PathVariable Long imageId) {
         productImagesService.deleteImage(imageId);
-        return ResponseEntity.ok(new BasicResponse("Image deleted successfully"));
+        return ResponseEntity.ok(new BasicResponse(Messages.DELETE_IMAGE));
     }
     
-
-
-
-
 }
