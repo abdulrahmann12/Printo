@@ -45,8 +45,15 @@ public class Messages {
 	public static final String FORMAT_ERROR = "Malformed JSON request";
 
 
-	// ==================== Images Messages ====================
+	// ==================== Image Messages ====================
 	public static final String EMPTY_IMAGE= "Image file is empty or null";
 	public static final String UPLOAD_IMAGE_FAILED= "Error occurred while uploading image: ";
     
+	// ==================== Address Messages ==================== 
+	public static final String ADDRESS_NOT_FOUND = "Address not found";
+	public static final String ADDRESS_NOT_BELONG_TO_USER = "Address does not belong to this user";
+	public static final String EMPTY_ADDRESSES = "No addresses found for this user. Please add at least one";
+	public static final String DEFAULT_ADDRESS = "Cannot delete default address";
+	public static final String UPDATE_ADDRESS = "Address updated successfully";
+	public static final String DELETE_ADDRESS = "Address deleted successfully";
 }

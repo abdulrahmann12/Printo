@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.team.printo.dto.AddressDTO;
 import com.team.printo.dto.BasicResponse;
+import com.team.printo.dto.Messages;
 import com.team.printo.model.User;
 import com.team.printo.service.AddressService;
 
@@ -29,7 +30,6 @@ import lombok.RequiredArgsConstructor;
 public class AddressController {
 	
 	private final AddressService addressService;
-	
 	
 	@PostMapping
 	@PreAuthorize("isAuthenticated()")
@@ -52,7 +52,7 @@ public class AddressController {
 	public ResponseEntity<BasicResponse> setDefaultAddress(@AuthenticationPrincipal UserDetails userDetails, @PathVariable Long addressId){
 		Long userId = ((User) userDetails).getId();
 		addressService.defaultAddress(userId,addressId);
-		return ResponseEntity.ok(new BasicResponse("Address updated successfully"));
+		return ResponseEntity.ok(new BasicResponse(Messages.UPDATE_ADDRESS));
 	}
 	
 	@GetMapping
@@ -80,13 +80,9 @@ public class AddressController {
 			@PathVariable Long addressId,
 			@AuthenticationPrincipal UserDetails userDetails
 			){
-	    try {
 	    	Long userId = ((User) userDetails).getId();
 	        addressService.deleteAddressById(addressId,userId);
-	        return ResponseEntity.ok(new BasicResponse("Address deleted successfully"));
-	    } catch (IllegalArgumentException ex) {
-	        return ResponseEntity.badRequest().body(new BasicResponse(ex.getMessage()));
-	    }
+	        return ResponseEntity.ok(new BasicResponse(Messages.DELETE_ADDRESS));
 	}
 
 }

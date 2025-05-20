@@ -7,7 +7,10 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 import com.team.printo.dto.AddressDTO;
-import com.team.printo.exception.ResourceNotFoundException;
+import com.team.printo.dto.Messages;
+import com.team.printo.exception.AddressNotFoundException;
+import com.team.printo.exception.InsufficientStockException;
+import com.team.printo.exception.UserNotFoundException;
 import com.team.printo.mapper.AddressMapper;
 import com.team.printo.model.Address;
 import com.team.printo.model.User;
@@ -28,7 +31,7 @@ public class AddressService {
 	@Transactional
 	public AddressDTO addAddress(Long userId, AddressDTO addressDTO) {
 	    User user = userRepository.findById(userId)
-	            .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+	            .orElseThrow(() -> new UserNotFoundException());
 
 
 	    Address address = addressMapper.toEntity(addressDTO);
@@ -53,10 +56,10 @@ public class AddressService {
 	
 	public AddressDTO updateAddress(Long userId,Long addressId, AddressDTO addressDTO) {
 		Address existingAddress = addressRepository.findById(addressId)
-				.orElseThrow(() -> new ResourceNotFoundException("Address not found"));
+				.orElseThrow(() -> new AddressNotFoundException());
 		
 	    if (!Objects.equals(existingAddress.getUser().getId(), userId)) {
-	        throw new IllegalArgumentException("Address does not belong to this user");
+	        throw new IllegalArgumentException(Messages.ADDRESS_NOT_BELONG_TO_USER);
 	    }
 	    
 		existingAddress.setCity(addressDTO.getCity());
@@ -76,10 +79,10 @@ public class AddressService {
 	
 	public void defaultAddress(Long userId, Long addressId) {
 	    Address address = addressRepository.findById(addressId)
-	        .orElseThrow(() -> new ResourceNotFoundException("Address not found"));
+	        .orElseThrow(() -> new AddressNotFoundException());
 
 	    if (!Objects.equals(address.getUser().getId(), userId)) {
-	        throw new IllegalArgumentException("Address does not belong to this user");
+	        throw new IllegalArgumentException(Messages.ADDRESS_NOT_BELONG_TO_USER);
 	    }
 
 	    List<Address> userAddresses = addressRepository.findByUserId(userId);
@@ -94,16 +97,16 @@ public class AddressService {
 	public List<AddressDTO> getAllUserAddress(Long userId) {
 	    List<Address> addresses = addressRepository.findByUserId(userId);
 	    if (addresses.isEmpty()) {
-	        throw new ResourceNotFoundException("No addresses found for this user. Please add at least one.");
+	        throw new InsufficientStockException(Messages.EMPTY_ADDRESSES);
 	    }
 	    return addresses.stream().map(addressMapper::toDTO).collect(Collectors.toList());
 	}
 	
 	public AddressDTO getAddressById(Long addressId, Long userId) {
 	    Address address = addressRepository.findById(addressId)
-		        .orElseThrow(() -> new ResourceNotFoundException("Address not found"));
+		        .orElseThrow(() -> new AddressNotFoundException());
 	    if (!Objects.equals(address.getUser().getId(), userId)) {
-	        throw new IllegalArgumentException("Address does not belong to this user");
+	        throw new IllegalArgumentException(Messages.ADDRESS_NOT_BELONG_TO_USER);
 	    }
 	    
 	    return addressMapper.toDTO(address);
@@ -112,12 +115,12 @@ public class AddressService {
 	
 	public void deleteAddressById(Long addressId, Long userId) {
 	    Address address = addressRepository.findById(addressId)
-		        .orElseThrow(() -> new ResourceNotFoundException("Address not found"));
+		        .orElseThrow(() -> new AddressNotFoundException());
 	    if (!Objects.equals(address.getUser().getId(), userId)) {
-	        throw new IllegalArgumentException("Address does not belong to this user");
+	        throw new IllegalArgumentException(Messages.ADDRESS_NOT_BELONG_TO_USER);
 	    }
 	    if (address.isDefaultAddress()) {
-	        throw new IllegalArgumentException("Cannot delete default address");
+	        throw new IllegalArgumentException(Messages.DEFAULT_ADDRESS);
 	    }
 	    addressRepository.delete(address);
 	}
