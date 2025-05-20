@@ -16,6 +16,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.team.printo.dto.BasicResponse;
 import com.team.printo.dto.CategoryDTO;
+import com.team.printo.dto.Messages;
 import com.team.printo.service.CategoryService;
 
 import jakarta.validation.Valid;
@@ -75,7 +76,7 @@ public class CategoryController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<BasicResponse> deleteCategory(@PathVariable Long categoryId){
 		categoryService.deleteCategory(categoryId);
-		return ResponseEntity.ok(new BasicResponse("Category deleted successfully"));
+		return ResponseEntity.ok(new BasicResponse(Messages.DELETE_CATEGORY));
 	}
 
 }

@@ -85,7 +85,8 @@ public class GlobalExceptionHandler {
         UserNotFoundException.class,
         AddressNotFoundException.class,
         CategoryNotFoundException.class,
-        AttributeNotFoundException.class
+        AttributeNotFoundException.class,
+        ParentCategoryNotFoundException.class
     })
     public ResponseEntity<ErrorDetails> handleNotFoundBusinessExceptions(Exception ex, WebRequest request) {
         return buildErrorResponse(ex, request, HttpStatus.NOT_FOUND);

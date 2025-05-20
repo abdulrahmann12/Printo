@@ -1,6 +1,5 @@
 package com.team.printo.service;
 
-
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
@@ -10,7 +9,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.team.printo.dto.CategoryDTO;
-import com.team.printo.exception.ResourceNotFoundException;
+import com.team.printo.dto.Messages;
+import com.team.printo.exception.CategoryNotFoundException;
+import com.team.printo.exception.ParentCategoryNotFoundException;
 import com.team.printo.mapper.CategoryMapper;
 import com.team.printo.model.Category;
 import com.team.printo.repository.CategoryRepository;
@@ -27,7 +28,7 @@ public class CategoryService {
 	
 	public CategoryDTO createCategory(CategoryDTO categoryDTO, MultipartFile image) throws Exception {
 	    if (categoryRepository.findByName(categoryDTO.getName()).isPresent()) {
-	        throw new IllegalArgumentException("Category with name '" + categoryDTO.getName() + "' already exists.");
+	        throw new IllegalArgumentException(Messages.CATEGORY_ALREADY_EXISTS);
 	    }
 		Category category = categoryMapper.toEntity(categoryDTO);
 	    
@@ -36,13 +37,13 @@ public class CategoryService {
                 String imageUrl = imageService.uploadImage(image);
                 category.setImage(imageUrl);
             } catch (IOException e) {
-                throw new Exception("Error occurred while saving image: " + e.getMessage());
+                throw new Exception(Messages.UPLOAD_IMAGE_FAILED + e.getMessage());
             }
         }
         
 		if(categoryDTO.getParentId() != null) {
 			Category parentCategory = categoryRepository.findById(categoryDTO.getParentId())
-                    .orElseThrow(() -> new ResourceNotFoundException("Parent category not found"));
+                    .orElseThrow(() -> new ParentCategoryNotFoundException());
 			category.setParent(parentCategory);
 		}
 		Category savedCategory = categoryRepository.save(category);
@@ -55,12 +56,11 @@ public class CategoryService {
 		Optional<Category> optionalCategory = categoryRepository.findByName(categoryDTO.getName());
 
 		if (optionalCategory.isPresent() && !optionalCategory.get().getId().equals(categoryId)) {
-		    throw new IllegalArgumentException("Category with name '" + categoryDTO.getName() + "' already exists.");
+		    throw new IllegalArgumentException(Messages.CATEGORY_ALREADY_EXISTS);
 		}
 	    
 		Category existingCategory = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
-		
+                .orElseThrow(() -> new CategoryNotFoundException());
 		existingCategory.setName(categoryDTO.getName());
 		
         if (image != null && !image.isEmpty()) {
@@ -68,12 +68,12 @@ public class CategoryService {
                 String imageUrl = imageService.uploadImage(image);
                 existingCategory.setImage(imageUrl);
             } catch (IOException e) {
-                throw new Exception("Error occurred while saving image: " + e.getMessage());
+                throw new Exception(Messages.UPLOAD_IMAGE_FAILED + e.getMessage());
             }
         }
 		if(categoryDTO.getParentId() != null) {
 			Category parentCategory = categoryRepository.findById(categoryDTO.getParentId())
-                    .orElseThrow(() -> new ResourceNotFoundException("Parent category not found"));
+                    .orElseThrow(() -> new ParentCategoryNotFoundException());
 			existingCategory.setParent(parentCategory);
 		}else {
 			existingCategory.setParent(null);
@@ -84,7 +84,7 @@ public class CategoryService {
 	
 	public void deleteCategory(Long categoryId) {
 		Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
+                .orElseThrow(() -> new CategoryNotFoundException());
 		categoryRepository.delete(category);
 	}
 	
@@ -104,7 +104,7 @@ public class CategoryService {
 	
 	public CategoryDTO getCategoryById(Long categoryId) {
 		Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
+                .orElseThrow(() -> new CategoryNotFoundException());
 		return categoryMapper.toDTO(category);
 	}
 	
