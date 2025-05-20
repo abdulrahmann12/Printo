@@ -15,11 +15,14 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.team.printo.dto.AttributeValueDTO;
 import com.team.printo.dto.AttributeValueResponseDTO;
+import com.team.printo.dto.Messages;
 import com.team.printo.dto.ProductImageDTO;
 import com.team.printo.dto.ProductRequestDTO;
 import com.team.printo.dto.ProductListDTO;
 import com.team.printo.dto.ProductResponseDTO;
-import com.team.printo.exception.ResourceNotFoundException;
+import com.team.printo.exception.AttributeNotFoundException;
+import com.team.printo.exception.CategoryNotFoundException;
+import com.team.printo.exception.ProductNotFoundException;
 import com.team.printo.mapper.ProductMapper;
 import com.team.printo.model.Attribute;
 import com.team.printo.model.AttributeValue;
@@ -45,7 +48,7 @@ public class ProductService {
 	
 	public ProductResponseDTO createProduct(ProductRequestDTO productDTO, MultipartFile image) throws Exception {
 	    Category category = categoryRepository.findById(productDTO.getCategoryId())
-	            .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
+	            .orElseThrow(() -> new CategoryNotFoundException());
 	    Product product = productMapper.toEntity(productDTO);
 	 
         if (image != null && !image.isEmpty()) {
@@ -53,7 +56,7 @@ public class ProductService {
                 String imageUrl = imageService.uploadImage(image);
                 product.setImage(imageUrl);
             } catch (IOException e) {
-                throw new Exception("Error occurred while saving image: " + e.getMessage());
+                throw new Exception(Messages.UPLOAD_IMAGE_FAILED + e.getMessage());
             }
         }
         
@@ -76,10 +79,10 @@ public class ProductService {
 	
 	public ProductResponseDTO updateProduct(Long productId, ProductRequestDTO productDTO, MultipartFile image) throws Exception {
 	    Product existingProduct = productRepository.findById(productId)
-	            .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
+	            .orElseThrow(() -> new ProductNotFoundException());
 	    
 	    Category category = categoryRepository.findById(productDTO.getCategoryId())
-	            .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
+	            .orElseThrow(() -> new CategoryNotFoundException());
 
 	    existingProduct.setName(productDTO.getName());
 	    existingProduct.setDescription(productDTO.getDescription());
@@ -93,7 +96,7 @@ public class ProductService {
 	            String imageUrl = imageService.uploadImage(image);
 	            existingProduct.setImage(imageUrl);
 	        } catch (IOException e) {
-	            throw new Exception("Error occurred while saving image: " + e.getMessage());
+	            throw new Exception(Messages.UPLOAD_IMAGE_FAILED + e.getMessage());
 	        }
 	    }
 
@@ -118,7 +121,7 @@ public class ProductService {
 	
 	public ProductResponseDTO getProductById(Long productId) {
 	    Product product = productRepository.findById(productId)
-	            .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + productId));
+	            .orElseThrow(() -> new ProductNotFoundException());
 	    ProductResponseDTO dto = productMapper.toResponseDTO(product);
 	    dto.setCategoryName(product.getCategory().getName());
 	    dto.setAttributeValues(mapAttributeValues(product));
@@ -131,14 +134,14 @@ public class ProductService {
 	
 	public void deleteProduct(Long productId) {
 	    Product product = productRepository.findById(productId)
-	            .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + productId));
+	            .orElseThrow(() -> new ProductNotFoundException());
 	    
 	    productRepository.delete(product);
 	}
 	
 	public List<ProductListDTO> getProductsByCategoryId(Long categoryId) {
 	    Category category = categoryRepository.findById(categoryId)
-	            .orElseThrow(() -> new ResourceNotFoundException("Category not found with id: " + categoryId));
+	            .orElseThrow(() -> new CategoryNotFoundException());
 
 	    return productRepository.findAllByCategoryId(category.getId());
 	}
@@ -165,10 +168,10 @@ public class ProductService {
 	    if (productDTO.getAttributeValues() != null && !productDTO.getAttributeValues().isEmpty()) {
 	        for (AttributeValueDTO attrValueDTO : productDTO.getAttributeValues()) {
 	            Attribute attribute = attributeRepository.findById(attrValueDTO.getAttributeId())
-	                    .orElseThrow(() -> new ResourceNotFoundException("Attribute not found"));
+	                    .orElseThrow(() -> new AttributeNotFoundException());
 	            
 	            if (!attribute.getCategory().getId().equals(category.getId())) {
-	                throw new IllegalArgumentException("Attribute does not belong to this category");
+	                throw new IllegalArgumentException(Messages.ATTRIBUTE_NOT_BELONG_TO_CATEGORY);
 	            }
 	            AttributeValue attributeValue = new AttributeValue();
 	            attributeValue.setAttribute(attribute);
@@ -197,7 +200,7 @@ public class ProductService {
 	
 	public void countSelling(Long productId) {
 	    Product product = productRepository.findById(productId)
-	            .orElseThrow(() -> new ResourceNotFoundException("Product not found with id: " + productId));
+	            .orElseThrow(() -> new ProductNotFoundException());
 	    product.setSalesCount(product.getSalesCount()+1);
 	    productRepository.save(product);
 	}

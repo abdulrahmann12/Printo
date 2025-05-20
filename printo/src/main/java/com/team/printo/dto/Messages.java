@@ -67,10 +67,12 @@ public class Messages {
 	public static final String ATTRIBUTE_ALREADY_EXISTS = "Attribute with this name already exists in the category";
 	public static final String ATTRIBUTE_NOT_FOUND =  "Attribute not found";
 	public static final String DELETE_ATTRIBUTE =  "Attribute deleted successfully";
+	public static final String ATTRIBUTE_NOT_BELONG_TO_CATEGORY = "Attribute does not belong to this category";
+	
 	
 	// ==================== Product Messages ==================== 
-	
-	
+	public static final String PRODUCT_NOT_FOUND =  "Product not found";
+	public static final String DELETE_PRODUCT =  "Product deleted successfully";
 
 
 }

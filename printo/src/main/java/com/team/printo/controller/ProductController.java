@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.team.printo.dto.BasicResponse;
+import com.team.printo.dto.Messages;
 import com.team.printo.dto.ProductRequestDTO;
 import com.team.printo.dto.ProductListDTO;
 import com.team.printo.dto.ProductResponseDTO;
@@ -56,7 +57,7 @@ public class ProductController {
 	@PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<BasicResponse> deleteProduct(@PathVariable Long productId) {
         productService.deleteProduct(productId);
-        return ResponseEntity.ok(new BasicResponse("Product deleted successfully"));
+        return ResponseEntity.ok(new BasicResponse(Messages.DELETE_PRODUCT));
     }
     
 
