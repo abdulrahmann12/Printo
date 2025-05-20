@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.AuthenticationCredentialsNotFoundException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -25,154 +26,107 @@ import io.jsonwebtoken.ExpiredJwtException;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 
-	@ExceptionHandler(ResourceNotFoundException.class)
-	public ResponseEntity<?> handleResourceNotFoundExcepion(ResourceNotFoundException exception, WebRequest request){
-		ErrorDetails detials = new ErrorDetails(new Date(), exception.getMessage(), request.getDescription(false));
-		return new ResponseEntity<>(detials,HttpStatus.NOT_FOUND);
-	}
-	
-	@ExceptionHandler(EmailAlreadyExistsException.class)
-	public ResponseEntity<?> handleResourceNotFoundExcepion(EmailAlreadyExistsException exception, WebRequest request){
-		ErrorDetails detials = new ErrorDetails(new Date(), exception.getMessage(), request.getDescription(false));
-		return new ResponseEntity<>(detials,HttpStatus.NOT_FOUND);
-	}
-
-	@ExceptionHandler(InvalidConfirmationCodeException.class)
-	public ResponseEntity<?> handleResourceNotFoundExcepion(InvalidConfirmationCodeException exception, WebRequest request){
-		ErrorDetails detials = new ErrorDetails(new Date(), exception.getMessage(), request.getDescription(false));
-		return new ResponseEntity<>(detials,HttpStatus.NOT_FOUND);
-	}
-	
-	@ExceptionHandler(InvalidTokenException.class)
-	public ResponseEntity<?> handleResourceNotFoundExcepion(InvalidTokenException exception, WebRequest request){
-		ErrorDetails detials = new ErrorDetails(new Date(), exception.getMessage(), request.getDescription(false));
-		return new ResponseEntity<>(detials,HttpStatus.NOT_FOUND);
-	}
-	
-	@ExceptionHandler(InvalidResetCodeException.class)
-	public ResponseEntity<?> handleResourceNotFoundExcepion(InvalidResetCodeException exception, WebRequest request){
-		ErrorDetails detials = new ErrorDetails(new Date(), exception.getMessage(), request.getDescription(false));
-		return new ResponseEntity<>(detials,HttpStatus.NOT_FOUND);
-	}
-	
-	@ExceptionHandler(InvalidCurrentPasswordException.class)
-	public ResponseEntity<?> handleResourceNotFoundExcepion(InvalidCurrentPasswordException exception, WebRequest request){
-		ErrorDetails detials = new ErrorDetails(new Date(), exception.getMessage(), request.getDescription(false));
-		return new ResponseEntity<>(detials,HttpStatus.NOT_FOUND);
-	}
-	
-	@ExceptionHandler(UserNotFoundException.class)
-	public ResponseEntity<?> handleResourceNotFoundExcepion(UserNotFoundException exception, WebRequest request){
-		ErrorDetails detials = new ErrorDetails(new Date(), exception.getMessage(), request.getDescription(false));
-		return new ResponseEntity<>(detials,HttpStatus.NOT_FOUND);
-	}
-	
-	
-	@ExceptionHandler(InsufficientStockException.class)
-	public ResponseEntity<?> handleInsufficientStockException(InsufficientStockException exception, WebRequest request){
-		ErrorDetails detials = new ErrorDetails(new Date(), exception.getMessage(), request.getDescription(false));
-		return new ResponseEntity<>(detials,HttpStatus.NOT_FOUND);
-	}
-	
-	
-	@ExceptionHandler(Exception.class)
-	public ResponseEntity<?> handleGlobalException(Exception exception, WebRequest request){
-		ErrorDetails detials = new ErrorDetails(new Date(), exception.getMessage(), request.getDescription(false));
-		return new ResponseEntity<>(detials, HttpStatus.INTERNAL_SERVER_ERROR);
-	}
-	
-    @ExceptionHandler(ExpiredJwtException.class)
-    public ResponseEntity<?> handleExpiredJwtException(ExpiredJwtException ex, WebRequest reques) {
-    	ErrorDetails detials = new ErrorDetails(new Date(), Messages.SESSION_EXPIRED, reques.getDescription(false));
-        return new ResponseEntity<>(detials, HttpStatus.BAD_REQUEST);
-    }
-    
-    
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<?> handleValidationException(MethodArgumentNotValidException ex, WebRequest reques) {
-        String errorMessage = ex.getBindingResult().getFieldErrors().get(0).getDefaultMessage();
-        ErrorDetails detials = new ErrorDetails(new Date(), errorMessage, reques.getDescription(false));
-        return new ResponseEntity<>(detials, HttpStatus.BAD_REQUEST);
-    }
- 
-    @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<ErrorDetails> handleIllegalArgumentException(IllegalArgumentException ex, WebRequest request) {
-        ErrorDetails errorDetails = new ErrorDetails(
-                new Date(),
-                ex.getMessage(),
-                request.getDescription(false)
-        );
-        return new ResponseEntity<>(errorDetails, HttpStatus.UNAUTHORIZED);
+    // === Common Utility === //
+    private ResponseEntity<ErrorDetails> buildErrorResponse(Exception ex, WebRequest request, HttpStatus status) {
+        ErrorDetails details = new ErrorDetails(new Date(), ex.getMessage(), request.getDescription(false));
+        return new ResponseEntity<>(details, status);
     }
 
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<ErrorDetails> handleRuntimeException(RuntimeException ex, WebRequest request) {
-        ErrorDetails errorDetails = new ErrorDetails(
-                new Date(),
-                ex.getMessage(),
-                request.getDescription(false)
-        );
-        return new ResponseEntity<>(errorDetails, HttpStatus.UNAUTHORIZED);
+    private ResponseEntity<ErrorDetails> buildErrorResponse(String message, WebRequest request, HttpStatus status) {
+        ErrorDetails details = new ErrorDetails(new Date(), message, request.getDescription(false));
+        return new ResponseEntity<>(details, status);
     }
+
+    // === Authentication & Security Exceptions === //
     
+    @ExceptionHandler({ 
+        AuthenticationCredentialsNotFoundException.class,
+        BadCredentialsException.class,
+        AuthenticationException.class
+    })
+    public ResponseEntity<ErrorDetails> handleAuthenticationExceptions(Exception ex, WebRequest request) {
+        String message = (ex instanceof BadCredentialsException) ? Messages.BAD_CREDENTIALS :
+                         (ex instanceof AuthenticationException) ? Messages.AUTH_FAILED :
+                         ex.getMessage();
+        return buildErrorResponse(message, request, HttpStatus.UNAUTHORIZED);
+    }
+
     @ExceptionHandler(AccessDeniedException.class)
-    public ResponseEntity<ErrorDetails> handleAccessDeniedException(AccessDeniedException ex, WebRequest request) {
-        ErrorDetails errorDetails = new ErrorDetails(
-                new Date(),
-                Messages.ACCESS_DENIED,
-                request.getDescription(false));
-        return new ResponseEntity<>(errorDetails, HttpStatus.FORBIDDEN);
-    }
-    
-    @ExceptionHandler(UsernameNotFoundException.class)
-    public ResponseEntity<ErrorDetails> handleUsernameNotFoundException(UsernameNotFoundException ex, WebRequest request) {
-        ErrorDetails errorDetails = new ErrorDetails(
-                new Date(),
-                Messages.USER_NOT_FOUND,
-                request.getDescription(false));
-        return new ResponseEntity<>(errorDetails, HttpStatus.NOT_FOUND);
+    public ResponseEntity<ErrorDetails> handleAccessDenied(AccessDeniedException ex, WebRequest request) {
+        return buildErrorResponse(Messages.ACCESS_DENIED, request, HttpStatus.FORBIDDEN);
     }
 
-    @ExceptionHandler(BadCredentialsException.class)
-    public ResponseEntity<ErrorDetails> handleBadCredentialsException(BadCredentialsException ex, WebRequest request) {
-        ErrorDetails errorDetails = new ErrorDetails(
-                new Date(),
-                Messages.BAD_CREDENTIAL,
-                request.getDescription(false));
-        return new ResponseEntity<>(errorDetails, HttpStatus.UNAUTHORIZED);
+    @ExceptionHandler(ExpiredJwtException.class)
+    public ResponseEntity<ErrorDetails> handleJwtExpired(ExpiredJwtException ex, WebRequest request) {
+        return buildErrorResponse(Messages.SESSION_EXPIRED, request, HttpStatus.BAD_REQUEST);
     }
-	
-    @ExceptionHandler(AuthenticationException.class)
-    public ResponseEntity<ErrorDetails> handleAuthenticationException(AuthenticationException ex, WebRequest request) {
-        ErrorDetails errorDetails = new ErrorDetails(
-                new Date(),
-                Messages.AUTH_FAILED,
-                request.getDescription(false));
-        return new ResponseEntity<>(errorDetails, HttpStatus.UNAUTHORIZED);
+
+    @ExceptionHandler(UsernameNotFoundException.class)
+    public ResponseEntity<ErrorDetails> handleUsernameNotFound(UsernameNotFoundException ex, WebRequest request) {
+        return buildErrorResponse(Messages.USER_NOT_FOUND, request, HttpStatus.NOT_FOUND);
     }
-    
+
+    // === Business Exceptions === //
+
+    @ExceptionHandler({
+        ResourceNotFoundException.class,
+        InvalidConfirmationCodeException.class,
+        InvalidTokenException.class,
+        InvalidResetCodeException.class,
+        InvalidCurrentPasswordException.class,
+        UserNotFoundException.class
+    })
+    public ResponseEntity<ErrorDetails> handleNotFoundBusinessExceptions(Exception ex, WebRequest request) {
+        return buildErrorResponse(ex, request, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(EmailAlreadyExistsException.class)
+    public ResponseEntity<ErrorDetails> handleEmailAlreadyExists(EmailAlreadyExistsException ex, WebRequest request) {
+        return buildErrorResponse(ex, request, HttpStatus.CONFLICT); 
+    }
+
+    @ExceptionHandler(InsufficientStockException.class)
+    public ResponseEntity<ErrorDetails> handleInsufficientStock(InsufficientStockException ex, WebRequest request) {
+        return buildErrorResponse(ex, request, HttpStatus.BAD_REQUEST);
+    }
+
+    // === Validation Exceptions === //
+
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ErrorDetails> handleValidation(MethodArgumentNotValidException ex, WebRequest request) {
+        String errorMessage = ex.getBindingResult().getFieldErrors().get(0).getDefaultMessage();
+        return buildErrorResponse(errorMessage, request, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ErrorDetails> handleIllegalArgument(IllegalArgumentException ex, WebRequest request) {
+        return buildErrorResponse(ex, request, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ErrorDetails> handleMessageNotReadable(HttpMessageNotReadableException ex, WebRequest request) {
+        return buildErrorResponse(Messages.FORMAT_ERROR, request, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(InvalidFormatException.class)
+    public ResponseEntity<ErrorDetails> handleInvalidFormat(InvalidFormatException ex, WebRequest request) {
+        return buildErrorResponse(Messages.CHANGE_ROLES_ERROR, request, HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public ResponseEntity<ErrorDetails> handleMethodNotSupported(HttpRequestMethodNotSupportedException ex, WebRequest request) {
-        ErrorDetails errorDetails = new ErrorDetails(
-                new Date(),
-                Messages.REQUEST_NOT_SUPPORTED,
-                request.getDescription(false));
-        return new ResponseEntity<>(errorDetails, HttpStatus.METHOD_NOT_ALLOWED);
+        return buildErrorResponse(Messages.REQUEST_NOT_SUPPORTED, request, HttpStatus.METHOD_NOT_ALLOWED);
     }
-    
-    @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<ErrorDetails> handleHttpMessageNotReadable(HttpMessageNotReadableException ex, WebRequest request) {
-        ErrorDetails errorDetails = new ErrorDetails(
-                new Date(),
-                Messages.FORMAT_ERROR,
-                request.getDescription(false));
-        return new ResponseEntity<>(errorDetails, HttpStatus.BAD_REQUEST);
+
+    // === Fallback Exceptions === //
+
+    @ExceptionHandler(RuntimeException.class)
+    public ResponseEntity<ErrorDetails> handleRuntime(RuntimeException ex, WebRequest request) {
+        return buildErrorResponse(ex, request, HttpStatus.INTERNAL_SERVER_ERROR);
     }
-    
-    @ExceptionHandler(InvalidFormatException.class)
-    public ResponseEntity<ErrorDetails> handleInvalidFormatException(InvalidFormatException ex) {
-        return ResponseEntity.badRequest().body(
-            new ErrorDetails(Messages.CHANGE_ROLES_ERROR)
-        );
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<ErrorDetails> handleAll(Exception ex, WebRequest request) {
+        return buildErrorResponse(ex, request, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

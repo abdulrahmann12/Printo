@@ -18,6 +18,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
+import com.team.printo.dto.Messages;
 import com.team.printo.repository.TokenRepository;
 import com.team.printo.repository.UserRepository;
 import com.team.printo.service.JwtService;
@@ -66,7 +67,7 @@ public class SecurityConfig {
 	@Bean
 	public UserDetailsService userDetailsService() {
 		return username -> (UserDetails) userRepository.findByEmail(username)
-				.orElseThrow(()->new UsernameNotFoundException("User not found !"));
+				.orElseThrow(()->new UsernameNotFoundException(Messages.USER_NOT_FOUND));
 	}
 	
 	@Bean

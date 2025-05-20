@@ -13,7 +13,6 @@ import com.cloudinary.Cloudinary;
 public class CloudinaryConfig {
 	@Bean
 	public Cloudinary cloudinary() {
-	    System.out.println("Creating Cloudinary bean...");
 	    Map<String, String> config = new HashMap<>();
 	    config.put("cloud_name", "djhbgtqbg");
 	    config.put("api_key", "732883554933543");

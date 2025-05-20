@@ -1,5 +1,6 @@
 package com.team.printo.dto;
 
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -10,9 +11,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class LoginRequest {
 
-    @NotBlank(message = "email is require")
+	@Email(message = "Invalid email format")
+    @NotBlank(message = "email is required")
 	private String email;
     
-    @NotBlank(message = "password is require")
+    @NotBlank(message = "password is required")
     private String password;
 }

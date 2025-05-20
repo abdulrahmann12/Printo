@@ -4,6 +4,8 @@ import java.util.Optional;
 import java.util.Random;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import com.team.printo.dto.AuthResponse;
 import com.team.printo.dto.ChangePasswordRequest;
 import com.team.printo.dto.EmailConfirmationRequest;
 import com.team.printo.dto.Messages;
@@ -22,6 +24,7 @@ import com.team.printo.model.User.Role;
 import com.team.printo.repository.TokenRepository;
 import com.team.printo.repository.UserRepository;
 
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -33,7 +36,7 @@ public class AuthService {
 	private final EmailService emailService;
 	private final UserMapper userMapper;
 	private final TokenRepository tokenRepository;
-
+	private final JwtService jwtService;
 	
 	public UserDTO registerUser(UserRegisterDTO userDTO) {
 		User user = userMapper.toEntity(userDTO);
@@ -109,7 +112,7 @@ public class AuthService {
 	        storedToken.setRevoked(true);
 	        tokenRepository.save(storedToken);
 		}else {
-			throw new InvalidTokenException();
+			throw new InvalidTokenException(Messages.ALREADY_LOGGED_OUT);
 		}
 	}
 	
@@ -124,6 +127,42 @@ public class AuthService {
 				orElseThrow(()-> new UserNotFoundException(email));
 	}
 	
-	
+	public AuthResponse refreshToken(HttpServletRequest request) {
+	    final String authHeader = request.getHeader("Authorization");
+
+	    if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+	        throw new InvalidTokenException(Messages.INVALID_REFRESH_TOKEN);
+	    }
+
+	    final String refreshToken = authHeader.substring(7);
+	    final String userEmail = jwtService.extractUsername(refreshToken);
+
+	    if (userEmail == null) {
+	        throw new InvalidTokenException(Messages.COULD_NOT_EXTRACT_USER);
+	    }
+
+	    User user = getUserByEmail(userEmail);
+
+	    if (!jwtService.validateToken(refreshToken, user)) {
+	        throw new InvalidTokenException(Messages.INVALID_REFRESH_TOKEN);
+	    }
+
+	    String accessToken = jwtService.generateToken(user);
+	    jwtService.revokeAllUserTokens(user);
+	    jwtService.saveUserToken(user, accessToken);
+
+	    return new AuthResponse(accessToken, refreshToken);
+	}
+
+	public void logout(HttpServletRequest request) {
+	    final String authHeader = request.getHeader("Authorization");
+
+	    if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+	        throw new InvalidTokenException(Messages.TOKEN_NOT_FOUND);
+	    }
+
+	    String token = authHeader.substring(7);
+	    logout(token);
+	}
 
 }

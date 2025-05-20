@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import com.team.printo.dto.Messages;
+import com.team.printo.exception.InvalidTokenException;
 import com.team.printo.model.Token;
 import com.team.printo.model.User;
 import com.team.printo.repository.TokenRepository;
@@ -84,7 +86,7 @@ public class JwtService {
 	                .parseClaimsJws(token)
 	                .getBody();
 	    } catch (Exception e) {
-	        throw new RuntimeException("Invalid or expired token", e);
+	        throw new InvalidTokenException(Messages.TOKEN_NOT_FOUND);
 	    }
 	}
 		

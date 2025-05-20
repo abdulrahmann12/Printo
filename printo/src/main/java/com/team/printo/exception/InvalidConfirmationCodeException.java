@@ -4,6 +4,6 @@ import com.team.printo.dto.Messages;
 
 public class InvalidConfirmationCodeException extends RuntimeException {
     public InvalidConfirmationCodeException() {
-        super(Messages.INVAILED_CONFIRM_EMAIL);
+        super(Messages.INVALID_CONFIRM_EMAIL);
     }
 }

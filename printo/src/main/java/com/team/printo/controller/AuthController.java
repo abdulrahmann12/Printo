@@ -1,9 +1,5 @@
 package com.team.printo.controller;
 
-
-import java.util.Date;
-
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -20,11 +16,9 @@ import com.team.printo.dto.Messages;
 import com.team.printo.dto.ChangePasswordRequest;
 import com.team.printo.dto.EmailConfirmationRequest;
 import com.team.printo.dto.EmailRequest;
-import com.team.printo.dto.ErrorDetails;
 import com.team.printo.dto.LoginRequest;
 import com.team.printo.dto.ResetPasswordDTO;
 import com.team.printo.dto.UserRegisterDTO;
-import com.team.printo.exception.UserNotFoundException;
 import com.team.printo.model.User;
 import com.team.printo.service.AuthService;
 import com.team.printo.service.JwtService;
@@ -43,7 +37,7 @@ public class AuthController {
 	private final AuthenticationManager authenticationManager;
 	
 	@PostMapping("/login")
-	public ResponseEntity<BasicResponse> login(@RequestBody LoginRequest loginRequest){
+	public ResponseEntity<BasicResponse> login(@Valid @RequestBody LoginRequest loginRequest){
 		authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
 		
 		User user = authService.getUserByEmail(loginRequest.getEmail());
@@ -55,57 +49,17 @@ public class AuthController {
 	}
 	
 	@PostMapping("/refresh-token")
-	public ResponseEntity<?> refreshToken(HttpServletRequest request) {
-	    final String authHeader = request.getHeader("Authorization");
-
-	    if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-	        return unauthorizedResponse(Messages.INVALID_REFRESH_TOKEN);
-	    }
-
-	    final String refreshToken = authHeader.substring(7);
-	    final String userEmail = jwtService.extractUsername(refreshToken);
-
-	    if (userEmail == null) {
-	        return unauthorizedResponse(Messages.COULD_NOT_EXTRACT_USER);
-	    }
-
-	    try {
-	        User user = authService.getUserByEmail(userEmail);
-
-	        if (!jwtService.validateToken(refreshToken, user)) {
-	            return unauthorizedResponse(Messages.INVALID_REFRESH_TOKEN);
-	        }
-
-	        String accessToken = jwtService.generateToken(user);
-	        jwtService.revokeAllUserTokens(user);
-	        jwtService.saveUserToken(user, accessToken);
-
-	        AuthResponse authResponse = new AuthResponse(accessToken, refreshToken);
-	        return ResponseEntity.ok(new BasicResponse(Messages.NEW_TOKEN_GENERATED, authResponse));
-
-	    } catch (UserNotFoundException e) {
-	        return unauthorizedResponse(Messages.USER_NOT_FOUND);
-	    }
+	public ResponseEntity<BasicResponse> refreshToken(HttpServletRequest request) {
+	    AuthResponse response = authService.refreshToken(request);
+	    return ResponseEntity.ok(new BasicResponse(Messages.NEW_TOKEN_GENERATED, response));
 	}
 
-	private ResponseEntity<ErrorDetails> unauthorizedResponse(String message) {
-	    return ResponseEntity
-	            .status(HttpStatus.UNAUTHORIZED)
-	            .body(new ErrorDetails(new Date(), "Unauthorized", message));
-	}
-	
 	@PostMapping("/logout")
-	public ResponseEntity<?> logout(HttpServletRequest request) {
-	    final String authHeader = request.getHeader("Authorization");
-
-	    if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-	        return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-	                             .body(new ErrorDetails(Messages.TOKEN_NOT_FOUND));
-	    }
-	    String token = authHeader.substring(7);
-	    authService.logout(token);
+	public ResponseEntity<BasicResponse> logout(HttpServletRequest request) {
+	    authService.logout(request);
 	    return ResponseEntity.ok(new BasicResponse(Messages.LOGOUT_SUCCESS));
 	}
+	
 	
 	@PostMapping("/register")
 	public ResponseEntity<BasicResponse> register(@Valid @RequestBody UserRegisterDTO user){
@@ -126,14 +80,12 @@ public class AuthController {
 	}
 	
 	@PostMapping("/regenerate-code")
-	public ResponseEntity<?> regenerateCode(@AuthenticationPrincipal UserDetails userDetails) {
-	    if (userDetails == null) {
-	        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-	                             .body(new ErrorDetails(Messages.USER_NOT_AUTHENTICATED));
-	    }
+	public ResponseEntity<BasicResponse> regenerateCode(@AuthenticationPrincipal UserDetails userDetails) {
+
 	    authService.reGenerateConfirmationCode(userDetails.getUsername());
 	    return ResponseEntity.ok(new BasicResponse(Messages.CODE_SENT));
 	}
+
 	
 	@PostMapping("/forget-password")
 	public ResponseEntity<BasicResponse> forgetPassword(@Valid @RequestBody EmailRequest email){
@@ -144,7 +96,7 @@ public class AuthController {
 	@PostMapping("/reset-password")
 	public ResponseEntity<BasicResponse> resetPassword(@Valid @RequestBody ResetPasswordDTO resetPasswodDTO){
 			authService.resetPassword(resetPasswodDTO);
-			return ResponseEntity.ok(new BasicResponse(Messages.CHANGE_PASSWORD	));
+			return ResponseEntity.ok(new BasicResponse(Messages.CHANGE_PASSWORD));
 	}
 }
 
