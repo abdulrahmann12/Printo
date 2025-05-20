@@ -37,10 +37,16 @@ public class Messages {
 	public static final String USER_NOT_FOUND = "User not found";
 	public static final String USER_NOT_AUTHENTICATED = "User not authenticated";
 	public static final String CHANGE_ROLES_ERROR = "Invalid role. Please provide one of: ADMIN, CUSTOMER, etc";
-
+	public static final String USER_UPDATE_PROFILE = "User role updated successfully";
+	public static final String USER_UPDATE_IMAGE = "User image updated successfully";
+	public static final String DELETE_USER = "User deleted successfully";
+	
 	// ==================== Format Messages ====================
 	public static final String FORMAT_ERROR = "Malformed JSON request";
 
-    
+
+	// ==================== Images Messages ====================
+	public static final String EMPTY_IMAGE= "Image file is empty or null";
+	public static final String UPLOAD_IMAGE_FAILED= "Error occurred while uploading image: ";
     
 }

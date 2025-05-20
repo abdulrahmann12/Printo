@@ -60,7 +60,7 @@ public class AuthService {
 	
 	public void forgotPassword(String email) {
 		User user = userRepository.findByEmail(email)
-			    .orElseThrow(() -> new UserNotFoundException(email));
+			    .orElseThrow(() -> new UserNotFoundException());
 		String resetCode = generateConfirmationCode();
 		user.setConfirmationCode(resetCode);
 		userRepository.save(user);
@@ -73,7 +73,7 @@ public class AuthService {
 	
 	public void resetPassword(ResetPasswordDTO resetPasswodDTO) {
 		User user = userRepository.findByEmail(resetPasswodDTO.getEmail())
-			    .orElseThrow(() -> new UserNotFoundException(resetPasswodDTO.getEmail()));
+			    .orElseThrow(() -> new UserNotFoundException());
 		if(!resetPasswodDTO.getCode().equals(user.getConfirmationCode())) {
 			throw new InvalidResetCodeException();
 		}
@@ -84,7 +84,7 @@ public class AuthService {
 	
 	public void changePassword(String email, ChangePasswordRequest request) {
 		User user = userRepository.findByEmail(email)
-			    .orElseThrow(() -> new UserNotFoundException(email));
+			    .orElseThrow(() -> new UserNotFoundException());
 		if(!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
 			throw new InvalidCurrentPasswordException();
 		}
@@ -94,7 +94,7 @@ public class AuthService {
 	
 	public void reGenerateConfirmationCode(String email) {
 		User user = userRepository.findByEmail(email)
-			    .orElseThrow(() -> new UserNotFoundException(email));
+			    .orElseThrow(() -> new UserNotFoundException());
 		String resetCode = generateConfirmationCode();
 		user.setConfirmationCode(resetCode);
 		userRepository.save(user);
@@ -107,7 +107,7 @@ public class AuthService {
 	
 	public void confirmation(EmailConfirmationRequest request) {
 		User user = userRepository.findByEmail(request.getEmail())
-			    .orElseThrow(() -> new UserNotFoundException(request.getEmail()));
+			    .orElseThrow(() -> new UserNotFoundException());
 		if(request.getConfirmationCode().equals(user.getConfirmationCode())) {
 			user.setConfirmationCode(null);
 			user.setEmailConfirmation(true);
@@ -137,7 +137,7 @@ public class AuthService {
 	
 	public User getUserByEmail(String email) {
 		return userRepository.findByEmail(email).
-				orElseThrow(()-> new UserNotFoundException(email));
+				orElseThrow(()-> new UserNotFoundException());
 	}
 	
 	public AuthResponse refreshToken(HttpServletRequest request) {

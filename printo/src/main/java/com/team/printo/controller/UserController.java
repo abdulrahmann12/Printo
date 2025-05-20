@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.team.printo.dto.BasicResponse;
+import com.team.printo.dto.Messages;
 import com.team.printo.dto.RoleRequest;
 import com.team.printo.dto.UserDTO;
 import com.team.printo.model.User;
@@ -63,7 +64,7 @@ public class UserController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<BasicResponse> changeRole(@PathVariable Long userId, @RequestBody RoleRequest request) {
 	    userService.changeUserRole(userId, request);
-	    return ResponseEntity.ok(new BasicResponse("User role updated successfully"));
+	    return ResponseEntity.ok(new BasicResponse(Messages.USER_UPDATE_PROFILE));
 	}
 	
 
@@ -72,13 +73,13 @@ public class UserController {
 	public ResponseEntity<BasicResponse> updateUserImage(@AuthenticationPrincipal UserDetails details,@RequestPart("image") MultipartFile image)throws Exception{
 	    Long userId= ((User) details).getId();
 		userService.updateUserImage(userId, image);
-	    return ResponseEntity.ok(new BasicResponse("User image updated successfully"));
+	    return ResponseEntity.ok(new BasicResponse(Messages.USER_UPDATE_IMAGE));
 	}
 	
 	@DeleteMapping("/{userId}")
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<BasicResponse> deleteUser(@PathVariable Long userId){
 	    userService.deleteUser(userId);
-	    return ResponseEntity.ok(new BasicResponse("User deleted successfully"));
+	    return ResponseEntity.ok(new BasicResponse(Messages.DELETE_USER));
 	}
 }
