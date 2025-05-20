@@ -83,7 +83,9 @@ public class GlobalExceptionHandler {
         InvalidResetCodeException.class,
         InvalidCurrentPasswordException.class,
         UserNotFoundException.class,
-        AddressNotFoundException.class
+        AddressNotFoundException.class,
+        CategoryNotFoundException.class,
+        AttributeNotFoundException.class
     })
     public ResponseEntity<ErrorDetails> handleNotFoundBusinessExceptions(Exception ex, WebRequest request) {
         return buildErrorResponse(ex, request, HttpStatus.NOT_FOUND);

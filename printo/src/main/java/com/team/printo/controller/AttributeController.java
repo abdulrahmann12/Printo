@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.team.printo.dto.AttributeDTO;
 import com.team.printo.dto.BasicResponse;
+import com.team.printo.dto.Messages;
 import com.team.printo.service.AttributeService;
 
 import jakarta.validation.Valid;
@@ -45,7 +46,7 @@ public class AttributeController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<BasicResponse> deleteAttribute(@PathVariable Long attributeId){
 		attributeService.deleteAttribute(attributeId);
-		return ResponseEntity.ok(new BasicResponse("Attribute deleted successfully"));
+		return ResponseEntity.ok(new BasicResponse(Messages.DELETE_ATTRIBUTE));
 	}
 	
 	@GetMapping("/{attributeId}")

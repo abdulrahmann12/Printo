@@ -56,4 +56,13 @@ public class Messages {
 	public static final String DEFAULT_ADDRESS = "Cannot delete default address";
 	public static final String UPDATE_ADDRESS = "Address updated successfully";
 	public static final String DELETE_ADDRESS = "Address deleted successfully";
+	
+	// ==================== Attribute Messages ==================== "Attribute deleted successfully"
+	public static final String ATTRIBUTE_ALREADY_EXISTS = "Attribute with this name already exists in the category";
+	public static final String ATTRIBUTE_NOT_FOUND =  "Attribute not found";
+	public static final String DELETE_ATTRIBUTE =  "Attribute deleted successfully";
+	// ==================== Category Messages ==================== 
+	public static final String CATEGORY_NOT_FOUND =  "Category not found";
+	
+
 }

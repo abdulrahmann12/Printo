@@ -1,13 +1,14 @@
 package com.team.printo.service;
 
-
-
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
 import com.team.printo.dto.AttributeDTO;
+import com.team.printo.dto.Messages;
+import com.team.printo.exception.AttributeNotFoundException;
+import com.team.printo.exception.CategoryNotFoundException;
 import com.team.printo.exception.ResourceNotFoundException;
 import com.team.printo.mapper.AttributeMapper;
 import com.team.printo.model.Attribute;
@@ -28,10 +29,10 @@ public class AttributeService {
 	
 	public AttributeDTO createAttribute(AttributeDTO attributeDTO) {
 		if (attributeRepository.existsByNameAndCategoryId(attributeDTO.getName(), attributeDTO.getCategoryId())) {
-		    throw new IllegalArgumentException("Attribute with this name already exists in the category");
+		    throw new IllegalArgumentException(Messages.ATTRIBUTE_ALREADY_EXISTS);
 		}
         Category category = categoryRepository.findById(attributeDTO.getCategoryId())
-                .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
+                .orElseThrow(() -> new CategoryNotFoundException());
 		
         Attribute attribute =  attributeMapper.toEntity(attributeDTO);
         attribute.setCategory(category);
@@ -46,17 +47,17 @@ public class AttributeService {
 		        attributeDTO.getName(), 
 		        attributeDTO.getCategoryId(), 
 		        attributeId)) {
-		    throw new IllegalArgumentException("Attribute with this name already exists in the category");
+		    throw new IllegalArgumentException(Messages.ATTRIBUTE_ALREADY_EXISTS);
 		}	
 		
 		Attribute existingAttribute = attributeRepository.findById(attributeId)
-                .orElseThrow(() -> new ResourceNotFoundException("Attribute not found"));
+                .orElseThrow(() -> new AttributeNotFoundException());
 		
 		existingAttribute.setName(attributeDTO.getName());
 		
         if (attributeDTO.getCategoryId() != null) {
             Category category = categoryRepository.findById(attributeDTO.getCategoryId())
-                    .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
+                    .orElseThrow(() -> new CategoryNotFoundException());
             existingAttribute.setCategory(category);
         }
         
@@ -66,19 +67,19 @@ public class AttributeService {
 	
 	public void deleteAttribute(Long attributeId) {
 		Attribute attribute = attributeRepository.findById(attributeId)
-                .orElseThrow(() -> new ResourceNotFoundException("Attribute not found"));
+                .orElseThrow(() -> new AttributeNotFoundException());
 		attributeRepository.delete(attribute);
 	}
 	
 	public AttributeDTO getAttributeById(Long attributeId) {
 		Attribute attribute = attributeRepository.findById(attributeId)
-                .orElseThrow(() -> new ResourceNotFoundException("Attribute not found"));
+                .orElseThrow(() -> new AttributeNotFoundException());
         return attributeMapper.toDTO(attribute);
 	}
 	
 	public List<AttributeDTO> getAttributesByCategory(Long categoryId) {
         Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
+                .orElseThrow(() -> new CategoryNotFoundException());
 		return attributeRepository.findByCategoryId(category.getId())
 				.stream()
 				.map(attributeMapper::toDTO)
