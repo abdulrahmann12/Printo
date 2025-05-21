@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.team.printo.dto.BasicResponse;
 import com.team.printo.dto.CartDTO;
 import com.team.printo.dto.CartItemRequestDTO;
+import com.team.printo.dto.Messages;
 import com.team.printo.model.User;
 import com.team.printo.service.CartService;
 
@@ -35,7 +36,7 @@ public class CartController {
 	
 		Long userId = ((User) userDetails).getId();	
 		cartService.addToCart(userId, cartItemDTO);
-		return ResponseEntity.ok(new BasicResponse("Added to cart successfuly"));
+		return ResponseEntity.ok(new BasicResponse(Messages.ADD_TO_CART));
 	}
 	
 	
@@ -53,7 +54,7 @@ public class CartController {
 	public ResponseEntity<BasicResponse> clearCart(@AuthenticationPrincipal UserDetails userDetails){
 		Long userId = ((User) userDetails).getId();	
 		cartService.clearCart(userId);
- 		return ResponseEntity.ok(new BasicResponse("Cart cleared successfuly"));
+ 		return ResponseEntity.ok(new BasicResponse(Messages.CLEAR_CART));
 	}
 	
 	@DeleteMapping("/{cartitemId}")
@@ -64,6 +65,6 @@ public class CartController {
 			){
 		Long userId = ((User) userDetails).getId();	
 		cartService.deleteCartItem(userId, cartitemId);
- 		return ResponseEntity.ok(new BasicResponse("Cart item deleted successfully"));
+ 		return ResponseEntity.ok(new BasicResponse(Messages.DELETE_CART_ITEM));
 	}
 }

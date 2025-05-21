@@ -99,4 +99,18 @@ public class Messages {
 	public static final String PRODUCT_NOT_EXIST_IN_FAVORITE = "Product not in favorites";
 	public static final String ADD_TO_FAVORITE = "Product added successfuly";
 	public static final String REMOVE_FROM_FAVORITE = "Product removed successfuly";
+	
+	// ==================== Cart Messages ====================  
+	public static final String NOT_ENOUGH_STOCK = "Not enough available stock";
+	public static final String USER_NOT_OWN_DESIGN = "You do not own this design";
+	public static final String PRODUCT_NOT_OWN_DESIGN = "This design does not belong to the selected product";
+	public static final String ATTRIBUTE_VALUE_NOT_NULL = "Attribute value ID must not be null";
+	public static final String PRODUCT_NOT_OWN_ATTRIBUTE = "Attribute value does not belong to the selected product";
+	public static final String CART_NOT_FOUND = "Cart not found";
+	public static final String CART_ITEM_NOT_FOUND = "Cart item not found";
+	public static final String CART_ITEM_NOT_IN_CART = "This cart item does not belong to your cart";
+	public static final String ADD_TO_CART = "Added to cart successfuly";
+	public static final String DELETE_CART_ITEM = "Cart item deleted successfully";
+	public static final String CLEAR_CART = "Cart cleared successfuly";
+	
 }

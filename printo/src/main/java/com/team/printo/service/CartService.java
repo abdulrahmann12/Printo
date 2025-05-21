@@ -12,8 +12,14 @@ import org.springframework.stereotype.Service;
 import com.team.printo.dto.CartDTO;
 import com.team.printo.dto.CartItemAttributeValueRequestDTO;
 import com.team.printo.dto.CartItemRequestDTO;
+import com.team.printo.dto.Messages;
+import com.team.printo.exception.AttributeNotFoundException;
+import com.team.printo.exception.CartNotFoundException;
+import com.team.printo.exception.DesignNotFoundException;
 import com.team.printo.exception.InsufficientStockException;
+import com.team.printo.exception.ProductNotFoundException;
 import com.team.printo.exception.ResourceNotFoundException;
+import com.team.printo.exception.UserNotFoundException;
 import com.team.printo.mapper.CartMapper;
 import com.team.printo.model.AttributeValue;
 import com.team.printo.model.Cart;
@@ -47,13 +53,13 @@ public class CartService {
     
     public void addToCart(Long userId, CartItemRequestDTO cartItemDTO) {
         Product product = productRepository.findById(cartItemDTO.getProductId())
-                .orElseThrow(() -> new ResourceNotFoundException("Product not found!"));
+                .orElseThrow(() -> new ProductNotFoundException());
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found."));
+                .orElseThrow(() -> new UserNotFoundException());
 
         if (product.getQuantity() < cartItemDTO.getQuantity()) {
-            throw new InsufficientStockException("Not enough available stock.");
+            throw new InsufficientStockException(Messages.NOT_ENOUGH_STOCK);
         }
 
         Cart cart = cartRepository.findByUserId(userId)
@@ -84,12 +90,12 @@ public class CartService {
 
         	if (cartItemDTO.getDesignId() != null) {
         	    Design design = designRepository.findById(cartItemDTO.getDesignId())
-        	            .orElseThrow(() -> new ResourceNotFoundException("Design not found!"));
+        	            .orElseThrow(() -> new DesignNotFoundException());
         	    if (design.getUser().getId() != userId) {
-        	        throw new IllegalArgumentException("You do not own this design.");
+        	        throw new IllegalArgumentException(Messages.USER_NOT_OWN_DESIGN);
         	    }
         	    if (!design.getProduct().getId().equals(product.getId())) {
-        	        throw new IllegalArgumentException("This design does not belong to the selected product.");
+        	        throw new IllegalArgumentException(Messages.PRODUCT_NOT_OWN_DESIGN);
         	    }
         	    cartItem.setDesign(design);
         	}
@@ -99,13 +105,13 @@ public class CartService {
         	if (cartItemDTO.getAttributeValuesId() != null && !cartItemDTO.getAttributeValuesId().isEmpty()) {
         	    for (CartItemAttributeValueRequestDTO attrDto : cartItemDTO.getAttributeValuesId()) {
         	        if (attrDto.getAttributeValueId() == null) {
-        	            throw new IllegalArgumentException("Attribute value ID must not be null");
+        	            throw new IllegalArgumentException(Messages.ATTRIBUTE_VALUE_NOT_NULL);
         	        }
         	        AttributeValue attrValue = attributeValueRepository.findById(attrDto.getAttributeValueId())
-        	                .orElseThrow(() -> new ResourceNotFoundException("AttributeValue not found with id: " + attrDto.getAttributeValueId()));
+        	                .orElseThrow(() -> new AttributeNotFoundException());
 
         	        if (!attrValue.getProduct().getId().equals(product.getId())) {
-        	            throw new IllegalArgumentException("Attribute value does not belong to the selected product.");
+        	            throw new IllegalArgumentException(Messages.PRODUCT_NOT_OWN_ATTRIBUTE);
         	        }
         	        CartItemAttributeValue cartItemAttrVal = new CartItemAttributeValue();
         	        cartItemAttrVal.setCartItem(cartItem);
@@ -127,13 +133,13 @@ public class CartService {
     
 	public CartDTO getCart(Long userId) {
 		Cart cart = cartRepository.findByUserId(userId)
-				.orElseThrow(()-> new ResourceNotFoundException("Cart not Found "));  	
+				.orElseThrow(()-> new CartNotFoundException());  	
 		return cartMapper.toDTO(cart);
 	}
 	
 	public void clearCart(Long userId) {
 		Cart cart = cartRepository.findByUserId(userId)
-				.orElseThrow(()-> new ResourceNotFoundException("Cart not Found "));    
+				.orElseThrow(()-> new CartNotFoundException());    
 		cart.getItems().clear();
 		cartRepository.save(cart);
 	}
@@ -150,12 +156,14 @@ public class CartService {
 	}
 		
 	public void deleteCartItem(Long userId, Long cartItemId) {
-	    Cart cart = cartRepository.findByUserId(userId)
-	            .orElseThrow(() -> new ResourceNotFoundException("Cart not found for this user."));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new UserNotFoundException());
+	    Cart cart = cartRepository.findByUserId(user.getId())
+	            .orElseThrow(() -> new CartNotFoundException());
 	    CartItem cartItem = cartItemRepository.findById(cartItemId)
-	            .orElseThrow(() -> new ResourceNotFoundException("Cart item not found."));
+	            .orElseThrow(() -> new ResourceNotFoundException(Messages.CART_ITEM_NOT_FOUND));
 	    if (cartItem.getCart().getId() != cart.getId()) {
-	        throw new IllegalArgumentException("This cart item does not belong to your cart.");
+	        throw new IllegalArgumentException(Messages.CART_ITEM_NOT_IN_CART);
 	    }
 	    cartItemRepository.delete(cartItem);
 	}
