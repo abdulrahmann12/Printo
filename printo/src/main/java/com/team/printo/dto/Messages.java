@@ -88,4 +88,9 @@ public class Messages {
 	public static final String DESIGN_NOT_FOUND = "Design not found";
 	public static final String UPLOAD_DESIGN = "Design uploaded successfully";
 	public static final String DELETE_DESIGN =  "Design deleted successfully";
+	
+	// ==================== Review Messages ==================== 
+	public static final String REVIEW_NOT_FOUND = "Review not found";
+	public static final String ADD_REVIEW =  "Review added successfully";
+	public static final String DELETE_REVIEW =  "Review deleted successfully";
 }

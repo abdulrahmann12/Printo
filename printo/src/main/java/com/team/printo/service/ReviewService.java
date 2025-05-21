@@ -6,7 +6,9 @@ import java.util.stream.Collectors;
 import org.springframework.stereotype.Service;
 
 import com.team.printo.dto.ReviewDTO;
-import com.team.printo.exception.ResourceNotFoundException;
+import com.team.printo.exception.ProductNotFoundException;
+import com.team.printo.exception.ReviewNotFoundException;
+import com.team.printo.exception.UserNotFoundException;
 import com.team.printo.mapper.ReviewMapper;
 import com.team.printo.model.Product;
 import com.team.printo.model.Review;
@@ -26,14 +28,13 @@ public class ReviewService {
 	private final ReviewRepository reviewRepository;
 	private final ReviewMapper reviewMapper;
 	
-	
 	public ReviewDTO addReview(Long userId, Long productId, ReviewDTO reviewDTO) {
 	
         Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new ResourceNotFoundException("Product not found!"));  
+                .orElseThrow(() -> new ProductNotFoundException());  
         
 		User user = userRepository.findById(userId)
-				.orElseThrow(()-> new ResourceNotFoundException("User not found ."));
+				.orElseThrow(()-> new UserNotFoundException());
 		
 		Review newReview = reviewMapper.toEntity(reviewDTO);
 		
@@ -47,7 +48,7 @@ public class ReviewService {
 	
 	public List<ReviewDTO> getAllReviewsByProductId(Long productId){
         Product product = productRepository.findById(productId)
-                .orElseThrow(() -> new ResourceNotFoundException("Product not found!"));  
+                .orElseThrow(() -> new ProductNotFoundException());  
         List<Review> reviews = reviewRepository.findByProductId(product.getId());
         return reviews.stream()
         		.map(reviewMapper::toDTO)
@@ -56,7 +57,7 @@ public class ReviewService {
 	
 	public void deleteReview(Long reviewId) {
 		Review review = reviewRepository.findById(reviewId)
-                .orElseThrow(() -> new ResourceNotFoundException("Review not found!")); 
+                .orElseThrow(() -> new ReviewNotFoundException()); 
 		reviewRepository.delete(review);
 	}
 }

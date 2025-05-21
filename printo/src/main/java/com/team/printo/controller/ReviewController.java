@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.team.printo.dto.BasicResponse;
+import com.team.printo.dto.Messages;
 import com.team.printo.dto.ReviewDTO;
 import com.team.printo.model.User;
 import com.team.printo.service.ReviewService;
@@ -38,7 +39,7 @@ public class ReviewController {
 			){
 		Long userId = ((User) userDetails).getId();
 		ReviewDTO newReview = reviewService.addReview(userId, productId, reviewDTO);
-		return ResponseEntity.ok(new BasicResponse("Review added successfuly",newReview));
+		return ResponseEntity.ok(new BasicResponse(Messages.ADD_REVIEW,newReview));
 	}
 	
 	@GetMapping("/product/{productId}")
@@ -53,7 +54,7 @@ public class ReviewController {
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<BasicResponse> deleteReview(@PathVariable Long reviewId){
 		reviewService.deleteReview(reviewId);
-		return ResponseEntity.ok(new BasicResponse("Review deleted successfuly"));
+		return ResponseEntity.ok(new BasicResponse(Messages.DELETE_REVIEW));
 	}
 
 }
