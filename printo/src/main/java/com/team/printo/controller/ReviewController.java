@@ -19,10 +19,13 @@ import com.team.printo.dto.ReviewDTO;
 import com.team.printo.model.User;
 import com.team.printo.service.ReviewService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import org.springframework.web.bind.annotation.RequestBody;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
+@Tag(name = "Review Controller", description = "API for submitting and viewing product reviews.")
 @RestController
 @RequestMapping("/api/reviews")
 @RequiredArgsConstructor

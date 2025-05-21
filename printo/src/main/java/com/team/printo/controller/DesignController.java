@@ -21,9 +21,11 @@ import com.team.printo.dto.Messages;
 import com.team.printo.model.User;
 import com.team.printo.service.DesignService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
+@Tag(name = "Design Controller", description = "API for uploading and managing user print designs.")
 @RestController
 @RequestMapping("/api/design")
 @RequiredArgsConstructor

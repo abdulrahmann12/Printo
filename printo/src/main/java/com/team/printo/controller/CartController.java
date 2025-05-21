@@ -18,10 +18,13 @@ import com.team.printo.dto.Messages;
 import com.team.printo.model.User;
 import com.team.printo.service.CartService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import org.springframework.web.bind.annotation.RequestBody;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
+@Tag(name = "Cart Controller", description = "API for managing the user's shopping cart.")
 @RestController
 @RequestMapping("/api/cart")
 @RequiredArgsConstructor

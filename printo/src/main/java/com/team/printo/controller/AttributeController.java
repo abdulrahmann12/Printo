@@ -2,6 +2,7 @@ package com.team.printo.controller;
 
 import java.util.List;
 
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,9 +19,11 @@ import com.team.printo.dto.BasicResponse;
 import com.team.printo.dto.Messages;
 import com.team.printo.service.AttributeService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
+@Tag(name = "Attribute Controller", description = "API for managing product attributes and specifications.")
 @RestController
 @RequestMapping("/api/attributes")
 @RequiredArgsConstructor

@@ -18,8 +18,10 @@ import com.team.printo.dto.Messages;
 import com.team.printo.dto.ProductImageDTO;
 import com.team.printo.service.ProductImagesService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
+@Tag(name = "Product Image Controller", description = "API for managing product images and media files.")
 @RestController
 @RequestMapping("/api/product-images")
 @RequiredArgsConstructor

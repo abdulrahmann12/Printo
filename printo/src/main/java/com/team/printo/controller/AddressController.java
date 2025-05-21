@@ -21,9 +21,11 @@ import com.team.printo.dto.Messages;
 import com.team.printo.model.User;
 import com.team.printo.service.AddressService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
+@Tag(name = "Address Controller", description = "API for managing user delivery addresses, including adding, updating, and deleting addresses.")
 @RestController
 @RequestMapping("/api/addresses")
 @RequiredArgsConstructor
@@ -32,7 +34,7 @@ public class AddressController {
 	private final AddressService addressService;
 	
 	@PostMapping
-	@PreAuthorize("isAuthenticated()")
+	@PreAuthorize("isAuthentic	ated()")
 	public ResponseEntity<AddressDTO> addAddress(@AuthenticationPrincipal UserDetails userDetails,@Valid @RequestBody AddressDTO addressDTO){
 		Long userId = ((User) userDetails).getId();
 		AddressDTO savedAddress = addressService.addAddress(userId, addressDTO);

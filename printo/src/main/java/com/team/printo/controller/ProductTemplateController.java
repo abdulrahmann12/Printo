@@ -18,8 +18,10 @@ import com.team.printo.dto.Messages;
 import com.team.printo.dto.ProductTemplateDTO;
 import com.team.printo.service.ProductTemplateService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
+@Tag(name = "Product Template Controller", description = "API for managing product templates used in printing.")
 @RestController
 @RequestMapping("/api/product-template")
 @RequiredArgsConstructor

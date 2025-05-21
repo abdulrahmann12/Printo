@@ -23,10 +23,12 @@ import com.team.printo.model.User;
 import com.team.printo.service.AuthService;
 import com.team.printo.service.JwtService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
+@Tag(name = "Auth Controller", description = "API for user authentication and authorization (login, register, etc).")
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor

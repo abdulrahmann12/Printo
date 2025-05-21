@@ -22,9 +22,11 @@ import com.team.printo.dto.ProductListDTO;
 import com.team.printo.dto.ProductResponseDTO;
 import com.team.printo.service.ProductService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
+@Tag(name = "Product Controller", description = "API for managing printable products and their details.")
 @RestController
 @RequestMapping("/api/products")
 @RequiredArgsConstructor

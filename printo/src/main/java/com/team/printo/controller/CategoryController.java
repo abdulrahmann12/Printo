@@ -19,9 +19,11 @@ import com.team.printo.dto.CategoryDTO;
 import com.team.printo.dto.Messages;
 import com.team.printo.service.CategoryService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
+@Tag(name = "Category Controller", description = "API for managing product categories and subcategories.")
 @RestController
 @RequestMapping("/api/categories")
 @RequiredArgsConstructor

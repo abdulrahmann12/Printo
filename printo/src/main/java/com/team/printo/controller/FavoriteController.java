@@ -17,8 +17,10 @@ import com.team.printo.dto.Messages;
 import com.team.printo.model.User;
 import com.team.printo.service.FavoriteService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
+@Tag(name = "Favorite Controller", description = "API for managing user's favorite products.")
 @RestController
 @RequestMapping("/api/favorites")
 @RequiredArgsConstructor

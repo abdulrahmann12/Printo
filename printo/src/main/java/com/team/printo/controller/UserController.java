@@ -24,9 +24,11 @@ import com.team.printo.dto.UserDTO;
 import com.team.printo.model.User;
 import com.team.printo.service.UserService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
+@Tag(name = "User Controller", description = "API for managing user profiles and account settings.")
 @RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
