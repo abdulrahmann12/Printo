@@ -8,7 +8,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.team.printo.dto.DesignDTO;
-import com.team.printo.exception.ResourceNotFoundException;
+import com.team.printo.dto.Messages;
+import com.team.printo.exception.DesignNotFoundException;
+import com.team.printo.exception.ProductNotFoundException;
+import com.team.printo.exception.UserNotFoundException;
 import com.team.printo.mapper.DesignMapper;
 import com.team.printo.model.Design;
 import com.team.printo.model.Product;
@@ -28,12 +31,11 @@ public class DesignService {
 	private final DesignMapper designMapper;
 	private final ImageService imageService;
 	
-	
 	public DesignDTO addDesign(Long userId, Long productId ,MultipartFile image) throws Exception{
 	    Product product = productRepository.findById(productId)
-	            .orElseThrow(() -> new ResourceNotFoundException("Product not found"));
+	            .orElseThrow(() -> new ProductNotFoundException());
 	    User user = userRepository.findById(userId)
-	            .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+	            .orElseThrow(() -> new UserNotFoundException());
 	    
 	    Design newDesign = new Design();
 	    
@@ -42,10 +44,10 @@ public class DesignService {
 	            String imageUrl = imageService.uploadImage(image);
 	            newDesign.setImage(imageUrl);
 	        } catch (IOException e) {
-	            throw new Exception("Error occurred while saving image: " + e.getMessage());
+	            throw new Exception(Messages.UPLOAD_IMAGE_FAILED + e.getMessage());
 	        }
 	    }else if (image == null || image.isEmpty()) {
-	        throw new IllegalArgumentException("Image file is required.");
+	        throw new IllegalArgumentException(Messages.IMAGE_REQUIRED);
 	    }
 	    
 	    newDesign.setProduct(product);
@@ -58,7 +60,7 @@ public class DesignService {
 	
 	public List<DesignDTO> getDesignsByUserId(Long userId) {
 	    User user = userRepository.findById(userId)
-	            .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+	            .orElseThrow(() -> new UserNotFoundException());
 	    List<Design> designs = designRepository.findByUserId(user.getId());
 	    return designs.stream()
 	            .map(designMapper::toDto)
@@ -67,7 +69,7 @@ public class DesignService {
 	
 	public void deleteDesign(Long designId) {
 	    Design design = designRepository.findById(designId)
-	            .orElseThrow(() -> new ResourceNotFoundException("Design not found"));
+	            .orElseThrow(() -> new DesignNotFoundException());
 	    designRepository.delete(design);
 	}
 	

@@ -50,6 +50,7 @@ public class Messages {
 	public static final String UPLOAD_IMAGE_FAILED= "Error occurred while uploading image: ";
 	public static final String IMAGE_NOT_FOUND = "Image not found";
 	public static final String DELETE_IMAGE = "Image deleted successfully";
+	public static final String IMAGE_REQUIRED = "Image is required.";
 	
 	// ==================== Template Messages ====================
 
@@ -82,5 +83,9 @@ public class Messages {
 	public static final String PRODUCT_NOT_FOUND =  "Product not found";
 	public static final String DELETE_PRODUCT =  "Product deleted successfully";
 
-
+	
+	// ==================== Design Messages ==================== 
+	public static final String DESIGN_NOT_FOUND = "Design not found";
+	public static final String UPLOAD_DESIGN = "Design uploaded successfully";
+	public static final String DELETE_DESIGN =  "Design deleted successfully";
 }

@@ -17,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.team.printo.dto.BasicResponse;
 import com.team.printo.dto.DesignDTO;
+import com.team.printo.dto.Messages;
 import com.team.printo.model.User;
 import com.team.printo.service.DesignService;
 
@@ -39,7 +40,7 @@ public class DesignController {
     ) throws Exception {
         Long userId = ((User) userDetails).getId();
         DesignDTO newDesign = designService.addDesign(userId, productId, image);
-        return ResponseEntity.ok(new BasicResponse("Design uploaded successfully", newDesign));
+        return ResponseEntity.ok(new BasicResponse(Messages.UPLOAD_DESIGN, newDesign));
     }
     
     @GetMapping("/my-designs")
@@ -58,6 +59,6 @@ public class DesignController {
             @PathVariable Long designId
     ) {
         designService.deleteDesign(designId);
-        return ResponseEntity.ok(new BasicResponse("Design deleted successfully"));
+        return ResponseEntity.ok(new BasicResponse(Messages.DELETE_DESIGN));
     }
 }
