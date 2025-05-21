@@ -93,4 +93,10 @@ public class Messages {
 	public static final String REVIEW_NOT_FOUND = "Review not found";
 	public static final String ADD_REVIEW =  "Review added successfully";
 	public static final String DELETE_REVIEW =  "Review deleted successfully";
+	
+	// ==================== Favorite Messages ==================== 
+	public static final String ALREADY_EXIST_IN_FAVORITE = "Product already in favorites";
+	public static final String PRODUCT_NOT_EXIST_IN_FAVORITE = "Product not in favorites";
+	public static final String ADD_TO_FAVORITE = "Product added successfuly";
+	public static final String REMOVE_FROM_FAVORITE = "Product removed successfuly";
 }

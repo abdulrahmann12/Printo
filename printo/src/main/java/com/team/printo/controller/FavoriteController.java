@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.team.printo.dto.BasicResponse;
 import com.team.printo.dto.FavoriteResponse;
+import com.team.printo.dto.Messages;
 import com.team.printo.model.User;
 import com.team.printo.service.FavoriteService;
 
@@ -31,7 +32,7 @@ public class FavoriteController {
             @AuthenticationPrincipal User user) {
         
         favoriteService.addToFavorites(user.getId(), productId);
-        return ResponseEntity.ok(new BasicResponse("Product added successfuly"));
+        return ResponseEntity.ok(new BasicResponse(Messages.ADD_TO_FAVORITE));
     }
     
     @DeleteMapping("/remove/{productId}")
@@ -40,7 +41,7 @@ public class FavoriteController {
             @AuthenticationPrincipal User user) {
         
         favoriteService.removeFromFavorites(user.getId(), productId);
-        return ResponseEntity.ok(new BasicResponse("Product removed successfuly"));
+        return ResponseEntity.ok(new BasicResponse(Messages.REMOVE_FROM_FAVORITE));
     }
     
     @GetMapping
