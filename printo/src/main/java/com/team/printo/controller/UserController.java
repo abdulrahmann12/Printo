@@ -22,6 +22,7 @@ import com.team.printo.dto.Messages;
 import com.team.printo.dto.RoleRequest;
 import com.team.printo.dto.UserDTO;
 import com.team.printo.model.User;
+import com.team.printo.model.User.Role;
 import com.team.printo.service.UserService;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -84,4 +85,10 @@ public class UserController {
 	    userService.deleteUser(userId);
 	    return ResponseEntity.ok(new BasicResponse(Messages.DELETE_USER));
 	}
+	
+    @GetMapping("/user_roles")
+    @PreAuthorize("hasRole('ADMIN')")
+    public List<Role> getAllRoles() {
+        return userService.getAllRoles();
+    }
 }

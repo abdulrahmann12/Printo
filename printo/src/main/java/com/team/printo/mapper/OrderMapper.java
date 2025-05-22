@@ -7,23 +7,21 @@ import org.mapstruct.Mapping;
 
 import com.team.printo.dto.OrderDTO;
 import com.team.printo.dto.OrderItemDTO;
+import com.team.printo.model.Design;
 import com.team.printo.model.Order;
 import com.team.printo.model.OrderItem;
 
 
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = {UserMapper.class, AddressMapper.class, OrderItemAttributeValueMapper.class})
 public interface OrderMapper {
 
-    @Mapping(target = "userId", source = "user.id")
-    @Mapping(target = "addressId", source = "address.id")
-    @Mapping(target = "orderItems", source = "items")
+	@Mapping(target = "userDTO", source = "user")
+	@Mapping(target = "addressDTO", source = "address")
+	@Mapping(target = "orderItems", source = "items") // ✅ ضيف دي بدل الـ ignore
     OrderDTO toDTO(Order order);
 
-    @Mapping(target = "user.id", source = "userId")
-    @Mapping(target = "address.id", source = "addressId")
-    @Mapping(target = "items", source = "orderItems")
-    Order toEntity(OrderDTO orderDTO);
+
 
     
     List<OrderDTO> toDTOs(List<Order> orders);
@@ -33,15 +31,15 @@ public interface OrderMapper {
     
     
     
-    @Mapping(target = "productId", source = "product.id")
+    @Mapping(target = "productDTO", source = "product")
     @Mapping(target = "orderId", source = "order.id")
-    @Mapping(target = "designId", source = "design.id")
+    @Mapping(target = "design", source = "design.image")
     OrderItemDTO toDTO(OrderItem orderItem);
 
     
-    @Mapping(target = "product.id", source = "productId")
+    @Mapping(target = "product", source = "productDTO")
     @Mapping(target = "order.id", source = "orderId")
-    @Mapping(target = "design.id", source = "designId")
+    @Mapping(target = "design.image", source = "design")
     OrderItem toEntity(OrderItemDTO orderItemDTO);
     
     
@@ -49,4 +47,17 @@ public interface OrderMapper {
     
     
     List<OrderItem> toOrderItemEntity(List<OrderItemDTO> orderItemsDTO);
+    
+    default Order mapOrderId(long id) {
+        Order order = new Order();
+        order.setId(id);
+        return order;
+    }
+
+    default Design mapDesign(String image) {
+        Design design = new Design();
+        design.setImage(image);
+        return design;
+    }
+    
 }

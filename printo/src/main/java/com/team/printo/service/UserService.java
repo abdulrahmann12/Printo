@@ -1,5 +1,6 @@
 package com.team.printo.service;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -11,6 +12,7 @@ import com.team.printo.dto.UserDTO;
 import com.team.printo.exception.UserNotFoundException;
 import com.team.printo.mapper.UserMapper;
 import com.team.printo.model.User;
+import com.team.printo.model.User.Role;
 import com.team.printo.repository.UserRepository;
 
 import jakarta.transaction.Transactional;
@@ -83,5 +85,9 @@ public class UserService {
 		User user = userRepository.findById(userId)
 			    .orElseThrow(() -> new UserNotFoundException());
 		userRepository.delete(user);
+	}
+	
+	public List<Role> getAllRoles(){
+		return Arrays.asList(Role.values());
 	}
 }

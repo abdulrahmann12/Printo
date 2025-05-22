@@ -27,9 +27,9 @@ public class OrderDTO {
     @NotBlank(message = "Status is required")
     private Order.OrderStatus status;
 
-    private Long userId;
+    private UserDTO userDTO;
 
-    private Long addressId;
+    private AddressDTO addressDTO;
 
     private List<OrderItemDTO> orderItems;
 }

@@ -120,6 +120,7 @@ public class CartService {
         	        attributeValueList.add(cartItemAttrVal);
         	    }
         	}
+        	
         	CartItem savedCartItem = cartItemRepository.save(cartItem);
 
         	for (CartItemAttributeValue cartItemAttrVal : attributeValueList) {

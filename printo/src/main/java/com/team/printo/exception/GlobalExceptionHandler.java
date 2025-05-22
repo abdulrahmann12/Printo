@@ -92,7 +92,8 @@ public class GlobalExceptionHandler {
         TemplateNotFoundException.class,
         DesignNotFoundException.class,
         ReviewNotFoundException.class,
-        CartNotFoundException.class
+        CartNotFoundException.class,
+        InvalidOrderStatusException.class
     })
     public ResponseEntity<ErrorDetails> handleNotFoundBusinessExceptions(Exception ex, WebRequest request) {
         return buildErrorResponse(ex, request, HttpStatus.NOT_FOUND);
@@ -147,4 +148,6 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorDetails> handleAll(Exception ex, WebRequest request) {
         return buildErrorResponse(ex, request, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+    
+
 }

@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -41,6 +42,7 @@ public class Order {
     private Address address;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+    @JsonBackReference
     private List<OrderItem> items = new ArrayList<>();;
     
     private BigDecimal totalPrice;
@@ -50,9 +52,11 @@ public class Order {
 	@Enumerated(EnumType.STRING)
     private OrderStatus status;
 	
+
 	
 	public enum OrderStatus{
 		PREPARING, DELIVERING, DELIVERED, CANCELED
 	}
 
+	
 }

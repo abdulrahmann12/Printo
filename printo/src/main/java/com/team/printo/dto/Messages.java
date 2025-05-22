@@ -113,4 +113,20 @@ public class Messages {
 	public static final String DELETE_CART_ITEM = "Cart item deleted successfully";
 	public static final String CLEAR_CART = "Cart cleared successfuly";
 	
+	
+	// ==================== Order Messages ====================  
+	public static final String EMAIL_NOT_CONFIRMED = "Email not confirmed , Please confirm email before placing order";
+	public static final String EMPTY_CART = "Cannot create an order with an empty cart";
+	public static final String NOT_SET_QUANTITY = "product quantity is not set for product ";
+	public static final String ORDER_CONFIRMARION = "Order Confirmation";
+	public static final String USER_OR_ADDRESS_IS_NULL = "UserId or AddressId must not be null";
+	public static final String Order_NOT_FOUND = "Order not found";
+	public static final String CHANGE_ORDER_STATUS = "Order Status Updated";
+	public static final String ORDER_NOT_BELONG_TO_USER = "Order does not belong to this user";
+	public static final String SAME_ORDER_STATUS = "Order Status do not change";
+	public static final String INVALID_ORDER_STATUS = "Invalid order status provided";
+	
+	
+	
+	
 }
