@@ -19,5 +19,4 @@ public interface OrderItemAttributeValueMapper {
     @Mapping(source = "attributeValueId", target = "attributeValue.id")
     OrderItemAttributeValue toResponseEntity(OrderItemAttributeValueResponseDTO dto);
     
-    
 }
