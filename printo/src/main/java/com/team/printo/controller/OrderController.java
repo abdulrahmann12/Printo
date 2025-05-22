@@ -1,6 +1,5 @@
 package com.team.printo.controller;
 
-
 import com.team.printo.dto.BasicResponse;
 import com.team.printo.dto.Messages;
 import com.team.printo.dto.OrderDTO;
@@ -9,6 +8,7 @@ import com.team.printo.model.Order.OrderStatus;
 import com.team.printo.model.User;
 import com.team.printo.service.OrderService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import java.util.List;
 
@@ -34,17 +34,15 @@ public class OrderController {
 
     @PostMapping("/create")
 	@PreAuthorize("isAuthenticated()")
-    public ResponseEntity<OrderDTO> createOrder(
-    		@AuthenticationPrincipal UserDetails userDetails, 
-    		@RequestParam Long addressId) {
+    public ResponseEntity<OrderDTO> createOrder(@AuthenticationPrincipal UserDetails userDetails, @RequestParam Long addressId) {
 		Long userId = ((User) userDetails).getId();
-        OrderDTO dto =  orderService.createOrder(userId, addressId);
-        return ResponseEntity.ok(dto);
+        OrderDTO createdOrder =  orderService.createOrder(userId, addressId);
+        return ResponseEntity.ok(createdOrder);
     }
     
 	@PutMapping("/{orderId}/status")
 	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<BasicResponse> updateOrderStatus(@PathVariable Long orderId, @RequestBody OrderStatusDTO status){
+	public ResponseEntity<BasicResponse> updateOrderStatus(@PathVariable Long orderId, @Valid @RequestBody OrderStatusDTO status){
 		orderService.updateOrderStatus(orderId, status);
 		return ResponseEntity.ok(new BasicResponse(Messages.CHANGE_ORDER_STATUS));
 	}
@@ -53,31 +51,29 @@ public class OrderController {
 	@PreAuthorize("isAuthenticated()")
 	public ResponseEntity<List<OrderDTO>> getUserOrders(@AuthenticationPrincipal UserDetails userDetails){
 		Long userId = ((User) userDetails).getId();
-		List<OrderDTO> orders = orderService.getUserOrders(userId);
-		return ResponseEntity.ok(orders);
+		List<OrderDTO> userOrders = orderService.getUserOrders(userId);
+		return ResponseEntity.ok(userOrders);
 	}
 	
 	@GetMapping
 	@PreAuthorize("hasRole('ADMIN')")
 	public ResponseEntity<List<OrderDTO>> getAllOrders(){
-		List<OrderDTO> orders = orderService.getAllOrders();
-		return ResponseEntity.ok(orders);
+		List<OrderDTO> allOrders = orderService.getAllOrders();
+		return ResponseEntity.ok(allOrders);
 	}
 	
 	@GetMapping("/user/{orderId}")
 	@PreAuthorize("isAuthenticated()")
-	public ResponseEntity<OrderDTO> getAllOrders(@PathVariable Long orderId,@AuthenticationPrincipal UserDetails userDetails){
+	public ResponseEntity<OrderDTO> getAllOrders(@PathVariable Long orderId, @AuthenticationPrincipal UserDetails userDetails){
 		Long userId = ((User) userDetails).getId();
-		OrderDTO orders = orderService.getOneOrder(orderId,userId);
-		return ResponseEntity.ok(orders);
+		OrderDTO order = orderService.getOneOrder(orderId,userId);
+		return ResponseEntity.ok(order);
 	}
 	
     @GetMapping("/order-statuses")
     @PreAuthorize("hasRole('ADMIN')")
-    public List<OrderStatus> getAllOrderStatuses() {
-        return orderService.getAllOrderStatuses();
+    public ResponseEntity<List<OrderStatus>> getAllOrderStatuses() {
+        return ResponseEntity.ok(orderService.getAllOrderStatuses());
     }
-    
-    
     
 }
