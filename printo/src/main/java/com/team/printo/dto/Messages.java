@@ -122,6 +122,7 @@ public class Messages {
     public static final String ORDER_NOT_BELONG_TO_USER = "Order does not belong to this user";
     public static final String SAME_ORDER_STATUS = "Order status has not changed";
     public static final String INVALID_DATA = "Invalid data. Please check your request body";
-	
+    public static final String ATTRIBUTE_VALUE_NOT_AVAILABLE = "Attribute value is not available"
+;
 	
 }

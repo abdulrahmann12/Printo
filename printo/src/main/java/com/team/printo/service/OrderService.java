@@ -4,8 +4,6 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.mail.MailException;
 import org.springframework.stereotype.Service;
 import java.util.stream.Collectors;
@@ -41,7 +39,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class OrderService {
 
-	private final Logger logger = LoggerFactory.getLogger(OrderService.class);
 	private final OrderRepository orderRepository;
 	private final UserRepository userRepository;
 	private final ProductRepository productRepository; 
@@ -52,39 +49,34 @@ public class OrderService {
 	private final CartService cartService;
 	private final EmailService emailService;
 	
-	
 	@Transactional
 	public OrderDTO createOrder(Long userId, Long addressId) {
-	    // التحقق من القيم الأساسية
-	    if (userId == null || addressId == null) {
-	        throw new IllegalArgumentException(Messages.USER_OR_ADDRESS_IS_NULL);
-	    }
-
 	    User user = userRepository.findById(userId)
 	            .orElseThrow(() -> new UserNotFoundException());
 	    
 	    Address address = addressRepository.findById(addressId)
 	            .orElseThrow(() -> new AddressNotFoundException());
 
-	    // التحقق من البريد المؤكد
+	    // CHeck confirmation email before place the order
 	    if(!user.isEmailConfirmation()) {
 	        throw new IllegalStateException(Messages.EMAIL_NOT_CONFIRMED);
 	    }
 
-	    // التحقق من أن العنوان يخص المستخدم
-	    if(address.getUser().getId() !=user.getId()) {
+	    // CHeck valid address owned by userId
+	    if(address.getUser().getId() != user.getId()) {
 	        throw new IllegalStateException(Messages.ADDRESS_NOT_BELONG_TO_USER);
 	    }
 	    
-	    // احصل على السلة مباشرة من الـ Repository بدلاً من الـ DTO
+	    // Get user cart 
 	    Cart cart = cartRepository.findByUserId(userId)
 	            .orElseThrow(() -> new CartNotFoundException());
 
+	    // Check user cart 
 	    if(cart.getItems().isEmpty()) {
 	        throw new IllegalStateException(Messages.EMPTY_CART);
 	    }
 
-	    // إنشاء الطلب
+	    // Create order
 	    Order newOrder = new Order();
 	    newOrder.setAddress(address);
 	    newOrder.setUser(user);
@@ -93,27 +85,28 @@ public class OrderService {
 	    newOrder.setStatus(OrderStatus.PREPARING);
 
 	    Order savedOrder = orderRepository.save(newOrder);
-	    // إنشاء العناصر
+	   
+	    // Create items
 	    List<OrderItem> orderItems = createOrderItems(cart, savedOrder);
 	    savedOrder.setItems(orderItems);
 
-	    // حساب السعر الكلي
+	    // Calculate total price
 	    BigDecimal totalPrice = orderItems.stream()
 	            .map(item -> item.getProduct().getPrice().multiply(BigDecimal.valueOf(item.getQuantity())))
 	            .reduce(BigDecimal.ZERO, BigDecimal::add);
 	    savedOrder.setTotalPrice(totalPrice);
 
-	    // حفظ الطلب
+	    // Saved order in database
 	    Order finalOrder = orderRepository.save(savedOrder);
 	    
-	    // تفريغ السلة
+	    // Clear cart
 	    cartService.clearCart(userId);
 
-	    // إرسال البريد (اختياري)
+	    // Send confirmation email to user  
 	    try {
 	        emailService.sendOrderConfirmationEmail(finalOrder, Messages.ORDER_CONFIRMATION);
 	    } catch (MailException e) {
-	        logger.error(Messages.FAILED_EMAIL, e);
+	    	throw new MailSendingException();
 	    }
 
 	    return orderMapper.toDTO(finalOrder);
@@ -121,46 +114,56 @@ public class OrderService {
 		
 	private List<OrderItem> createOrderItems(Cart cart, Order order) {
 	    return cart.getItems().stream().map(cartItem -> {
-	        // التحقق من المنتج
+	    	// Check on product 
 	        Product product = productRepository.findById(cartItem.getProduct().getId())
 					.orElseThrow(()-> new ProductNotFoundException());
 			
-	        // التحقق من الكمية المتاحة
+	        // Check on product quantity
 	        if(product.getQuantity() < cartItem.getQuantity()) {
 	            throw new IllegalStateException(Messages.NOT_ENOUGH_STOCK);
 	        }
 	        
-	        // تحديث الكمية
+	        // Update product quantity
 	        product.setQuantity(product.getQuantity() - cartItem.getQuantity());
 	        productRepository.save(product);
 
-	        // إنشاء OrderItem
+	        
+	        // Calculate total price for one order item
+	        BigDecimal totalPrice = product.getPrice().multiply(BigDecimal.valueOf(cartItem.getQuantity()));
+	        
+	        // Create OrderItem
 	        OrderItem orderItem = new OrderItem(
 	            order,
 	            product,
 	            cartItem.getQuantity(),
-	            product.getPrice(),
+	            totalPrice,
 	            cartItem.getDesign()
 	        );
 
+	        // Save order item in database
 	        OrderItem savedOrderItem = orderItemRepository.save(orderItem);
-	        // نسخ attributeValues
+	        
+	        
+	        // Copy attributeValues from cart item to order item
 	        if(cartItem.getAttributeValues() != null) {
 	            List<OrderItemAttributeValue> orderAttrValues = cartItem.getAttributeValues()
 	                .stream()
 	                .map(cartAttr -> {
 	                    OrderItemAttributeValue orderAttr = new OrderItemAttributeValue();
 	                    orderAttr.setOrderItem(savedOrderItem);
+	                    if(!cartAttr.getAttributeValue().getAvailable()) {
+	                    	throw new IllegalAccessError(Messages.ATTRIBUTE_VALUE_NOT_AVAILABLE);
+	                    }
 	                    orderAttr.setAttributeValue(cartAttr.getAttributeValue());
 	                    return orderAttr;
 	                })
 	                .collect(Collectors.toList());
 	            
-	            // بدلاً من استبدال القائمة، عدل القائمة الأصلية
+	            // Save attribute value in order item
 	            savedOrderItem.getAttributeValues().clear();
 	            savedOrderItem.getAttributeValues().addAll(orderAttrValues);
 
-	            // حفظ بعد تعديل القائمة
+	            // Save order item
 	            orderItemRepository.save(savedOrderItem);
 	            }
 
