@@ -24,5 +24,4 @@ public class OrderItemDTO {
 	private BigDecimal price;
 	
     private List<OrderItemAttributeValueResponseDTO> attributeValues;
-
 }

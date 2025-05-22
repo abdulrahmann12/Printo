@@ -10,5 +10,4 @@ public class OrderStatusDTO {
 	
 	@NotNull(message = "Status is required")
     private OrderStatus status;
-	
 }

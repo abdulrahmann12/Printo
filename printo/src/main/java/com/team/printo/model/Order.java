@@ -46,17 +46,15 @@ public class Order {
     private List<OrderItem> items = new ArrayList<>();;
     
     private BigDecimal totalPrice;
+    
     private String phoneNumber;
+    
     private LocalDateTime createdAt;
     
 	@Enumerated(EnumType.STRING)
     private OrderStatus status;
 	
-
-	
 	public enum OrderStatus{
 		PREPARING, DELIVERING, DELIVERED, CANCELED
-	}
-
-	
+	}	
 }

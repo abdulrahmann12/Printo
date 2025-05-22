@@ -12,6 +12,5 @@ public class OrderItemAttributeValueResponseDTO {
 
     private String attributeName;
 
-    private String attributeValue;
-    
+    private String attributeValue;   
 }
