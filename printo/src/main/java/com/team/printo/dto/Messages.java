@@ -124,7 +124,7 @@ public class Messages {
 	public static final String CHANGE_ORDER_STATUS = "Order Status Updated";
 	public static final String ORDER_NOT_BELONG_TO_USER = "Order does not belong to this user";
 	public static final String SAME_ORDER_STATUS = "Order Status do not change";
-	public static final String INVALID_ORDER_STATUS = "Invalid order status provided";
+	public static final String INVALID_DATA = "Invalid data, Please check your request body";
 	
 	
 	

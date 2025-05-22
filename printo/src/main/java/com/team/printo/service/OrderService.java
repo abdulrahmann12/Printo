@@ -193,7 +193,6 @@ public class OrderService {
 	    if(order.getStatus().equals(newStatus.getStatus())) {
 	    	throw new IllegalStateException(Messages.SAME_ORDER_STATUS);
 	    }
-	    
 	    order.setStatus(newStatus.getStatus());
 	    orderRepository.save(order);
 

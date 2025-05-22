@@ -17,7 +17,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 
-import com.fasterxml.jackson.databind.exc.InvalidFormatException;
 import com.team.printo.dto.ErrorDetails;
 import com.team.printo.dto.Messages;
 
@@ -93,7 +92,6 @@ public class GlobalExceptionHandler {
         DesignNotFoundException.class,
         ReviewNotFoundException.class,
         CartNotFoundException.class,
-        InvalidOrderStatusException.class
     })
     public ResponseEntity<ErrorDetails> handleNotFoundBusinessExceptions(Exception ex, WebRequest request) {
         return buildErrorResponse(ex, request, HttpStatus.NOT_FOUND);
@@ -121,17 +119,16 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorDetails> handleIllegalArgument(IllegalArgumentException ex, WebRequest request) {
         return buildErrorResponse(ex, request, HttpStatus.BAD_REQUEST);
     }
+    
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public ResponseEntity<ErrorDetails> handleMessageNotReadable(HttpMessageNotReadableException ex, WebRequest request) {
-        return buildErrorResponse(Messages.FORMAT_ERROR, request, HttpStatus.BAD_REQUEST);
+    public ResponseEntity<ErrorDetails> handleSpringJsonParseException(
+            HttpMessageNotReadableException ex) {
+    	ErrorDetails error = new ErrorDetails(Messages.INVALID_DATA);
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(InvalidFormatException.class)
-    public ResponseEntity<ErrorDetails> handleInvalidFormat(InvalidFormatException ex, WebRequest request) {
-        return buildErrorResponse(Messages.CHANGE_ROLES_ERROR, request, HttpStatus.BAD_REQUEST);
-    }
-
+    
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
     public ResponseEntity<ErrorDetails> handleMethodNotSupported(HttpRequestMethodNotSupportedException ex, WebRequest request) {
         return buildErrorResponse(Messages.REQUEST_NOT_SUPPORTED, request, HttpStatus.METHOD_NOT_ALLOWED);
