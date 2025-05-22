@@ -111,7 +111,7 @@ public class OrderService {
 
 	    // إرسال البريد (اختياري)
 	    try {
-	        emailService.sendOrderConfirmationEmail(finalOrder, Messages.ORDER_CONFIRMARION);
+	        emailService.sendOrderConfirmationEmail(finalOrder, Messages.ORDER_CONFIRMATION);
 	    } catch (MailException e) {
 	        logger.error(Messages.FAILED_EMAIL, e);
 	    }
@@ -178,7 +178,7 @@ public class OrderService {
 	
 	public OrderDTO getOneOrder(Long orderId, Long userId) {
 	    Order order = orderRepository.findById(orderId)
-	            .orElseThrow(() -> new IllegalStateException(Messages.Order_NOT_FOUND));
+	            .orElseThrow(() -> new IllegalStateException(Messages.ORDER_NOT_FOUND));
 	    if(order.getUser().getId() != userId) {
 	    	throw new IllegalStateException(Messages.ORDER_NOT_BELONG_TO_USER);
 	    }
@@ -188,7 +188,7 @@ public class OrderService {
 	@Transactional
 	public void updateOrderStatus(Long orderId, OrderStatusDTO newStatus) {
 	    Order order = orderRepository.findById(orderId)
-	            .orElseThrow(() -> new IllegalStateException(Messages.Order_NOT_FOUND));
+	            .orElseThrow(() -> new IllegalStateException(Messages.ORDER_NOT_FOUND));
 
 	    if(order.getStatus().equals(newStatus.getStatus())) {
 	    	throw new IllegalStateException(Messages.SAME_ORDER_STATUS);
