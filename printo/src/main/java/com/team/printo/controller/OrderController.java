@@ -34,7 +34,7 @@ public class OrderController {
 
     private final OrderService orderService;
 
-    @PostMapping("/create")
+    @PostMapping
 	@PreAuthorize("isAuthenticated()")
     public ResponseEntity<OrderDTO> createOrder(@AuthenticationPrincipal UserDetails userDetails, @RequestParam Long addressId) {
 		Long userId = ((User) userDetails).getId();
