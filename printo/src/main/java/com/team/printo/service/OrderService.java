@@ -152,7 +152,7 @@ public class OrderService {
 	                    OrderItemAttributeValue orderAttr = new OrderItemAttributeValue();
 	                    orderAttr.setOrderItem(savedOrderItem);
 	                    if(!cartAttr.getAttributeValue().getAvailable()) {
-	                    	throw new IllegalAccessError(Messages.ATTRIBUTE_VALUE_NOT_AVAILABLE);
+	                    	throw new IllegalStateException(Messages.ATTRIBUTE_VALUE_NOT_AVAILABLE);
 	                    }
 	                    orderAttr.setAttributeValue(cartAttr.getAttributeValue());
 	                    return orderAttr;

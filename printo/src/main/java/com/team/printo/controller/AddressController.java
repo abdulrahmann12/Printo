@@ -34,7 +34,7 @@ public class AddressController {
 	private final AddressService addressService;
 	
 	@PostMapping
-	@PreAuthorize("isAuthentic	ated()")
+	@PreAuthorize("isAuthenticated()")
 	public ResponseEntity<AddressDTO> addAddress(@AuthenticationPrincipal UserDetails userDetails,@Valid @RequestBody AddressDTO addressDTO){
 		Long userId = ((User) userDetails).getId();
 		AddressDTO savedAddress = addressService.addAddress(userId, addressDTO);

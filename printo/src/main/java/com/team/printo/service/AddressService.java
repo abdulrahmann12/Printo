@@ -33,11 +33,9 @@ public class AddressService {
 	    User user = userRepository.findById(userId)
 	            .orElseThrow(() -> new UserNotFoundException());
 
-
 	    Address address = addressMapper.toEntity(addressDTO);
 	    address.setUser(user);
-	    Address savedAddress = addressRepository.save(address);
-	    
+   
 	    long count = addressRepository.countByUserId(userId);
 
 	    if (count == 0) {
@@ -50,7 +48,8 @@ public class AddressService {
 	        address.setDefaultAddress(false);
 	    }
 
-	    addressRepository.save(address);
+	    Address savedAddress = addressRepository.save(address);
+
 	    return addressMapper.toDTO(savedAddress);
 	}
 	

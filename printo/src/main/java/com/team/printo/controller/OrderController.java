@@ -8,6 +8,7 @@ import com.team.printo.model.Order.OrderStatus;
 import com.team.printo.model.User;
 import com.team.printo.service.OrderService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import java.util.List;
@@ -25,6 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+@Tag(name = "Order Controller", description = "API for managing orders including creating orders from cart, viewing user and admin orders, and updating order statuses.")
 @RestController
 @RequestMapping("/api/orders")
 @RequiredArgsConstructor
