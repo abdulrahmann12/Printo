@@ -9,7 +9,7 @@ public class CategoryDTO {
 	private Long id;
 	
 	
-    @NotBlank(message = "Name is required")
+    @NotBlank(message = "Category name is required")
 	private String name;
 	
 	private String image;

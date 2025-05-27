@@ -109,7 +109,9 @@ public class CategoryService {
 	}
 	
 	public List<CategoryDTO> getSubcategories(Long parentId) {
-        return categoryRepository.findByParentId(parentId)
+		Category category = categoryRepository.findById(parentId)
+                .orElseThrow(() -> new ParentCategoryNotFoundException());
+        return categoryRepository.findByParentId(category.getId())
                 .stream()
                 .map(categoryMapper::toDTO)
                 .collect(Collectors.toList());	

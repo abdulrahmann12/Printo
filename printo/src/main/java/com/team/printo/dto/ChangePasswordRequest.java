@@ -7,10 +7,10 @@ import lombok.Data;
 @Data
 public class ChangePasswordRequest {
 
-	@NotBlank(message = "Password is required")
+	@NotBlank(message = "Current password is required")
     private String currentPassword;
     
-    @Size(min = 6, message = "Password too short")
-    @NotBlank(message = "Password is required")
+	@NotBlank(message = "New password is required")
+    @Size(min = 6, message = "New password too short")
     private String newPassword;
 }

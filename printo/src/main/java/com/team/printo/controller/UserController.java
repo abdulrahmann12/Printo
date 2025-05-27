@@ -86,9 +86,10 @@ public class UserController {
 	    return ResponseEntity.ok(new BasicResponse(Messages.DELETE_USER));
 	}
 	
-    @GetMapping("/user_roles")
+    @GetMapping("/user-roles")
     @PreAuthorize("hasRole('ADMIN')")
     public List<Role> getAllRoles() {
         return userService.getAllRoles();
     }
 }
+	

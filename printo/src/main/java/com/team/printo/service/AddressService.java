@@ -69,7 +69,8 @@ public class AddressService {
 			defaultAddress(userId,addressId);
 	    }
 	    else {
-	    	existingAddress.setDefaultAddress(false);
+	    	//existingAddress.setDefaultAddress(false);
+	    	throw new IllegalArgumentException(Messages.REQUIRE_DEFAULT);
 	    }
 		
 		Address savedAddress = addressRepository.save(existingAddress);

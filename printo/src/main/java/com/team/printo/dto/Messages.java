@@ -8,8 +8,8 @@ public class Messages {
     public static final String FAILED_EMAIL = "Failed to send email. Please try again later";
 	
 	// ==================== Auth Messages ====================
-    public static final String LOGIN_SUCCESS = "Login successful";
-    public static final String REGISTER_SUCCESS = "Register successful";
+    public static final String LOGIN_SUCCESS = "Login successfully";
+    public static final String REGISTER_SUCCESS = "Register successfully";
     public static final String LOGOUT_SUCCESS = "Logged out successfully";
     public static final String ALREADY_LOGGED_OUT = "You are already logged out";
     public static final String INVALID_CONFIRM_EMAIL = "Invalid confirmation code";
@@ -63,15 +63,19 @@ public class Messages {
     public static final String ADDRESS_NOT_BELONG_TO_USER = "Address does not belong to this user";
     public static final String EMPTY_ADDRESSES = "No addresses found for this user. Please add at least one";
     public static final String DEFAULT_ADDRESS = "Cannot delete default address";
+    public static final String REQUIRE_DEFAULT = "One default address is require";
     public static final String UPDATE_ADDRESS = "Address updated successfully";
     public static final String DELETE_ADDRESS = "Address deleted successfully";
+    public static final String ADD_ADDRESS = "Address added successfully";
 
 	// ==================== Category Messages ==================== 
     public static final String CATEGORY_NOT_FOUND = "Category not found";
     public static final String PARENT_CATEGORY_NOT_FOUND = "Parent category not found";
-    public static final String CATEGORY_ALREADY_EXISTS = "Category with this name already exists in the category";
+    public static final String CATEGORY_ALREADY_EXISTS = "Category with this name already exists";
     public static final String DELETE_CATEGORY = "Category deleted successfully";
-	
+    public static final String ADD_CATEGORY = "Category added successfully";
+    public static final String UPDATE_CATEGORY = "Category updated successfully";
+    
 	// ==================== Attribute Messages ==================== 
     public static final String ATTRIBUTE_ALREADY_EXISTS = "Attribute with this name already exists in the category";
     public static final String ATTRIBUTE_NOT_FOUND = "Attribute not found";

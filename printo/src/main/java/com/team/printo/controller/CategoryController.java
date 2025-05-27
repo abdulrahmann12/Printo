@@ -33,21 +33,21 @@ public class CategoryController {
 	
 	@PostMapping
 	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<CategoryDTO> createCategory(
+	public ResponseEntity<BasicResponse> createCategory(
             @Valid @RequestPart("category") CategoryDTO categoryDTO,
             @RequestPart(value = "image", required = false) MultipartFile image) throws Exception {
 		CategoryDTO createdCategory = categoryService.createCategory(categoryDTO, image);
-        return ResponseEntity.ok(createdCategory);		
+        return ResponseEntity.ok(new BasicResponse(Messages.ADD_CATEGORY, createdCategory));		
 	}
 	
 	@PutMapping("/{categoryId}")
 	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<CategoryDTO> updateCategory(
+	public ResponseEntity<BasicResponse> updateCategory(
 			@PathVariable Long categoryId,
 			@Valid @RequestPart("category") CategoryDTO categoryDTO,
             @RequestPart(value = "image", required = false) MultipartFile image) throws Exception {
 		CategoryDTO updateCategory = categoryService.updateCategory(categoryId, categoryDTO, image);
-        return ResponseEntity.ok(updateCategory);		
+        return ResponseEntity.ok(new BasicResponse(Messages.UPDATE_CATEGORY, updateCategory));		
 	}
 	
 	@GetMapping

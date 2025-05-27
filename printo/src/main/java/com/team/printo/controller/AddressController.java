@@ -35,19 +35,19 @@ public class AddressController {
 	
 	@PostMapping
 	@PreAuthorize("isAuthenticated()")
-	public ResponseEntity<AddressDTO> addAddress(@AuthenticationPrincipal UserDetails userDetails,@Valid @RequestBody AddressDTO addressDTO){
+	public ResponseEntity<BasicResponse> addAddress(@AuthenticationPrincipal UserDetails userDetails,@Valid @RequestBody AddressDTO addressDTO){
 		Long userId = ((User) userDetails).getId();
 		AddressDTO savedAddress = addressService.addAddress(userId, addressDTO);
-		return ResponseEntity.ok(savedAddress);
+		return ResponseEntity.ok(new BasicResponse(Messages.ADD_ADDRESS,savedAddress));
 	}
 	
 	
 	@PutMapping("/{addressId}")
 	@PreAuthorize("isAuthenticated()")
-	public ResponseEntity<AddressDTO> updateAddress(@AuthenticationPrincipal UserDetails userDetails,@PathVariable Long addressId,@Valid @RequestBody AddressDTO addressDTO){
+	public ResponseEntity<BasicResponse> updateAddress(@AuthenticationPrincipal UserDetails userDetails,@PathVariable Long addressId,@Valid @RequestBody AddressDTO addressDTO){
 		Long userId = ((User) userDetails).getId();
 		AddressDTO updateAddress = addressService.updateAddress(userId,addressId, addressDTO);
-		return ResponseEntity.ok(updateAddress);
+		return ResponseEntity.ok(new BasicResponse(Messages.UPDATE_ADDRESS,updateAddress));
 	}
 	
 	@PutMapping("/default/{addressId}")
