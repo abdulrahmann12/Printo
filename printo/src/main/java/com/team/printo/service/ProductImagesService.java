@@ -41,6 +41,8 @@ public class ProductImagesService {
 	        } catch (IOException e) {
 	            throw new Exception(Messages.UPLOAD_IMAGE_FAILED + e.getMessage());
 	        }
+	    }else if (image == null || image.isEmpty()) {
+	        throw new IllegalArgumentException(Messages.IMAGE_REQUIRED);
 	    }
 	    
 	    productImage.setProduct(product);

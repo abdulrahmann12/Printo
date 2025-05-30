@@ -15,17 +15,17 @@ import lombok.Data;
 public class ProductRequestDTO {
 
 	
-    @NotBlank(message = "Name is required")
+    @NotBlank(message = "Product name is required")
     private String name;
 
-    @NotNull(message = "Price is required")
-    @Positive(message = "Price must be positive")
+    @NotNull(message = "Product price is required")
+    @Positive(message = "Product price must be positive")
     private BigDecimal price;
 
-    @NotBlank(message = "Description is required")
+    @NotBlank(message = "Product description is required")
     private String description;
 
-    @PositiveOrZero(message = "Quantity must be zero or positive")
+    @PositiveOrZero(message = "Product quantity must be zero or positive")
     private int quantity;
 
     private boolean active;

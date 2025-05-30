@@ -37,22 +37,22 @@ public class ProductController {
     
     @PostMapping
 	@PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ProductResponseDTO> createProduct(
+    public ResponseEntity<BasicResponse> createProduct(
     		@Valid @RequestPart("product") ProductRequestDTO productDTO,
             @RequestPart(value = "image", required = false) MultipartFile image) throws Exception {
     	ProductResponseDTO createdProduct = productService.createProduct(productDTO, image);
-        return ResponseEntity.ok(createdProduct);
+        return ResponseEntity.ok(new BasicResponse(Messages.ADD_PRODUCT, createdProduct));
     }
     
     
     @PutMapping("/{productId}")
 	@PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ProductResponseDTO> updateProduct(
+    public ResponseEntity<BasicResponse> updateProduct(
     		@PathVariable Long productId,
     		@Valid @RequestPart("product") ProductRequestDTO productDTO,
             @RequestPart(value = "image", required = false) MultipartFile image) throws Exception {
     	ProductResponseDTO updateProduct = productService.updateProduct(productId,productDTO, image);
-        return ResponseEntity.ok(updateProduct);
+        return ResponseEntity.ok(new BasicResponse(Messages.UPDATE_PRODUCT, updateProduct));
     }
     
     @DeleteMapping("/{productId}")
@@ -88,13 +88,13 @@ public class ProductController {
 		return ResponseEntity.ok(productService.getTopSellingProducts(numberOfItem));
 	}
 	
-    @GetMapping("/fast-search")
+    @GetMapping("/search")
     @PreAuthorize("isAuthenticated()") 
     public List<ProductListDTO> fastSearchByName(@RequestParam String keyword) {
         return productService.fastSearch(keyword);
     }
 
-    @GetMapping("/fast-search/price")
+    @GetMapping("/filter-price")
     @PreAuthorize("isAuthenticated()") 
     public List<ProductListDTO> fastSearchByPriceRange(
             @RequestParam double minPrice,

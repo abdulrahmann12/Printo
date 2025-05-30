@@ -49,14 +49,16 @@ public class Messages {
     public static final String EMPTY_IMAGE = "Image file is empty or null";
     public static final String UPLOAD_IMAGE_FAILED = "Error occurred while uploading image";
     public static final String IMAGE_NOT_FOUND = "Image not found";
-    public static final String DELETE_IMAGE = "Image deleted successfully";
+    public static final String DELETE_IMAGE = "Product image deleted successfully";
+    public static final String ADD_IMAGE = "Product image uploaded successfully";
     public static final String IMAGE_REQUIRED = "Image is required";
 	
 	// ==================== Template Messages ====================
 
     public static final String TEMPLATE_NOT_FOUND = "Template not found";
-    public static final String DELETE_TEMPLATE = "Template deleted successfully";
-	
+    public static final String TEMPLATE_REQUIRED = "Template is required";
+    public static final String DELETE_TEMPLATE = "Product template deleted successfully";
+    public static final String ADD_TEMPLATE = "Product template uploaded successfully";
 	
 	// ==================== Address Messages ==================== 
     public static final String ADDRESS_NOT_FOUND = "Address not found";
@@ -87,6 +89,8 @@ public class Messages {
 	// ==================== Product Messages ==================== 
     public static final String PRODUCT_NOT_FOUND = "Product not found";
     public static final String DELETE_PRODUCT = "Product deleted successfully";
+    public static final String ADD_PRODUCT = "Product added successfully";
+    public static final String UPDATE_PRODUCT = "Product updated successfully";
 	
 	// ==================== Design Messages ==================== 
     public static final String DESIGN_NOT_FOUND = "Design not found";

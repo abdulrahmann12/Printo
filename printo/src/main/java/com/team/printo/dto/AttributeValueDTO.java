@@ -12,7 +12,7 @@ public class AttributeValueDTO {
     @NotNull(message = "Attribute ID is required")
 	private Long attributeId;
 	
-    @NotBlank(message = "Value is required")
+    @NotBlank(message = "Attribute value is required")
 	private String value;
 	
 	private boolean available; 

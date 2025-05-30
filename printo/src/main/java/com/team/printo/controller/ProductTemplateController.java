@@ -31,11 +31,11 @@ public class ProductTemplateController {
 
     @PostMapping("/{productId}")
 	@PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ProductTemplateDTO> uploadTempleteToProduct(
+    public ResponseEntity<BasicResponse> uploadTempleteToProduct(
             @PathVariable Long productId,
             @RequestPart("image") MultipartFile image) throws Exception {
     	ProductTemplateDTO savedImage = productTempleteService.addTempleteToProduct(productId, image);
-        return ResponseEntity.ok(savedImage);
+        return ResponseEntity.ok(new BasicResponse(Messages.ADD_TEMPLATE, savedImage));
     }
     
     @GetMapping("/{productId}")
