@@ -135,6 +135,11 @@ public class CartService {
 	public CartDTO getCart(Long userId) {
 		Cart cart = cartRepository.findByUserId(userId)
 				.orElseThrow(()-> new CartNotFoundException());  	
+		
+	    List<CartItem> filteredItems = cart.getItems().stream()
+	            .filter(item -> item.getProduct().isActive() && item.getProduct().getQuantity() > 0)
+	            .toList();
+	    cart.setItems(filteredItems);
 		return cartMapper.toDTO(cart);
 	}
 	

@@ -36,6 +36,6 @@ public interface ProductRepository extends JpaRepository<Product, Long>, JpaSpec
 	
 	@Query("SELECT new com.team.printo.dto.FavoriteResponse(p.id, p.name, p.price, p.image, p.description, c.name) " +
 		       "FROM Product p LEFT JOIN p.category c " +
-		       "WHERE p IN :favorites")
+		       "WHERE p IN :favorites AND p.active = true AND p.quantity > 0")
 		List<FavoriteResponse> findFavoriteProductsDetails(@Param("favorites") Set<Product> favorites);
 }
