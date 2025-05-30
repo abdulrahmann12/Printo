@@ -63,7 +63,7 @@ public class Messages {
     public static final String ADDRESS_NOT_BELONG_TO_USER = "Address does not belong to this user";
     public static final String EMPTY_ADDRESSES = "No addresses found for this user. Please add at least one";
     public static final String DEFAULT_ADDRESS = "Cannot delete default address";
-    public static final String REQUIRE_DEFAULT = "One default address is require";
+    public static final String REQUIRE_DEFAULT = "There must be one default address";
     public static final String UPDATE_ADDRESS = "Address updated successfully";
     public static final String DELETE_ADDRESS = "Address deleted successfully";
     public static final String ADD_ADDRESS = "Address added successfully";
@@ -77,9 +77,11 @@ public class Messages {
     public static final String UPDATE_CATEGORY = "Category updated successfully";
     
 	// ==================== Attribute Messages ==================== 
-    public static final String ATTRIBUTE_ALREADY_EXISTS = "Attribute with this name already exists in the category";
+    public static final String ATTRIBUTE_NAME_ALREADY_EXISTS = "Attribute with this name already exists in the category";
     public static final String ATTRIBUTE_NOT_FOUND = "Attribute not found";
     public static final String DELETE_ATTRIBUTE = "Attribute deleted successfully";
+    public static final String ADD_ATTRIBUTE = "Attribute added successfully";
+    public static final String UPDATE_ATTRIBUTE = "Attribute updated successfully";
     public static final String ATTRIBUTE_NOT_BELONG_TO_CATEGORY = "Attribute does not belong to this category";
 
 	// ==================== Product Messages ==================== 

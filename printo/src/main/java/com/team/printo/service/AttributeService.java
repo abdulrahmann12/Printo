@@ -28,7 +28,7 @@ public class AttributeService {
 	
 	public AttributeDTO createAttribute(AttributeDTO attributeDTO) {
 		if (attributeRepository.existsByNameAndCategoryId(attributeDTO.getName(), attributeDTO.getCategoryId())) {
-		    throw new IllegalArgumentException(Messages.ATTRIBUTE_ALREADY_EXISTS);
+		    throw new IllegalArgumentException(Messages.ATTRIBUTE_NAME_ALREADY_EXISTS);
 		}
         Category category = categoryRepository.findById(attributeDTO.getCategoryId())
                 .orElseThrow(() -> new CategoryNotFoundException());
@@ -36,18 +36,17 @@ public class AttributeService {
         Attribute attribute =  attributeMapper.toEntity(attributeDTO);
         attribute.setCategory(category);
         
-        Attribute saved = attributeRepository.save(attribute);
-        return attributeMapper.toDTO(saved);
+        Attribute savedAttribute = attributeRepository.save(attribute);
+        return attributeMapper.toDTO(savedAttribute);
 	}
 	
 	public AttributeDTO updateAttribute(Long attributeId, AttributeDTO attributeDTO) {
+		Attribute attribute = attributeRepository.findById(attributeId)
+                .orElseThrow(() -> new AttributeNotFoundException());
 		
-		if (attributeRepository.existsByNameAndCategoryIdAndIdNot(
-		        attributeDTO.getName(), 
-		        attributeDTO.getCategoryId(), 
-		        attributeId)) {
-		    throw new IllegalArgumentException(Messages.ATTRIBUTE_ALREADY_EXISTS);
-		}	
+		if (attributeRepository.existsByNameAndCategoryId(attributeDTO	.getName(), attribute.getCategory().getId())) {
+		    throw new IllegalArgumentException(Messages.ATTRIBUTE_NAME_ALREADY_EXISTS);
+		}
 		
 		Attribute existingAttribute = attributeRepository.findById(attributeId)
                 .orElseThrow(() -> new AttributeNotFoundException());

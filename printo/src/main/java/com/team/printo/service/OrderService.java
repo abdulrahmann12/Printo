@@ -82,7 +82,7 @@ public class OrderService {
 	    newOrder.setUser(user);
 	    newOrder.setCreatedAt(LocalDateTime.now());
 	    newOrder.setPhoneNumber(user.getPhone());
-	    newOrder.setStatus(OrderStatus.PREPARING);
+	    newOrder.setStatus(OrderStatus.PROCESSING);
 
 	    Order savedOrder = orderRepository.save(newOrder);
 	   

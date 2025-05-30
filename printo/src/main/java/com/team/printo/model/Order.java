@@ -8,6 +8,7 @@ import java.util.List;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -52,9 +53,10 @@ public class Order {
     private LocalDateTime createdAt;
     
 	@Enumerated(EnumType.STRING)
+	@Column(name = "status")
     private OrderStatus status;
 	
 	public enum OrderStatus{
-		PREPARING, DELIVERING, DELIVERED, CANCELED
+		PROCESSING, PREPARING, DELIVERING, DELIVERED, CANCELED
 	}	
 }

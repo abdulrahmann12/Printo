@@ -33,16 +33,16 @@ public class AttributeController {
 	
 	@PostMapping
 	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<AttributeDTO> createAttribute(@Valid @RequestBody AttributeDTO attributeDTO){
-		AttributeDTO createdAttribute =  attributeService.createAttribute(attributeDTO);
-		return ResponseEntity.ok(createdAttribute);
+	public ResponseEntity<BasicResponse> createAttribute(@Valid @RequestBody AttributeDTO attributeDTO){
+		AttributeDTO savedAttribute = attributeService.createAttribute(attributeDTO);
+		return ResponseEntity.ok(new BasicResponse(Messages.ADD_ATTRIBUTE,savedAttribute));
 	}
 
 	@PutMapping("/{attributeId}")
 	@PreAuthorize("hasRole('ADMIN')")
-	public ResponseEntity<AttributeDTO> updateAttribute(@PathVariable Long attributeId, @Valid @RequestBody AttributeDTO attributeDTO){
-		AttributeDTO updateAttribute =  attributeService.updateAttribute(attributeId, attributeDTO);
-		return ResponseEntity.ok(updateAttribute);
+	public ResponseEntity<BasicResponse> updateAttribute(@PathVariable Long attributeId, @Valid @RequestBody AttributeDTO attributeDTO){
+		AttributeDTO updatedAttribute = attributeService.updateAttribute(attributeId, attributeDTO);
+		return ResponseEntity.ok(new BasicResponse(Messages.UPDATE_ATTRIBUTE,updatedAttribute));
 	}
 	
 	@DeleteMapping("/{attributeId}")
