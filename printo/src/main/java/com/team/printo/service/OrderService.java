@@ -14,6 +14,7 @@ import com.team.printo.dto.OrderStatusDTO;
 import com.team.printo.exception.AddressNotFoundException;
 import com.team.printo.exception.CartNotFoundException;
 import com.team.printo.exception.MailSendingException;
+import com.team.printo.exception.OrderNotFoundException;
 import com.team.printo.exception.ProductNotFoundException;
 import com.team.printo.exception.UserNotFoundException;
 import com.team.printo.mapper.OrderMapper;
@@ -181,7 +182,7 @@ public class OrderService {
 	
 	public OrderDTO getOneOrder(Long orderId, Long userId) {
 	    Order order = orderRepository.findById(orderId)
-	            .orElseThrow(() -> new IllegalStateException(Messages.ORDER_NOT_FOUND));
+	            .orElseThrow(() -> new OrderNotFoundException());
 	    if(order.getUser().getId() != userId) {
 	    	throw new IllegalStateException(Messages.ORDER_NOT_BELONG_TO_USER);
 	    }
@@ -191,7 +192,7 @@ public class OrderService {
 	@Transactional
 	public void updateOrderStatus(Long orderId, OrderStatusDTO newStatus) {
 	    Order order = orderRepository.findById(orderId)
-	            .orElseThrow(() -> new IllegalStateException(Messages.ORDER_NOT_FOUND));
+	            .orElseThrow(() -> new OrderNotFoundException());
 
 	    if(order.getStatus().equals(newStatus.getStatus())) {
 	    	throw new IllegalStateException(Messages.SAME_ORDER_STATUS);
@@ -208,5 +209,35 @@ public class OrderService {
 	
 	public List<OrderStatus> getAllOrderStatuses(){
 		return Arrays.asList(OrderStatus.values());
+	}
+	
+	public void cancelOrder(Long orderId, Long userId ) {
+	    Order order = orderRepository.findById(orderId)
+	            .orElseThrow(() -> new OrderNotFoundException());
+	    User user = userRepository.findById(userId)
+	            .orElseThrow(() -> new UserNotFoundException());
+	    if(order.getUser().getId() != user.getId()) {
+	    	throw new IllegalStateException(Messages.ORDER_NOT_BELONG_TO_USER);
+	    }
+	    
+	    if (order.getStatus() == OrderStatus.CANCELED) {
+	        throw new IllegalStateException(Messages.ORDER_ALREADY_CANCELED);
+	    }
+	    
+	    for(OrderItem item : order.getItems()) {
+	    	Product product = item.getProduct();
+	    	product.setQuantity(product.getQuantity() + item.getQuantity());
+	    	productRepository.save(product);
+	    }
+	    
+	    order.setStatus(OrderStatus.CANCELED);
+	    orderRepository.save(order);
+	    
+	    try {
+	        emailService.sendOrderStatusUpdateEmail(order, Messages.CHANGE_ORDER_STATUS);
+	    } catch (MailException e) {
+	        throw new MailSendingException();
+	    }
+		
 	}
 }

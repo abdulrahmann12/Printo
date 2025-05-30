@@ -117,7 +117,7 @@ public class Messages {
     public static final String DELETE_CART_ITEM = "Cart item deleted successfully";
     public static final String CLEAR_CART = "Cart cleared successfully";
 	
-	// ==================== Order Messages ====================  
+	// ==================== Order Messages ====================  ORDER_ALREADY_CANCELED
     public static final String EMAIL_NOT_CONFIRMED = "Email not confirmed. Please confirm your email before placing order";
     public static final String EMPTY_CART = "Cannot create an order with an empty cart";
     public static final String NOT_SET_QUANTITY = "Product quantity is not set for product";
@@ -129,5 +129,7 @@ public class Messages {
     public static final String SAME_ORDER_STATUS = "Order status has not changed";
     public static final String INVALID_DATA = "Invalid data. Please check your request body";
     public static final String ATTRIBUTE_VALUE_NOT_AVAILABLE = "Attribute value is not available";
-	
+    public static final String ORDER_ALREADY_CANCELED = "Order already canceled.";
+    public static final String ORDER_CANCELED = "Your order has been canceled successfully.";
+    
 }
