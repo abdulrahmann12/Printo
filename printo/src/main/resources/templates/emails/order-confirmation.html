@@ -1,91 +1,116 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Printo | Order Confirmation</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+      body {
+        margin: 0;
+        padding: 0;
+        background-color: #f8fafc;
+        font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+      }
+      .gradient-bg {
+        background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+      }
+      .order-box {
+        background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+        border: 1px solid #bbf7d0;
+        color: #166534;
+      }
+      .product-image {
+        border-radius: 8px;
+        border: 1px solid #e2e8f0;
+      }
       @media only screen and (max-width: 600px) {
         .container {
           padding: 20px !important;
         }
+        .main-title {
+          font-size: 24px !important;
+        }
+        .order-details {
+          padding: 15px !important;
+        }
       }
     </style>
-  </head>
-  <body style="margin: 0; padding: 0; background-color: #f4f4f7; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;">
+</head>
+<body>
 
-    <table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color: #f4f4f7;">
-      <tr>
-        <td align="center">
-          <table class="container" width="100%" style="max-width: 600px; background-color: #ffffff; border-radius: 12px; margin: 40px auto; overflow: hidden; box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05); padding: 40px;">
-            
-            <!-- Logo/Header -->
-            <tr>
-              <td align="center" style="padding-bottom: 20px;">
-                <h1 style="margin: 0; font-size: 28px; color: #007bff;">Printo</h1>
-              </td>
-            </tr>
+<table role="presentation" width="100%" cellspacing="0" cellpadding="0" border="0" style="background-color: #f8fafc;">
+  <tr>
+    <td align="center" style="padding: 40px 0;">
+      <!-- Header with Gradient -->
+      <table width="100%" style="max-width: 600px; margin-bottom: 20px;">
+        <tr>
+          <td align="center" class="gradient-bg" style="padding: 25px; border-radius: 12px 12px 0 0; text-align: center;">
+            <h1 style="margin: 0; font-size: 28px; color: white; font-weight: 600;">Printo</h1>
+          </td>
+        </tr>
+      </table>
+      
+      <!-- Main Content -->
+      <table class="container" width="100%" style="max-width: 600px; background-color: #ffffff; border-radius: 0 0 12px 12px; margin: 0 auto; overflow: hidden; box-shadow: 0 10px 25px rgba(0, 0, 0, 0.05);">
+        
+        <!-- Illustration -->
+        <tr>
+          <td align="center" style="padding: 30px 0 10px;">
+            <img src="https://cdn-icons-png.flaticon.com/512/1055/1055666.png" alt="Order Confirmed" width="120" style="display: block; margin: 0 auto;">
+          </td>
+        </tr>
 
-            <!-- Title -->
-            <tr>
-              <td style="text-align: center;">
-                <h2 style="font-size: 22px; color: #333333; margin-bottom: 10px;">Order Confirmation 🛒</h2>
-                <p style="font-size: 16px; color: #555555; margin: 0;">
-                  Hi <strong th:text="${name}">Customer</strong>,
-                </p>
-              </td>
-            </tr>
+        <!-- Title -->
+        <tr>
+          <td style="text-align: center; padding: 0 40px;">
+            <h2 class="main-title" style="font-size: 26px; color: #1e293b; margin-bottom: 10px; font-weight: 600;">Order Confirmed! 🎉</h2>
+            <p style="font-size: 16px; color: #64748b; margin: 0; line-height: 1.6;">
+              Hi <strong th:text="${name}" style="color: #4f46e5;">Customer</strong>,
+              your order has been placed successfully and is being processed.
+            </p>
+          </td>
+        </tr>
 
-            <!-- Message -->
-            <tr>
-              <td style="padding: 20px 0; text-align: center;">
-                <p style="font-size: 16px; color: #555555; line-height: 1.6;">
-                  Your order was placed successfully!
-                </p>
-              </td>
-            </tr>
+        <!-- Order ID -->
+        <tr>
+          <td align="center" style="padding: 30px 40px;">
+            <div class="order-box" style="display: inline-block; font-size: 32px; padding: 18px 40px; border-radius: 8px; letter-spacing: 2px; font-weight: 700; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);" th:text="'#' + ${orderId}">
+              #2025
+            </div>
+            <p style="font-size: 14px; color: #64748b; margin-top: 20px;">
+              Order Date: <strong style="color: #166534;" th:text="${orderDate}">June 1, 2025</strong>
+            </p>
+          </td>
+        </tr>
 
-            <!-- Order ID -->
-            <tr>
-              <td align="center" style="padding: 10px 0 30px;">
-                <div style="display: inline-block; background-color: #28a745; color: #ffffff; font-size: 28px; padding: 14px 32px; border-radius: 6px; letter-spacing: 4px;" th:text="'#' + ${orderId}">
-                  #123456
-                </div>
-              </td>
-            </tr>
+ 
+        <!-- Shipping Info -->
+        <tr>
+          <td style="padding: 0 40px 30px; text-align: center;">
+            <p style="font-size: 16px; color: #64748b; line-height: 1.6;">
+              We'll notify you when your order ships
+            </p>
+          </td>
+        </tr>
 
-            <!-- Follow up message -->
-            <tr>
-              <td style="text-align: center;">
-                <p style="font-size: 16px; color: #555555; margin-bottom: 0;">
-                  We’ll notify you once it’s shipped.
-                </p>
-                <p style="font-size: 16px; color: #555555; margin-top: 30px;">
-                  — The Printo Team
-                </p>
-              </td>
-            </tr>
+        <!-- Footer -->
+        <tr>
+          <td style="background-color: #f1f5f9; padding: 20px 40px; text-align: center; border-radius: 0 0 12px 12px;">
+            <p style="font-size: 12px; color: #64748b; margin: 0;">
+              © 2025 Printo Technologies Pvt. Ltd. All rights reserved.<br>
+            </p>
+            <p style="font-size: 12px; color: #64748b; margin-top: 10px;">
+              <a href="#" style="color: #4f46e5; text-decoration: none; margin: 0 8px;">Order Help</a>
+              <a href="#" style="color: #4f46e5; text-decoration: none; margin: 0 8px;">Returns Policy</a>
+              <a href="#" style="color: #4f46e5; text-decoration: none; margin: 0 8px;">Contact Us</a>
+            </p>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>
 
-            <!-- Divider -->
-            <tr>
-              <td style="padding-top: 30px;">
-                <hr style="border: none; height: 1px; background-color: #eaeaea;">
-              </td>
-            </tr>
-
-            <!-- Footer -->
-            <tr>
-              <td style="text-align: center; padding: 20px 0;">
-                <p style="font-size: 12px; color: #b0b0b0;">
-                  © 2025 Printo. All rights reserved.
-                </p>
-              </td>
-            </tr>
-
-          </table>
-        </td>
-      </tr>
-    </table>
-    
-  </body>
+</body>
 </html>
