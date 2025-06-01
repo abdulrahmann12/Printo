@@ -3,6 +3,7 @@ package com.team.printo.controller;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,6 +30,7 @@ public class FavoriteController {
     private final FavoriteService favoriteService;
     
     @PostMapping("/add/{productId}")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<BasicResponse> addToFavorites(
             @PathVariable Long productId,
             @AuthenticationPrincipal User user) {
@@ -38,6 +40,7 @@ public class FavoriteController {
     }
     
     @DeleteMapping("/remove/{productId}")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<BasicResponse> removeFromFavorites(
             @PathVariable Long productId,
             @AuthenticationPrincipal User user) {
@@ -47,6 +50,7 @@ public class FavoriteController {
     }
     
     @GetMapping
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<List<FavoriteResponse>> getUserFavorites(
             @AuthenticationPrincipal User user) {
         

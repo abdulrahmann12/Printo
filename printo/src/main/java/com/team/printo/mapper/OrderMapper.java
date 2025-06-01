@@ -7,7 +7,6 @@ import org.mapstruct.Mapping;
 
 import com.team.printo.dto.OrderDTO;
 import com.team.printo.dto.OrderItemDTO;
-import com.team.printo.model.Design;
 import com.team.printo.model.Order;
 import com.team.printo.model.OrderItem;
 

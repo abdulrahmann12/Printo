@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.team.printo.model.Payment.PaymentStatus;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -57,6 +58,12 @@ public class Order {
     private OrderStatus status;
 	
 	public enum OrderStatus{
-		PROCESSING, PREPARING, DELIVERING, DELIVERED, CANCELED
+		PENDING, PROCESSING, PREPARING, DELIVERING, DELIVERED, CANCELED
 	}	
+	
+	@Enumerated(EnumType.STRING)
+	@Column(name = "payment_status")
+	private PaymentStatus paymentStatus = PaymentStatus.PENDING;
+	
+
 }

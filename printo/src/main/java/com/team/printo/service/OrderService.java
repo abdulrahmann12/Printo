@@ -83,7 +83,7 @@ public class OrderService {
 	    newOrder.setUser(user);
 	    newOrder.setCreatedAt(LocalDateTime.now());
 	    newOrder.setPhoneNumber(user.getPhone());
-	    newOrder.setStatus(OrderStatus.PROCESSING);
+	    newOrder.setStatus(OrderStatus.PENDING);
 
 	    Order savedOrder = orderRepository.save(newOrder);
 	   

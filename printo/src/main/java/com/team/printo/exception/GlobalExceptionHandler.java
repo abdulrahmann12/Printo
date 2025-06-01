@@ -92,7 +92,8 @@ public class GlobalExceptionHandler {
         DesignNotFoundException.class,
         ReviewNotFoundException.class,
         CartNotFoundException.class,
-        OrderNotFoundException.class
+        OrderNotFoundException.class,
+        PaymentNotFoundException.class
     })
     public ResponseEntity<ErrorDetails> handleNotFoundBusinessExceptions(Exception ex, WebRequest request) {
         return buildErrorResponse(ex, request, HttpStatus.NOT_FOUND);
