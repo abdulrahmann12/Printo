@@ -3,8 +3,11 @@ package com.team.printo.service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import com.team.printo.dto.Messages;
 import com.team.printo.dto.ReviewDTO;
 import com.team.printo.exception.ProductNotFoundException;
 import com.team.printo.exception.ReviewNotFoundException;
@@ -13,6 +16,7 @@ import com.team.printo.mapper.ReviewMapper;
 import com.team.printo.model.Product;
 import com.team.printo.model.Review;
 import com.team.printo.model.User;
+import com.team.printo.model.User.Role;
 import com.team.printo.repository.ProductRepository;
 import com.team.printo.repository.ReviewRepository;
 import com.team.printo.repository.UserRepository;
@@ -58,6 +62,20 @@ public class ReviewService {
 	public void deleteReview(Long reviewId) {
 		Review review = reviewRepository.findById(reviewId)
                 .orElseThrow(() -> new ReviewNotFoundException()); 
+
+	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	    String email = authentication.getName();
+	    User currentUser = userRepository.findByEmail(email)
+	            .orElseThrow(() -> new UserNotFoundException());
+	    
+	    boolean isAdmin = currentUser.getRole() == Role.ADMIN;
+
+	    
+	    boolean isOwner = review.getUser().getId() == (currentUser.getId());
+
+	    if (!isAdmin && !isOwner) {
+	        throw new IllegalArgumentException(Messages.ACCESS_DENIED);
+	    }
 		reviewRepository.delete(review);
 	}
 }
