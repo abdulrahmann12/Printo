@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.team.printo.model.Order;
 
 import jakarta.validation.constraints.NotBlank;
@@ -22,6 +23,7 @@ public class OrderDTO {
     @NotBlank(message = "Phone number is required")
     private String phoneNumber;
 
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm a")
     private LocalDateTime createdAt;
 
     @NotBlank(message = "Status is required")

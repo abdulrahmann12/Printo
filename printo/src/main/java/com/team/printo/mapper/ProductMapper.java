@@ -61,7 +61,7 @@ public interface ProductMapper {
     }
     
 
-    @Mapping(target = "userName", source = "user.firstName")
+    @Mapping(target = "user", source = "user")
 	@Mapping(target = "productId", source = "product.id")
 	ReviewDTO toDTO(Review review);
 	

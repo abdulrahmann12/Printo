@@ -1,5 +1,6 @@
 package com.team.printo.service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,7 +45,7 @@ public class ReviewService {
 		
 		newReview.setProduct(product);
 		newReview.setUser(user);
-		
+		newReview.setCreatedAt(LocalDateTime.now());
 		Review savedReview = reviewRepository.save(newReview);
 		
 		return reviewMapper.toDTO(savedReview);

@@ -1,5 +1,7 @@
 package com.team.printo.model;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -32,4 +34,6 @@ public class Review {
 	@ManyToOne
 	@JoinColumn(name = "product_id", nullable = false)
 	private Product product;
+	
+    private LocalDateTime createdAt; 
 }

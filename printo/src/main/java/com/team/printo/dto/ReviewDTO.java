@@ -1,5 +1,9 @@
 package com.team.printo.dto;
 
+import java.time.LocalDateTime;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -17,7 +21,10 @@ public class ReviewDTO {
     @NotBlank(message = "Comment is required")
 	private String comment;
 	
-	private String userName;
+	private UserDTO user;
+	
+	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy hh:mm a")
+	private LocalDateTime createdAt; 
 	
 	private Long productId;
 }
