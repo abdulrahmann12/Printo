@@ -102,6 +102,11 @@
 		    <artifactId>spring-boot-starter-thymeleaf</artifactId>
 		</dependency>
 		
+		<dependency>
+		    <groupId>org.thymeleaf</groupId>
+		    <artifactId>thymeleaf</artifactId>
+		    <version>3.1.2.RELEASE</version>
+		</dependency>
 		
         <!-- MySQL -->
         <dependency>
@@ -110,6 +115,19 @@
             <scope>runtime</scope>
         </dependency>
 
+		<!-- open html to pdf -->
+		<dependency>
+		    <groupId>com.openhtmltopdf</groupId>
+		    <artifactId>openhtmltopdf-pdfbox</artifactId>
+		    <version>1.0.10</version>
+		</dependency>
+		
+		<dependency>
+		    <groupId>ognl</groupId>
+		    <artifactId>ognl</artifactId>
+		    <version>3.3.4</version>
+		</dependency>
+		
         <!-- JAXB -->
         <dependency>
             <groupId>javax.xml.bind</groupId>

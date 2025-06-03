@@ -39,7 +39,7 @@ import lombok.RequiredArgsConstructor;
 @Service
 @RequiredArgsConstructor
 public class OrderService {
-
+	
 	private final OrderRepository orderRepository;
 	private final UserRepository userRepository;
 	private final ProductRepository productRepository; 
@@ -186,6 +186,12 @@ public class OrderService {
 	    if(order.getUser().getId() != userId) {
 	    	throw new IllegalStateException(Messages.ORDER_NOT_BELONG_TO_USER);
 	    }
+	    return orderMapper.toDTO(order);
+	}
+	
+	public OrderDTO getOrder(Long orderId) {
+	    Order order = orderRepository.findById(orderId)
+	            .orElseThrow(() -> new OrderNotFoundException());
 	    return orderMapper.toDTO(order);
 	}
 	
