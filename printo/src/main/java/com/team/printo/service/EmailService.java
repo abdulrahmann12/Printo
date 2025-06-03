@@ -25,7 +25,6 @@ public class EmailService {
     private final PdfGenerator pdfGenerator;
     private final OrderMapper orderMapper;
     
-
     @Value("${spring.mail.username}")
     private String fromEmail;
 
