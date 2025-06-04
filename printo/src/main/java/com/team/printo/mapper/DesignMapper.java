@@ -16,5 +16,6 @@ public interface DesignMapper {
     
 	@Mapping(target = "user.id", source = "userId")
 	@Mapping(target = "product.id", source = "productId")
+	@Mapping(target = "cartItems", ignore = true)
     Design toEntity(DesignDTO designDTO);
 }

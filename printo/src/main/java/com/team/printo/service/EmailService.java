@@ -1,6 +1,5 @@
 package com.team.printo.service;
 
-import com.team.printo.config.PdfGenerator;
 import com.team.printo.dto.OrderDTO;
 import com.team.printo.mapper.OrderMapper;
 import com.team.printo.model.Order;
@@ -22,7 +21,7 @@ public class EmailService {
 
     private final JavaMailSender javaMailSender;
     private final TemplateEngine templateEngine;
-    private final PdfGenerator pdfGenerator;
+    private final PdfGeneratorService pdfGenerator;
     private final OrderMapper orderMapper;
     
     @Value("${spring.mail.username}")

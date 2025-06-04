@@ -25,7 +25,6 @@ public interface CartItemAttributeValueMapper {
     @Mapping(target = "attributeValueId", source = "attributeValue.id")
     CartItemAttributeValueRequestDTO toRequestDTO(CartItemAttributeValue entity);
 
-    
     @Mapping(target = "attributeValue.id", source = "attributeValueId")
     CartItemAttributeValue toRequestEntiry(CartItemAttributeValueRequestDTO entity);
 

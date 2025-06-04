@@ -11,9 +11,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.team.printo.config.PdfGenerator;
 import com.team.printo.dto.OrderDTO;
 import com.team.printo.service.OrderService;
+import com.team.printo.service.PdfGeneratorService;
 
 import lombok.RequiredArgsConstructor;
 
@@ -23,7 +23,7 @@ import lombok.RequiredArgsConstructor;
 public class OrderPdfController {
 
     private final OrderService orderService; 
-    private final PdfGenerator pdfGenerator;
+    private final PdfGeneratorService pdfGenerator;
 
 
     @GetMapping("/{orderId}")

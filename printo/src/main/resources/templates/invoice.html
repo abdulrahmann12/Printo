@@ -5,193 +5,235 @@
     <title>Purchase Order</title>
     <style>
 		
-        body {
-            font-family: Arial, sans-serif;
-            font-size: 12px;
-            line-height: 1.4;
-            margin: 0;
-            padding: 20px 40px;
-            color: #000;
-            border: 1px solid #000; 
-        }
-		.header {
-		    margin-bottom: 10px;
-		}
+		@page {
+		    size: A4;
+			border: 1px solid #000;
 
-		.header-content {
-			display: flex !important;
-		    align-items: center;
-		    gap: 15px;
-		}
-
-		.logo {
-		    width: 100px;
-		    height: auto;
-		}
-
-		.header-text {
-		    display: flex;
-		    flex-direction: column;
-		    justify-content: center;
 		}
 		
-        h1 {
-            font-size: 18px;
-            margin: 0;
-            padding: 0;
-            font-weight: bold;
-            text-transform: uppercase;
-        }
 
-        .company-address {
-            margin-bottom: 25px;
-        }
+		        html, body {
+		            height: 100%;
+		            margin: 0;
+		            padding: 0;
+		            font-family: Arial, sans-serif;
+		            font-size: 12px;
+		            line-height: 1.4;
+		            color: #000;
+		        }
 
-		.info-section {
-		    display: grid;
-		    grid-template-columns: 1fr 1fr;
-		    margin-bottom: 25px;
-		}
+		        table.layout {
+		            width: 100%;
+		            height: 100%;
+		            border-collapse: collapse;
+		        }
 
-		.for-section {
-		    text-align: left;
-		}
+		        td.content-cell {
+		            padding: 20px 40px;
+		            vertical-align: top;
+		        }
 
-		.order-info {
-		    text-align: right;
-		}
+		        td.footer-cell {
+		            padding: 20px 40px;
+		            vertical-align: bottom;
+		        }
 
+		        .header {
+		            margin-bottom: 10px;
+		            padding-bottom: 70px;
+		        }
 
+		        .header-content {
+		            width: 100%;
+		            overflow: hidden;
+		        }
 
-        .divider {
-            border: none;
-            border-top: 1px solid #000;
-            margin: 15px 0;
-        }
+		        .header-text {
+		            float: left;
+		            width: 60%;
+		        }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 15px 0 25px 0;
-        }
+		        .logo-container {
+		            float: right;
+		            width: 40%;
+		            text-align: right;
+		        }
 
-        th, td {
-            border: 1px solid #000;
-            padding: 8px;
-            text-align: left;
-            vertical-align: top;
-        }
+		        .logo {
+		            max-width: 150px;
+		        }
 
-        th {
-            background-color: #f2f2f2;
-            font-weight: bold;
-        }
+		        h1 {
+		            font-size: 18px;
+		            margin: 0;
+		            font-weight: bold;
+		            text-transform: uppercase;
+		        }
 
-        .total-section {
-            margin: 15px 0 30px 0;
-        }
+		        .company-address {
+		            margin-top: 5px;
+		        }
 
-        .total-section div {
-            margin-bottom: 5px;
-        }
+		        .info-section {
+		            width: 100%;
+		            overflow: hidden;
+		            margin-bottom: 25px;
+		        }
 
-        .signature-section {
-            margin-top: 50px;
-        }
+		        .for-section {
+		            float: left;
+		            width: 49%;
+		        }
 
-        .signature-img {
-            height: 50px;
-            margin-top: 10px;
-        }
+		        .order-info {
+		            float: right;
+		            width: 49%;
+		            text-align: right;
+		        }
 
-        .footer {
-            margin-top: 30px;
-            font-size: 11px;
-        }
+		        .divider {
+		            border: none;
+		            border-top: 1px solid #000;
+		            margin: 15px 0;
+		            clear: both;
+		        }
 
-        .description-small {
-            font-size: 11px;
-            color: #555;
-            display: block;
-            margin-top: 3px;
-            font-style: italic;
-        }
+		        table.items-table {
+		            width: 100%;
+		            border-collapse: collapse;
+		            margin: 15px 0 25px 0;
+		        }
 
-		.amount-column {
-		    text-align: right;
-		    padding-right: 8px;
-		    white-space: nowrap;
-		}
-    </style>
-</head>
-<body>
-	<div class="header">
-	    <div class="header-content">
-	        <img src="file:src/main/resources/static/logo.png" class="logo" />
-	        <div class="header-text">
-	            <h1>Purchase Order</h1>
-	            <div class="company-address">Cairo - Egypt</div>
-	        </div>
-	    </div>
-	</div>
+		        .items-table th, .items-table td {
+		            border: 1px solid #000;
+		            padding: 8px;
+		            text-align: left;
+		            vertical-align: middle;
+		        }
 
-    <div class="info-section">
-        <div class="for-section">
-            <strong>FOR</strong>
-            <span th:text="${order.userDTO.firstName + ' ' + order.userDTO.lastName}"></span><br/>
-            <span th:text="${order.addressDTO.street}"></span><br/>
-            <span th:text="${order.addressDTO.city}"></span><br/>
-            <span th:text="${order.addressDTO.country}"></span>
-        </div>
+		        .items-table th {
+		            background-color: #f2f2f2;
+		            font-weight: bold;
+		        }
 
-        <div class="order-info">
-            <strong>Order No.:</strong>
-            <span th:text="'PO' + ${order.id}"></span><br/><br/>
-            <strong>Issue date:</strong>
-            <span th:text="${#temporals.format(order.createdAt, 'dd/MM/yyyy')}"></span>
-        </div>
-    </div>
+		        .total-section {
+		            margin: 15px 0 30px 0;
+		        }
 
-    <div class="divider"></div>
+		        .total-section div {
+		            margin-bottom: 5px;
+		        }
 
-    <table>
-        <thead>
-            <tr>
-                <th width="50%">PRODUCT</th>
-                <th width="10%">QUANTITY</th>
-                <th width="20%">UNIT PRICE</th>
-				<th width="20%" class="amount-column">AMOUNT</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="item : ${order.orderItems}">
-                <td>
-                    <span th:text="${item.productDTO.name}"></span><br/>
-                    <span class="description-small" th:text="${item.productDTO.description} ?: 'No description available'"></span>
-                </td>
-                <td th:text="${item.quantity}"></td>
-                <td th:text="${'£' + #numbers.formatDecimal(item.price, 1, 2)}"></td>
-				<td class="amount-column" th:text="${'£' + #numbers.formatDecimal(item.price * item.quantity, 1, 2)}"></td>
-            </tr>
-        </tbody>
-    </table>
+		        .signature-section {
+		            margin-top: 50px;
+		        }
 
-    <div class="divider"></div>
+		        .signature-img {
+		            height: 50px;
+		            margin-top: 10px;
+		        }
 
-    <div class="total-section">
-        <div><strong>TOTAL (GBP):</strong> <span th:text="${#numbers.formatDecimal(order.totalPrice, 1, 2)}"></span></div>
-        <div><strong>TOTAL DUE (GBP):</strong> <span th:text="${#numbers.formatDecimal(order.totalPrice, 1, 2)}"></span></div>
-    </div>
+		        .footer {
+		            margin-top: 30px;
+		            font-size: 11px;
+		            color: #444;
+		        }
 
-    <div class="signature-section">
-        <div><strong>Issued by, signature:</strong></div>
-        <img src="file:src/main/resources/static/signature.png" width="100"/>
-        <div style="margin-top: 10px; font-weight: bold;">Ellington Wood Decor</div>
-    </div>
+		        .description-small {
+		            font-size: 11px;
+		            color: #555;
+		            display: block;
+		            margin-top: 3px;
+		            font-style: italic;
+		        }
+		    </style>
+		</head>
+		<body>
+		    <table class="layout">
+		        <tr>
+		            <td class="content-cell">
+		                <div class="header">
+		                    <div class="header-content">
+		                        <div class="header-text">
+		                            <h1>Invoice</h1>
+		                            <div class="company-address">Cairo - Egypt</div>
+		                        </div>
+		                        <div class="logo-container">
+		                            <img src="file:src/main/resources/static/logo.png" class="logo" />
+		                        </div>
+		                    </div>
+		                </div>
 
-    <div class="footer">
-        <strong>Ellington Wood Decor</strong>, 36 Terrick Rd, Ellington PE18 2NT, United Kingdom<br/>
-        <strong>Email:</strong> email@yourbusinessname.co.uk | <strong>Phone:</strong> +44 1234 567890
-    </div>
-</body>
-</html>
+		                <div class="info-section">
+		                    <div class="for-section">
+		                        <strong>FOR</strong><br/>
+		                        <span th:text="${order.userDTO.firstName + ' ' + order.userDTO.lastName}"></span><br/>
+		                        <span th:text="${order.addressDTO.street}"></span><br/>
+		                        <span th:text="${order.addressDTO.city}"></span><br/>
+		                        <span th:text="${order.addressDTO.country}"></span>
+		                    </div>
+
+		                    <div class="order-info">
+		                        <strong>Order No.:</strong>
+		                        <span th:text="'PO' + ${order.id}"></span><br/><br/>
+		                        <strong>Issue date:</strong>
+		                        <span th:text="${#temporals.format(order.createdAt, 'dd/MM/yyyy')}"></span>
+		                    </div>
+		                </div>
+
+		                <div class="divider"></div>
+
+		                <table class="items-table">
+		                    <thead>
+		                        <tr>
+		                            <th width="55%">PRODUCT</th>
+		                            <th width="10%">QUANTITY</th>
+		                            <th width="15%">UNIT PRICE</th>
+		                            <th width="15%">AMOUNT</th>
+		                        </tr>
+		                    </thead>
+		                    <tbody>
+		                        <tr th:each="item : ${order.orderItems}">
+									<td style="text-align: left;">
+									    <span th:text="${item.productDTO.name}"></span><br/>
+									    <div class="description-small">
+									        <ul style="padding-left: 15px; margin: 0;">
+									            <li th:each="attr : ${item.attributeValues}">
+									                <span th:text="${attr.attributeName} + ': ' + attr.attributeValue"></span>
+									            </li>
+									        </ul>
+									    </div>
+									</td>
+		                            <td th:text="${item.quantity}"></td>
+		                            <td th:text="${'£' + #numbers.formatDecimal(item.productDTO.price, 1, 2)}"></td>
+		                            <td th:text="${'£' + #numbers.formatDecimal(item.price, 1, 2)}"></td>
+		                        </tr>
+		                    </tbody>
+		                </table>
+
+		                <div class="divider"></div>
+
+		                <div class="total-section">
+		                    <div><strong>TOTAL (GBP):</strong> <span th:text="${#numbers.formatDecimal(order.totalPrice, 1, 2)}"></span></div>
+		                    <div><strong>TOTAL DUE (GBP):</strong> <span th:text="${#numbers.formatDecimal(order.totalPrice, 1, 2)}"></span></div>
+		                </div>
+		            </td>
+		        </tr>
+
+		        <tr>
+		            <td class="footer-cell">
+		                <div class="signature-section">
+		                    <div><strong>Issued by, signature:</strong></div>
+		                    <img src="file:src/main/resources/static/signature.png" width="100" />
+		                    <div style="margin-top: 10px; font-weight: bold;">Ellington Wood Decor</div>
+		                </div>
+
+		                <div class="footer">
+		                    <strong>Ellington Wood Decor</strong>, 36 Terrick Rd, Ellington PE18 2NT, United Kingdom<br/>
+		                    <strong>Email:</strong> email@yourbusinessname.co.uk | <strong>Phone:</strong> +44 1234 567890
+		                </div>
+		            </td>
+		        </tr>
+		    </table>
+		</body>
+		</html>
