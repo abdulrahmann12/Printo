@@ -92,11 +92,12 @@ public class Messages {
     public static final String ADD_PRODUCT = "Product added successfully";
     public static final String UPDATE_PRODUCT = "Product updated successfully";
 	
-	// ==================== Design Messages ==================== 
+	// ==================== Design Messages ====================  
     public static final String DESIGN_NOT_FOUND = "Design not found";
     public static final String UPLOAD_DESIGN = "Design uploaded successfully";
     public static final String DELETE_DESIGN = "Design deleted successfully";
-	
+    public static final String CANNOT_DELETE_DESIGN = "Cannot delete this design because it is used in orders";
+        
 	// ==================== Review Messages ==================== 
     public static final String REVIEW_NOT_FOUND = "Review not found";
     public static final String ADD_REVIEW = "Review added successfully";

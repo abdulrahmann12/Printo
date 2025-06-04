@@ -45,7 +45,7 @@ public class DesignController {
         return ResponseEntity.ok(new BasicResponse(Messages.UPLOAD_DESIGN, newDesign));
     }
     
-    @GetMapping("/my-designs")
+    @GetMapping
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<List<DesignDTO>> getMyDesigns(
             @AuthenticationPrincipal UserDetails userDetails
@@ -56,7 +56,6 @@ public class DesignController {
     }
     
     @DeleteMapping("/{designId}")
-	@PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<BasicResponse> deleteDesign(
             @PathVariable Long designId
     ) {

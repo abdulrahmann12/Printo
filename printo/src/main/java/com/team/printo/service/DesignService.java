@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,6 +19,7 @@ import com.team.printo.mapper.DesignMapper;
 import com.team.printo.model.Design;
 import com.team.printo.model.Product;
 import com.team.printo.model.User;
+import com.team.printo.model.User.Role;
 import com.team.printo.repository.DesignRepository;
 import com.team.printo.repository.ProductRepository;
 import com.team.printo.repository.UserRepository;
@@ -70,7 +74,26 @@ public class DesignService {
 	public void deleteDesign(Long designId) {
 	    Design design = designRepository.findById(designId)
 	            .orElseThrow(() -> new DesignNotFoundException());
-	    designRepository.delete(design);
+	    
+	    Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+	    String email = authentication.getName();
+	    User currentUser = userRepository.findByEmail(email)
+	            .orElseThrow(() -> new UserNotFoundException());
+	    
+	    boolean isAdmin = currentUser.getRole() == Role.ADMIN;
+
+	    
+	    boolean isOwner = design.getUser().getId() == (currentUser.getId());
+
+	    if (!isAdmin && !isOwner) {
+	        throw new IllegalArgumentException(Messages.ACCESS_DENIED);
+	    }
+	    
+	   try {
+		   designRepository.delete(design);
+		   } catch (DataIntegrityViolationException e) {
+	        throw new IllegalArgumentException(Messages.CANNOT_DELETE_DESIGN);
+	    }
 	}
 	
 }
