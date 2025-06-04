@@ -29,7 +29,7 @@ public class FavoriteController {
     
     private final FavoriteService favoriteService;
     
-    @PostMapping("/add/{productId}")
+    @PostMapping("/{productId}")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<BasicResponse> addToFavorites(
             @PathVariable Long productId,
@@ -39,7 +39,7 @@ public class FavoriteController {
         return ResponseEntity.ok(new BasicResponse(Messages.ADD_TO_FAVORITE));
     }
     
-    @DeleteMapping("/remove/{productId}")
+    @DeleteMapping("/{productId}")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<BasicResponse> removeFromFavorites(
             @PathVariable Long productId,

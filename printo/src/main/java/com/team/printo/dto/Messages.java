@@ -106,8 +106,8 @@ public class Messages {
 	// ==================== Favorite Messages ==================== 
     public static final String ALREADY_EXIST_IN_FAVORITE = "Product already in favorites";
     public static final String PRODUCT_NOT_EXIST_IN_FAVORITE = "Product not in favorites";
-    public static final String ADD_TO_FAVORITE = "Product added successfully";
-    public static final String REMOVE_FROM_FAVORITE = "Product removed successfully";
+    public static final String ADD_TO_FAVORITE = "Product added to favorite successfully";
+    public static final String REMOVE_FROM_FAVORITE = "Product removed from favorite successfully";
     
 	// ==================== Cart Messages ====================  
     public static final String NOT_ENOUGH_STOCK = "Not enough available stock";
