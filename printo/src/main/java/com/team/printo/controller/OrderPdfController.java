@@ -15,8 +15,10 @@ import com.team.printo.dto.OrderDTO;
 import com.team.printo.service.OrderService;
 import com.team.printo.service.PdfGeneratorService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 
+@Tag(name = "Invoice Controller", description = "API for generating and viewing invoices in PDF format.")
 @RestController
 @RequestMapping("/api/invoice")
 @RequiredArgsConstructor

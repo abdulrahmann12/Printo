@@ -6,6 +6,7 @@ import com.team.printo.dto.PaymentStatusUpdateDTO;
 import com.team.printo.model.User;
 import com.team.printo.service.PaymentService;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+@Tag(name = "Payment Controller", description = "API for managing payment operations, including creating and tracking payments.")
 @RestController
 @RequestMapping("/api/payments")
 @RequiredArgsConstructor
