@@ -32,7 +32,7 @@ public class CartController {
 
     private final CartService cartService;
 
-	@PostMapping("/add")
+	@PostMapping
 	@PreAuthorize("isAuthenticated()")
 	public ResponseEntity<BasicResponse> addToCart(@AuthenticationPrincipal UserDetails userDetails,
 											 @Valid @RequestBody CartItemRequestDTO cartItemDTO ){
@@ -41,7 +41,6 @@ public class CartController {
 		cartService.addToCart(userId, cartItemDTO);
 		return ResponseEntity.ok(new BasicResponse(Messages.ADD_TO_CART));
 	}
-	
 	
 	@GetMapping
 	@PreAuthorize("isAuthenticated()")

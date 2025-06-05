@@ -81,6 +81,7 @@ public class Messages {
 	// ==================== Attribute Messages ==================== 
     public static final String ATTRIBUTE_NAME_ALREADY_EXISTS = "Attribute with this name already exists in the category";
     public static final String ATTRIBUTE_NOT_FOUND = "Attribute not found";
+    public static final String ATTRIBUTE_VALUE_NOT_FOUND = "Attribute value not found";
     public static final String DELETE_ATTRIBUTE = "Attribute deleted successfully";
     public static final String ADD_ATTRIBUTE = "Attribute added successfully";
     public static final String UPDATE_ATTRIBUTE = "Attribute updated successfully";

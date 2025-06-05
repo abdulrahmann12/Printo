@@ -14,6 +14,7 @@ import com.team.printo.dto.CartItemAttributeValueRequestDTO;
 import com.team.printo.dto.CartItemRequestDTO;
 import com.team.printo.dto.Messages;
 import com.team.printo.exception.AttributeNotFoundException;
+import com.team.printo.exception.AttributeValueNotFoundException;
 import com.team.printo.exception.CartNotFoundException;
 import com.team.printo.exception.DesignNotFoundException;
 import com.team.printo.exception.InsufficientStockException;
@@ -108,7 +109,7 @@ public class CartService {
         	            throw new IllegalArgumentException(Messages.ATTRIBUTE_VALUE_NOT_NULL);
         	        }
         	        AttributeValue attrValue = attributeValueRepository.findById(attrDto.getAttributeValueId())
-        	                .orElseThrow(() -> new AttributeNotFoundException());
+        	                .orElseThrow(() -> new AttributeValueNotFoundException());
 
         	        if (!attrValue.getProduct().getId().equals(product.getId())) {
         	            throw new IllegalArgumentException(Messages.PRODUCT_NOT_OWN_ATTRIBUTE);
