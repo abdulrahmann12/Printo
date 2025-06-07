@@ -244,6 +244,5 @@ public class OrderService {
 	    } catch (MailException e) {
 	        throw new MailSendingException();
 	    }
-		
 	}
 }

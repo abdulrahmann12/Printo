@@ -199,7 +199,7 @@
 									    <div class="description-small">
 									        <ul style="padding-left: 15px; margin: 0;">
 									            <li th:each="attr : ${item.attributeValues}">
-									                <span th:text="${attr.attributeName} + ': ' + attr.attributeValue"></span>
+									                <span th:text="${attr.attributeName} + ': ' + ${attr.attributeValue}"></span>
 									            </li>
 									        </ul>
 									    </div>
