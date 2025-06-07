@@ -13,7 +13,6 @@ import com.team.printo.dto.CartDTO;
 import com.team.printo.dto.CartItemAttributeValueRequestDTO;
 import com.team.printo.dto.CartItemRequestDTO;
 import com.team.printo.dto.Messages;
-import com.team.printo.exception.AttributeNotFoundException;
 import com.team.printo.exception.AttributeValueNotFoundException;
 import com.team.printo.exception.CartNotFoundException;
 import com.team.printo.exception.DesignNotFoundException;
