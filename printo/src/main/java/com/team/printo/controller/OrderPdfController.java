@@ -27,7 +27,6 @@ public class OrderPdfController {
     private final OrderService orderService; 
     private final PdfGeneratorService pdfGenerator;
 
-
     @GetMapping("/{orderId}")
     @PreAuthorize("isAuthenticated()")
     public ResponseEntity<byte[]> downloadInvoice(@PathVariable Long orderId) throws Exception {
