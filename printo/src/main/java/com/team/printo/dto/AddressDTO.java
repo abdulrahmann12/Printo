@@ -8,7 +8,6 @@ public class AddressDTO {
 	
 	private Long id;
 	
-	
 	private Long userId;
 	
 	@NotBlank(message = "Street name is required")
